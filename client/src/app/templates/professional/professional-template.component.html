@@ -1,0 +1,168 @@
+<div class="resume professional-resume">
+  <!-- Header -->
+  <header class="header">
+    <h1 class="name">{{ data.personalInfo.fullName || 'Your Name' }}</h1>
+    <div class="contact-row">
+      @if (data.personalInfo.email) {
+        <span class="contact-item">{{ data.personalInfo.email }}</span>
+      }
+      @if (data.personalInfo.phone) {
+        <span class="contact-item">{{ data.personalInfo.phone }}</span>
+      }
+      @if (data.personalInfo.location) {
+        <span class="contact-item">{{ data.personalInfo.location }}</span>
+      }
+      @if (data.personalInfo.linkedin) {
+        <span class="contact-item">{{ data.personalInfo.linkedin }}</span>
+      }
+      @if (data.personalInfo.website) {
+        <span class="contact-item">{{ data.personalInfo.website }}</span>
+      }
+    </div>
+  </header>
+
+  <!-- Summary -->
+  @if (data.summary) {
+    <section class="section">
+      <h2 class="section-title">Professional Summary</h2>
+      <p class="summary-text">{{ data.summary }}</p>
+    </section>
+  }
+
+  <!-- Experience -->
+  @if (data.experience.length) {
+    <section class="section">
+      <h2 class="section-title">Professional Experience</h2>
+      @for (exp of data.experience; track exp.id) {
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-left">
+              <h3 class="entry-title">{{ exp.position }}</h3>
+              <span class="entry-subtitle">{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</span>
+            </div>
+            <span class="entry-date">{{ formatDateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+          </div>
+          @if (exp.description) {
+            <p class="entry-description">{{ exp.description }}</p>
+          }
+          @if (exp.highlights.length) {
+            <ul class="highlights">
+              @for (h of exp.highlights; track $index) {
+                <li>{{ h }}</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Education -->
+  @if (data.education.length) {
+    <section class="section">
+      <h2 class="section-title">Education</h2>
+      @for (edu of data.education; track edu.id) {
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-left">
+              <h3 class="entry-title">{{ edu.degree }}@if (edu.field) { in {{ edu.field }}}</h3>
+              <span class="entry-subtitle">{{ edu.institution }}@if (edu.location) {, {{ edu.location }}}</span>
+            </div>
+            <div class="entry-right">
+              <span class="entry-date">{{ formatDateRange(edu.startDate, edu.endDate) }}</span>
+              @if (edu.gpa) {
+                <span class="gpa">GPA: {{ edu.gpa }}</span>
+              }
+            </div>
+          </div>
+          @if (edu.highlights.length) {
+            <ul class="highlights">
+              @for (h of edu.highlights; track $index) {
+                <li>{{ h }}</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Skills -->
+  @if (data.skills.length) {
+    <section class="section">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        @for (cat of skillCategories; track cat) {
+          <div class="skill-category">
+            <strong class="category-name">{{ cat }}:</strong>
+            <span class="skill-list">
+              @for (skill of groupedSkills[cat]; track skill.id; let last = $last) {
+                <span>{{ skill.name }}@if (!last) {, }</span>
+              }
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Projects -->
+  @if (data.projects.length) {
+    <section class="section">
+      <h2 class="section-title">Projects</h2>
+      @for (proj of data.projects; track proj.id) {
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-left">
+              <h3 class="entry-title">{{ proj.name }}</h3>
+              @if (proj.url) {
+                <span class="entry-subtitle">{{ proj.url }}</span>
+              }
+            </div>
+            <span class="entry-date">{{ formatDateRange(proj.startDate, proj.endDate) }}</span>
+          </div>
+          @if (proj.description) {
+            <p class="entry-description">{{ proj.description }}</p>
+          }
+          @if (proj.technologies.length) {
+            <div class="tech-list">
+              @for (tech of proj.technologies; track $index; let last = $last) {
+                <span>{{ tech }}@if (!last) { · }</span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Certifications -->
+  @if (data.certifications.length) {
+    <section class="section">
+      <h2 class="section-title">Certifications</h2>
+      @for (cert of data.certifications; track cert.id) {
+        <div class="entry cert-entry">
+          <strong>{{ cert.name }}</strong>
+          @if (cert.issuer) {
+            <span> – {{ cert.issuer }}</span>
+          }
+          @if (cert.date) {
+            <span class="cert-date">{{ formatDate(cert.date) }}</span>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Languages -->
+  @if (data.languages.length) {
+    <section class="section">
+      <h2 class="section-title">Languages</h2>
+      <div class="languages-row">
+        @for (lang of data.languages; track lang.id; let last = $last) {
+          <span>{{ lang.name }} ({{ lang.proficiency }})@if (!last) { · }</span>
+        }
+      </div>
+    </section>
+  }
+</div>

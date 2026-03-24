@@ -1,0 +1,20 @@
+<div class="toolbar">
+  @for (group of toolGroups; track group.group; let last = $last) {
+    <div class="tool-group">
+      @for (tool of group.tools; track tool.name) {
+        <button
+          class="tool-btn"
+          [class.active]="currentTool === tool.name"
+          [attr.title]="tool.label"
+          (click)="selectTool(tool.name)"
+        >
+          <span class="tool-icon" [innerHTML]="tool.icon"></span>
+          <span class="tooltip">{{ tool.label }}</span>
+        </button>
+      }
+    </div>
+    @if (!last) {
+      <div class="divider"></div>
+    }
+  }
+</div>

@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="navbar__container">
+    <a routerLink="/" class="navbar__brand" (click)="closeMobileMenu()">
+      <svg class="navbar__logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="url(#logo-gradient)"/>
+        <path d="M9 8h10a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V10a2 2 0 012-2z" fill="white" opacity="0.9"/>
+        <path d="M11 13h8M11 16h6M11 19h7" stroke="var(--color-indigo-600)" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="23" cy="21" r="5" fill="var(--color-indigo-500)"/>
+        <path d="M21.5 21l1 1 2.5-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
+            <stop stop-color="var(--color-indigo-600)"/>
+            <stop offset="1" stop-color="var(--color-purple-600)"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="navbar__brand-text">ResumeAI</span>
+    </a>
+
+    <div class="navbar__links" [class.navbar__links--open]="mobileMenuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/builder" routerLinkActive="active" (click)="closeMobileMenu()">Templates</a>
+      <a routerLink="/upload" routerLinkActive="active" (click)="closeMobileMenu()">Upload Resume</a>
+      <a routerLink="/builder" class="navbar__cta" (click)="closeMobileMenu()">Build Resume</a>
+    </div>
+
+    <button class="navbar__hamburger" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation menu">
+      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
+      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
+      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
+    </button>
+  </div>
+</nav>
