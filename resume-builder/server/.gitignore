@@ -1,0 +1,31 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+
+# Visual Studio
+.vs/
+*.swp
+*.swo
+
+# Database
+*.mdf
+*.ldf
+
+# Build
+*.exe
+*.dll
+*.pdb
+*.deps.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
