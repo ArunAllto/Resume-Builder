@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #2d2d3d;
+
+  canvas {
+    display: block;
+  }
+}
+
+// Rulers
+.ruler {
+  position: absolute;
+  background: #1e1e2e;
+  z-index: 10;
+  pointer-events: none;
+
+  .ruler-tick {
+    position: absolute;
+    font-size: 9px;
+    color: #555570;
+    font-family: 'Inter', monospace;
+  }
+}
+
+.ruler-horizontal {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  border-bottom: 1px solid #2a2a3e;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2px;
+  overflow: hidden;
+
+  .ruler-tick {
+    bottom: 2px;
+  }
+}
+
+.ruler-vertical {
+  top: 22px;
+  left: 0;
+  bottom: 0;
+  width: 22px;
+  border-right: 1px solid #2a2a3e;
+  overflow: hidden;
+
+  .ruler-tick {
+    left: 2px;
+    transform: rotate(-90deg);
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+}
+
+// Fabric.js canvas overrides
+::ng-deep .canvas-container {
+  margin-top: 22px;
+  margin-left: 22px;
+}
+
+// Custom scrollbar for canvas area
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a5e;
+  border-radius: 4px;
+
+  &:hover {
+    background: #4a4a6e;
+  }
+}

@@ -1,0 +1,126 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Save Template</h2>
+      <button class="close-btn" (click)="onClose()" type="button">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Success Message -->
+      @if (saveSuccess) {
+        <div class="success-message">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="#22c55e" stroke-width="3"/>
+            <path d="M13 20l5 5 9-9" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>Template saved successfully!</p>
+        </div>
+      }
+
+      @if (!saveSuccess) {
+        <!-- Thumbnail Preview -->
+        @if (thumbnailUrl) {
+          <div class="thumbnail-section">
+            <label class="field-label">Preview</label>
+            <div class="thumbnail-container">
+              <img [src]="thumbnailUrl" alt="Template thumbnail" />
+            </div>
+          </div>
+        }
+
+        <!-- Form Fields -->
+        <div class="form-group">
+          <label class="field-label" for="templateName">Template Name *</label>
+          <input
+            id="templateName"
+            type="text"
+            class="form-input"
+            [(ngModel)]="name"
+            placeholder="Enter template name"
+            [class.error]="errorMessage && !name.trim()"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="templateDesc">Description</label>
+          <textarea
+            id="templateDesc"
+            class="form-input form-textarea"
+            [(ngModel)]="description"
+            placeholder="Brief description of this template"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="templateCategory">Category</label>
+          <select
+            id="templateCategory"
+            class="form-input form-select"
+            [(ngModel)]="category"
+            (ngModelChange)="onCategoryChange()"
+          >
+            @for (cat of categories; track cat.value) {
+              <option [value]="cat.value">{{ cat.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label class="field-label">Active</label>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="isActive" />
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-text">{{ isActive ? 'Visible to users' : 'Hidden' }}</span>
+        </div>
+
+        <div class="form-group toggle-group">
+          <label class="field-label">Publish</label>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="isPublished" />
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-text">{{ isPublished ? 'Published (visible to end users)' : 'Draft (admin only)' }}</span>
+        </div>
+
+        <!-- Error -->
+        @if (errorMessage) {
+          <div class="error-message">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="7" stroke="#ef4444" stroke-width="2"/>
+              <path d="M8 5v3M8 10.5v.5" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
+      }
+    </div>
+
+    @if (!saveSuccess) {
+      <div class="modal-footer">
+        <button class="btn btn-cancel" (click)="onClose()" type="button">Cancel</button>
+        <button
+          class="btn btn-primary"
+          [disabled]="isSaving || !name.trim()"
+          (click)="save()"
+          type="button"
+        >
+          @if (isSaving) {
+            <div class="spinner spinner-small"></div>
+            <span>Saving...</span>
+          } @else {
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M13 11v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2M5 6l3-3 3 3M8 3v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Save Template</span>
+          }
+        </button>
+      </div>
+    }
+  </div>
+</div>

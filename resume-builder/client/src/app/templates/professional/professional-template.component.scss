@@ -1,0 +1,203 @@
+$navy: #1a365d;
+$navy-light: #2c5282;
+$text-primary: #1a202c;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$border-color: #cbd5e0;
+
+.resume {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: $text-primary;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+}
+
+.header {
+  background: $navy;
+  color: #fff;
+  padding: 28mm 20mm 20mm;
+  text-align: center;
+
+  .name {
+    font-size: 26pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px;
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 9.5pt;
+    color: #e2e8f0;
+  }
+
+  .contact-item {
+    white-space: nowrap;
+
+    &:not(:last-child)::after {
+      content: '';
+    }
+  }
+}
+
+.section {
+  padding: 12px 20mm 0;
+
+  &:last-child {
+    padding-bottom: 16px;
+  }
+}
+
+.section-title {
+  font-size: 13pt;
+  font-weight: 700;
+  color: $navy;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid $navy;
+}
+
+.entry {
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.entry-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.entry-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+}
+
+.entry-subtitle {
+  font-size: 10pt;
+  color: $text-secondary;
+  font-style: italic;
+}
+
+.entry-date {
+  font-size: 9.5pt;
+  color: $text-muted;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.entry-description {
+  margin: 4px 0 2px;
+  color: $text-secondary;
+  font-size: 10pt;
+}
+
+.highlights {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style-type: disc;
+
+  li {
+    font-size: 10pt;
+    color: $text-secondary;
+    margin-bottom: 2px;
+    line-height: 1.45;
+  }
+}
+
+.summary-text {
+  margin: 0;
+  color: $text-secondary;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-category {
+  font-size: 10pt;
+  line-height: 1.5;
+
+  .category-name {
+    color: $navy;
+  }
+
+  .skill-list {
+    color: $text-secondary;
+  }
+}
+
+.tech-list {
+  font-size: 9.5pt;
+  color: $text-muted;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.cert-entry {
+  font-size: 10pt;
+  line-height: 1.5;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+
+  .cert-date {
+    color: $text-muted;
+    font-size: 9.5pt;
+    margin-left: auto;
+  }
+}
+
+.gpa {
+  display: block;
+  font-size: 9.5pt;
+  color: $text-muted;
+}
+
+.languages-row {
+  font-size: 10pt;
+  color: $text-secondary;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+@media print {
+  .resume {
+    box-shadow: none;
+    margin: 0;
+  }
+}

@@ -1,0 +1,202 @@
+$text-dark: #111827;
+$text-medium: #374151;
+$text-light: #6b7280;
+$text-muted: #9ca3af;
+$border: #d1d5db;
+
+.resume {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  font-family: 'Georgia', 'Cambria', 'Times New Roman', serif;
+  color: $text-dark;
+  font-size: 10.5pt;
+  line-height: 1.65;
+  box-sizing: border-box;
+  padding: 28mm 24mm 24mm;
+  overflow: hidden;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.name {
+  font-size: 30pt;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $text-dark;
+  margin: 0 0 10px;
+}
+
+.contact-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  font-size: 9pt;
+  color: $text-light;
+
+  span {
+    &:not(:last-child)::after {
+      content: '·';
+      margin: 0 10px;
+      color: $text-muted;
+    }
+  }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid $border;
+  margin: 16px 0;
+}
+
+.section {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 10pt;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: $text-light;
+  margin: 0 0 10px;
+}
+
+.entry {
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.entry-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0;
+}
+
+.entry-date {
+  font-size: 9pt;
+  color: $text-light;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.entry-sub {
+  font-size: 9.5pt;
+  color: $text-light;
+  margin-top: 1px;
+}
+
+.entry-description {
+  margin: 4px 0 2px;
+  color: $text-medium;
+  font-size: 10pt;
+}
+
+.highlights {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style-type: disc;
+
+  li {
+    font-size: 10pt;
+    color: $text-medium;
+    margin-bottom: 2px;
+    line-height: 1.5;
+
+    &::marker {
+      color: $text-muted;
+    }
+  }
+}
+
+.summary-text {
+  margin: 0;
+  color: $text-medium;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  text-align: center;
+  font-style: italic;
+}
+
+// Skills inline with dot separators
+.skills-inline {
+  font-size: 10pt;
+  color: $text-medium;
+  line-height: 2;
+  text-align: center;
+}
+
+.dot-sep {
+  margin: 0 8px;
+  color: $text-muted;
+}
+
+.tech-inline {
+  font-size: 9pt;
+  color: $text-light;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.proficiency {
+  color: $text-light;
+  font-size: 9pt;
+}
+
+// Certifications inline
+.entry-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+  font-size: 10pt;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.entry-title-sm {
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.entry-sub-sm {
+  color: $text-light;
+
+  &::before {
+    content: '–';
+    margin-right: 4px;
+  }
+}
+
+.entry-date-sm {
+  color: $text-muted;
+  font-size: 9pt;
+  margin-left: auto;
+}
+
+@media print {
+  .resume {
+    box-shadow: none;
+    margin: 0;
+  }
+}
