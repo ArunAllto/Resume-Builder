@@ -1,0 +1,205 @@
+<div class="resume creative-resume">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Photo -->
+    @if (data.personalInfo.photo) {
+      <div class="photo-section">
+        <img [src]="data.personalInfo.photo" alt="Profile photo" class="photo" />
+      </div>
+    }
+
+    <!-- Contact -->
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">Contact</h3>
+      @if (data.personalInfo.email) {
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">{{ data.personalInfo.email }}</span>
+        </div>
+      }
+      @if (data.personalInfo.phone) {
+        <div class="contact-item">
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">{{ data.personalInfo.phone }}</span>
+        </div>
+      }
+      @if (data.personalInfo.location) {
+        <div class="contact-item">
+          <span class="contact-label">Location</span>
+          <span class="contact-value">{{ data.personalInfo.location }}</span>
+        </div>
+      }
+      @if (data.personalInfo.linkedin) {
+        <div class="contact-item">
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value">{{ data.personalInfo.linkedin }}</span>
+        </div>
+      }
+      @if (data.personalInfo.website) {
+        <div class="contact-item">
+          <span class="contact-label">Website</span>
+          <span class="contact-value">{{ data.personalInfo.website }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Skills -->
+    @if (data.skills.length) {
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Skills</h3>
+        @for (cat of skillCategories; track cat) {
+          <div class="skill-group">
+            <h4 class="skill-cat">{{ cat }}</h4>
+            <div class="skill-tags">
+              @for (skill of groupedSkills[cat]; track skill.id) {
+                <span class="skill-tag">{{ skill.name }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Languages -->
+    @if (data.languages.length) {
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Languages</h3>
+        @for (lang of data.languages; track lang.id) {
+          <div class="language-item">
+            <span class="language-name">{{ lang.name }}</span>
+            <div class="dot-rating">
+              @for (dot of proficiencyDots(lang.proficiency); track $index) {
+                <span class="dot" [class.filled]="dot"></span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Certifications -->
+    @if (data.certifications.length) {
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Certifications</h3>
+        @for (cert of data.certifications; track cert.id) {
+          <div class="cert-item">
+            <span class="cert-name">{{ cert.name }}</span>
+            @if (cert.issuer) {
+              <span class="cert-issuer">{{ cert.issuer }}</span>
+            }
+            @if (cert.date) {
+              <span class="cert-date">{{ formatDate(cert.date) }}</span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Name & Title -->
+    <header class="main-header">
+      <h1 class="name">{{ data.personalInfo.fullName || 'Your Name' }}</h1>
+      @if (data.experience.length) {
+        <p class="tagline">{{ data.experience[0].position }}</p>
+      }
+    </header>
+
+    <!-- Summary -->
+    @if (data.summary) {
+      <section class="main-section">
+        <h2 class="main-section-title">Profile</h2>
+        <p class="summary-text">{{ data.summary }}</p>
+      </section>
+    }
+
+    <!-- Experience -->
+    @if (data.experience.length) {
+      <section class="main-section">
+        <h2 class="main-section-title">Experience</h2>
+        @for (exp of data.experience; track exp.id) {
+          <div class="entry">
+            <div class="entry-header">
+              <div class="entry-left">
+                <h3 class="entry-title">{{ exp.position }}</h3>
+                <span class="entry-company">{{ exp.company }}@if (exp.location) { · {{ exp.location }}}</span>
+              </div>
+              <span class="entry-date">{{ formatDateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+            </div>
+            @if (exp.description) {
+              <p class="entry-description">{{ exp.description }}</p>
+            }
+            @if (exp.highlights.length) {
+              <ul class="highlights">
+                @for (h of exp.highlights; track $index) {
+                  <li>{{ h }}</li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </section>
+    }
+
+    <!-- Education -->
+    @if (data.education.length) {
+      <section class="main-section">
+        <h2 class="main-section-title">Education</h2>
+        @for (edu of data.education; track edu.id) {
+          <div class="entry">
+            <div class="entry-header">
+              <div class="entry-left">
+                <h3 class="entry-title">{{ edu.degree }}@if (edu.field) { in {{ edu.field }}}</h3>
+                <span class="entry-company">{{ edu.institution }}@if (edu.location) { · {{ edu.location }}}</span>
+              </div>
+              <div class="entry-right">
+                <span class="entry-date">{{ formatDateRange(edu.startDate, edu.endDate) }}</span>
+                @if (edu.gpa) {
+                  <span class="gpa">GPA: {{ edu.gpa }}</span>
+                }
+              </div>
+            </div>
+            @if (edu.highlights.length) {
+              <ul class="highlights">
+                @for (h of edu.highlights; track $index) {
+                  <li>{{ h }}</li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </section>
+    }
+
+    <!-- Projects -->
+    @if (data.projects.length) {
+      <section class="main-section">
+        <h2 class="main-section-title">Projects</h2>
+        @for (proj of data.projects; track proj.id) {
+          <div class="entry">
+            <div class="entry-header">
+              <div class="entry-left">
+                <h3 class="entry-title">{{ proj.name }}</h3>
+                @if (proj.url) {
+                  <span class="entry-company">{{ proj.url }}</span>
+                }
+              </div>
+              <span class="entry-date">{{ formatDateRange(proj.startDate, proj.endDate) }}</span>
+            </div>
+            @if (proj.description) {
+              <p class="entry-description">{{ proj.description }}</p>
+            }
+            @if (proj.technologies.length) {
+              <div class="tech-tags">
+                @for (tech of proj.technologies; track $index) {
+                  <span class="tech-tag">{{ tech }}</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+  </main>
+</div>

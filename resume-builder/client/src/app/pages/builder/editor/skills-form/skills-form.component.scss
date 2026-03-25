@@ -1,0 +1,240 @@
+$primary: #2563eb;
+$primary-dark: #1d4ed8;
+$primary-light: #eff6ff;
+$text-dark: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border: #e5e7eb;
+$bg-white: #ffffff;
+$bg-light: #f9fafb;
+$danger: #ef4444;
+$danger-light: #fef2f2;
+$radius-sm: 8px;
+$radius: 12px;
+$transition: 0.2s ease;
+
+.form-section { padding: 0; }
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0 0 16px;
+  svg { color: $primary; flex-shrink: 0; }
+}
+
+.add-skill-form {
+  margin-bottom: 16px;
+}
+
+.skill-inputs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .skill-name-input {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+.form-input {
+  padding: 10px 14px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  color: $text-dark;
+  background: $bg-white;
+  transition: all $transition;
+  outline: none;
+  box-sizing: border-box;
+  &::placeholder { color: $text-muted; }
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+}
+
+.form-select {
+  padding: 10px 14px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  color: $text-dark;
+  background: $bg-white;
+  transition: all $transition;
+  outline: none;
+  cursor: pointer;
+  min-width: 130px;
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+}
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: $primary;
+  color: white;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background $transition;
+  white-space: nowrap;
+  &:hover:not(:disabled) { background: $primary-dark; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.quick-suggestions {
+  margin-bottom: 20px;
+  padding: 14px;
+  background: $bg-light;
+  border-radius: $radius-sm;
+  border: 1px solid $border;
+
+  .suggestions-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .suggestions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+.suggestion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  background: $bg-white;
+  color: $text-secondary;
+  border: 1px solid $border;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition;
+
+  svg { color: $text-muted; }
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: $primary-light;
+    svg { color: $primary; }
+  }
+}
+
+.empty-entries {
+  padding: 32px 20px;
+  text-align: center;
+  color: $text-muted;
+  font-size: 14px;
+  background: $bg-light;
+  border-radius: $radius-sm;
+  border: 1px dashed $border;
+  p { margin: 0; }
+}
+
+.skills-display {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skill-group {
+  .group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 10px;
+
+    .group-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.skills-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: $bg-white;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  transition: all $transition;
+
+  &:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    .badge-remove { opacity: 1; }
+  }
+
+  .badge-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  .badge-level {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .badge-remove {
+    padding: 2px;
+    border: none;
+    background: transparent;
+    color: $text-muted;
+    cursor: pointer;
+    border-radius: 4px;
+    opacity: 0.5;
+    transition: all $transition;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: $danger;
+      background: $danger-light;
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .skill-inputs {
+    flex-direction: column;
+    .skill-name-input { min-width: unset; }
+  }
+  .form-select { min-width: unset; width: 100%; }
+}
