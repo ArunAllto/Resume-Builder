@@ -1,0 +1,77 @@
+<div class="form-section">
+  <h3 class="section-title">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+    Personal Information
+  </h3>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label class="form-label" for="fullName">Full Name</label>
+      <input
+        id="fullName"
+        type="text"
+        class="form-input"
+        placeholder="John Doe"
+        [(ngModel)]="data.fullName"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">Email Address</label>
+      <input
+        id="email"
+        type="email"
+        class="form-input"
+        placeholder="john@example.com"
+        [(ngModel)]="data.email"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="phone">Phone Number</label>
+      <input
+        id="phone"
+        type="tel"
+        class="form-input"
+        placeholder="+1 (555) 123-4567"
+        [(ngModel)]="data.phone"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="location">Location</label>
+      <input
+        id="location"
+        type="text"
+        class="form-input"
+        placeholder="San Francisco, CA"
+        [(ngModel)]="data.location"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="linkedin">LinkedIn</label>
+      <input
+        id="linkedin"
+        type="url"
+        class="form-input"
+        placeholder="linkedin.com/in/johndoe"
+        [(ngModel)]="data.linkedin"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="website">Website</label>
+      <input
+        id="website"
+        type="url"
+        class="form-input"
+        placeholder="johndoe.com"
+        [(ngModel)]="data.website"
+        (ngModelChange)="onFieldChange()" />
+    </div>
+  </div>
+</div>
