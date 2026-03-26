@@ -1,15 +1,15 @@
-<div class="template-manager">
+<div class="p-4 p-sm-3 template-manager">
   <!-- Header -->
-  <div class="page-header">
+  <div class="d-flex align-items-start justify-content-between mb-4 gap-3 flex-wrap">
     <div>
-      <h1>
+      <h1 class="fs-4 fw-bold text-dark mb-1">
         @if (showCreator) {
           Create Template
         } @else {
           Templates
         }
       </h1>
-      <p class="subtitle">
+      <p class="text-secondary small mb-0">
         @if (showCreator) {
           Fill in the details to create a new resume template.
         } @else {
@@ -18,19 +18,13 @@
       </p>
     </div>
     @if (!showCreator) {
-      <div class="header-actions">
-        <a class="designer-btn" routerLink="/admin/templates/designer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-          </svg>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <a class="btn btn-outline-primary d-inline-flex align-items-center gap-2 fw-semibold" routerLink="/admin/templates/designer">
+          <i class="bi bi-pencil-square"></i>
           Open Template Designer
         </a>
-        <button class="primary-btn" (click)="showCreatorView()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
+        <button class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold" (click)="showCreatorView()">
+          <i class="bi bi-plus-lg"></i>
           Add New Template
         </button>
       </div>
@@ -40,103 +34,85 @@
   <!-- Template List View -->
   @if (!showCreator) {
     @if (isLoading) {
-      <div class="loading-grid">
+      <div class="d-flex flex-column gap-2">
         @for (i of [1, 2, 3]; track i) {
-          <div class="skeleton-row"></div>
+          <div class="skeleton-row rounded-2"></div>
         }
       </div>
     } @else if (errorMessage) {
-      <div class="error-banner">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
+      <div class="alert alert-danger d-flex align-items-center gap-2 fw-medium" role="alert">
+        <i class="bi bi-exclamation-circle"></i>
         {{ errorMessage }}
-        <button class="retry-btn" (click)="loadTemplates()">Retry</button>
+        <button class="btn btn-danger btn-sm ms-auto fw-semibold" (click)="loadTemplates()">Retry</button>
       </div>
     } @else if (templates.length === 0) {
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="3" y1="9" x2="21" y2="9"></line>
-          <line x1="9" y1="21" x2="9" y2="9"></line>
-        </svg>
-        <p>No templates yet</p>
-        <span>Create your first template to get started.</span>
-        <button class="primary-btn sm" (click)="showCreatorView()">Create Template</button>
+      <div class="card border-dashed bg-white text-center py-5 px-4">
+        <div class="card-body d-flex flex-column align-items-center">
+          <i class="bi bi-layout-text-window-reverse display-4 text-secondary opacity-50 mb-3"></i>
+          <p class="fw-semibold text-body-secondary mb-1">No templates yet</p>
+          <span class="text-secondary small mb-3">Create your first template to get started.</span>
+          <button class="btn btn-primary btn-sm fw-semibold" (click)="showCreatorView()">Create Template</button>
+        </div>
       </div>
     } @else {
-      <div class="template-list">
+      <div class="d-flex flex-column gap-2">
         @for (template of templates; track template.id) {
-          <div class="template-row">
-            <div class="template-color-bar" [style.background-color]="template.layoutConfig?.primaryColor || '#4f46e5'"></div>
-            <div class="template-details">
-              <span class="template-name">{{ template.name }}</span>
-              <span class="template-desc">{{ template.description || 'No description' }}</span>
-            </div>
-            <span class="badge category-badge">{{ template.category }}</span>
-            <span
-              class="badge"
-              [class.published-badge]="template.isPublished"
-              [class.draft-badge]="!template.isPublished">
-              {{ template.isPublished ? 'Published' : 'Draft' }}
-            </span>
-            <span class="badge" [class.active-badge]="template.isActive" [class.inactive-badge]="!template.isActive">
-              {{ template.isActive ? 'Active' : 'Inactive' }}
-            </span>
-            <div class="template-actions">
-              <a
-                class="action-btn edit-designer-btn"
-                [routerLink]="['/admin/templates/designer', template.id]"
-                title="Edit in Designer">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 20h9"></path>
-                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                </svg>
-              </a>
-              <button
-                class="action-btn publish-btn"
-                [class.unpublish]="template.isPublished"
-                (click)="togglePublish(template)"
-                [title]="template.isPublished ? 'Unpublish' : 'Publish'">
-                @if (template.isPublished) {
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
-                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                  </svg>
-                } @else {
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                }
-              </button>
-              <button
-                class="action-btn toggle-btn"
-                [class.deactivate]="template.isActive"
-                (click)="toggleActive(template)"
-                [title]="template.isActive ? 'Deactivate' : 'Activate'"
-              >
-                @if (template.isActive) {
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                    <line x1="12" y1="2" x2="12" y2="12"></line>
-                  </svg>
-                } @else {
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                }
-              </button>
-              <button class="action-btn delete-btn" (click)="deleteTemplate(template)" title="Delete">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-              </button>
+          <div class="card border shadow-sm template-row">
+            <div class="card-body d-flex align-items-center gap-3 py-3 flex-wrap flex-md-nowrap">
+              <div class="template-color-bar rounded-1 flex-shrink-0" [style.background-color]="template.layoutConfig?.primaryColor || '#4f46e5'"></div>
+              <div class="flex-grow-1 d-flex flex-column min-w-0">
+                <span class="fw-semibold text-dark">{{ template.name }}</span>
+                <span class="text-secondary small text-truncate">{{ template.description || 'No description' }}</span>
+              </div>
+              <span class="badge rounded-pill bg-primary-subtle text-primary">{{ template.category }}</span>
+              @if (template.isFree) {
+                <span class="badge rounded-pill bg-success-subtle text-success">Free</span>
+              } @else {
+                <span class="badge rounded-pill bg-warning-subtle text-warning">
+                  &#8377;{{ template.offerPrice || template.originalPrice || '—' }}
+                  @if (template.originalPrice && template.offerPrice && template.originalPrice > template.offerPrice) {
+                    <del class="ms-1 opacity-75">&#8377;{{ template.originalPrice }}</del>
+                  }
+                </span>
+              }
+              <span
+                class="badge rounded-pill"
+                [ngClass]="template.isPublished ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'">
+                {{ template.isPublished ? 'Published' : 'Draft' }}
+              </span>
+              <span
+                class="badge rounded-pill"
+                [ngClass]="template.isActive ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'">
+                {{ template.isActive ? 'Active' : 'Inactive' }}
+              </span>
+              <div class="d-flex gap-1 flex-shrink-0">
+                <a
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn"
+                  [routerLink]="['/admin/templates/designer', template.id]"
+                  title="Edit in Designer">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn"
+                  [ngClass]="template.isPublished ? 'hover-warning' : 'hover-success'"
+                  (click)="togglePublish(template)"
+                  [title]="template.isPublished ? 'Unpublish' : 'Publish'">
+                  <i class="bi" [ngClass]="template.isPublished ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn"
+                  [ngClass]="template.isActive ? 'hover-warning' : 'hover-success'"
+                  (click)="toggleActive(template)"
+                  [title]="template.isActive ? 'Deactivate' : 'Activate'">
+                  <i class="bi" [ngClass]="template.isActive ? 'bi-power' : 'bi-check-circle'"></i>
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn hover-danger"
+                  (click)="deleteTemplate(template)"
+                  title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
           </div>
         }
@@ -146,163 +122,205 @@
 
   <!-- Template Creator View -->
   @if (showCreator) {
-    <div class="creator-form">
-      <button class="back-btn" (click)="cancelCreator()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
+    <div>
+      <button class="btn btn-light d-inline-flex align-items-center gap-2 text-secondary mb-3" (click)="cancelCreator()">
+        <i class="bi bi-arrow-left"></i>
         Back to List
       </button>
 
       @if (creatorError) {
-        <div class="error-banner" style="margin-bottom: 20px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
+        <div class="alert alert-danger d-flex align-items-center gap-2 fw-medium mb-3" role="alert">
+          <i class="bi bi-exclamation-circle"></i>
           {{ creatorError }}
         </div>
       }
 
-      <div class="form-grid">
+      <div class="row g-4">
         <!-- Basic Info -->
-        <div class="form-section">
-          <h3>Basic Information</h3>
-          <div class="form-group">
-            <label>Template Name *</label>
-            <input type="text" [(ngModel)]="formName" placeholder="e.g., Executive Pro" />
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea [(ngModel)]="formDescription" rows="3" placeholder="Brief description of the template..."></textarea>
-          </div>
-          <div class="form-group">
-            <label>Category</label>
-            <select [(ngModel)]="formCategory">
-              @for (cat of categories; track cat) {
-                <option [value]="cat">{{ cat | titlecase }}</option>
-              }
-            </select>
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm border">
+            <div class="card-header bg-white fw-semibold border-bottom">Basic Information</div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label small fw-semibold">Template Name *</label>
+                <input type="text" class="form-control" [(ngModel)]="formName" placeholder="e.g., Executive Pro" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-semibold">Description</label>
+                <textarea class="form-control" [(ngModel)]="formDescription" rows="3" placeholder="Brief description of the template..."></textarea>
+              </div>
+              <div>
+                <label class="form-label small fw-semibold">Category</label>
+                <select class="form-select" [(ngModel)]="formCategory">
+                  @for (cat of categories; track cat) {
+                    <option [value]="cat">{{ cat | titlecase }}</option>
+                  }
+                </select>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Styling -->
-        <div class="form-section">
-          <h3>Styling</h3>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Primary Color</label>
-              <div class="color-input">
-                <input type="color" [(ngModel)]="formPrimaryColor" />
-                <span>{{ formPrimaryColor }}</span>
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm border">
+            <div class="card-header bg-white fw-semibold border-bottom">Styling</div>
+            <div class="card-body">
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label class="form-label small fw-semibold">Primary Color</label>
+                  <div class="d-flex align-items-center gap-2 border rounded-2 px-2 py-1">
+                    <input type="color" class="form-control form-control-color border-0 p-0 color-swatch" [(ngModel)]="formPrimaryColor" />
+                    <span class="small text-secondary font-monospace">{{ formPrimaryColor }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-semibold">Secondary Color</label>
+                  <div class="d-flex align-items-center gap-2 border rounded-2 px-2 py-1">
+                    <input type="color" class="form-control form-control-color border-0 p-0 color-swatch" [(ngModel)]="formSecondaryColor" />
+                    <span class="small text-secondary font-monospace">{{ formSecondaryColor }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-semibold">Font Family</label>
+                <select class="form-select" [(ngModel)]="formFontFamily">
+                  @for (font of fontFamilies; track font) {
+                    <option [value]="font">{{ font }}</option>
+                  }
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-semibold">Layout</label>
+                <select class="form-select" [(ngModel)]="formLayout">
+                  @for (layout of layouts; track layout) {
+                    <option [value]="layout">{{ layout | titlecase }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="showPhoto" [(ngModel)]="formShowPhoto" />
+                <label class="form-check-label fw-medium" for="showPhoto">Show Photo Section</label>
               </div>
             </div>
-            <div class="form-group">
-              <label>Secondary Color</label>
-              <div class="color-input">
-                <input type="color" [(ngModel)]="formSecondaryColor" />
-                <span>{{ formSecondaryColor }}</span>
-              </div>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="col-12">
+          <div class="card shadow-sm border">
+            <div class="card-header bg-white fw-semibold border-bottom d-flex align-items-center gap-2">
+              <i class="bi bi-currency-rupee text-primary"></i>
+              Pricing
             </div>
-          </div>
-          <div class="form-group">
-            <label>Font Family</label>
-            <select [(ngModel)]="formFontFamily">
-              @for (font of fontFamilies; track font) {
-                <option [value]="font">{{ font }}</option>
+            <div class="card-body">
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="isFreeToggle" [(ngModel)]="formIsFree" />
+                <label class="form-check-label fw-medium" for="isFreeToggle">
+                  @if (formIsFree) {
+                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Free Template</span>
+                  } @else {
+                    <span class="text-warning"><i class="bi bi-coin me-1"></i>Paid Template</span>
+                  }
+                </label>
+              </div>
+              @if (!formIsFree) {
+                <div class="row g-3">
+                  <div class="col-12 col-sm-6">
+                    <label class="form-label small fw-semibold">Original Price (&#8377;) <span class="text-muted fw-normal">— shown as strikethrough</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text">&#8377;</span>
+                      <input type="number" class="form-control" [(ngModel)]="formOriginalPrice" placeholder="e.g., 999" min="0" step="1" />
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <label class="form-label small fw-semibold">Offer Price (&#8377;) <span class="text-muted fw-normal">— actual selling price</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text">&#8377;</span>
+                      <input type="number" class="form-control" [(ngModel)]="formOfferPrice" placeholder="e.g., 499" min="0" step="1" />
+                    </div>
+                  </div>
+                  @if (formOriginalPrice && formOfferPrice && formOriginalPrice > formOfferPrice) {
+                    <div class="col-12">
+                      <div class="alert alert-success py-2 d-flex align-items-center gap-2 mb-0 small">
+                        <i class="bi bi-tag-fill"></i>
+                        <strong>{{ (((formOriginalPrice - formOfferPrice) / formOriginalPrice) * 100) | number:'1.0-0' }}% OFF</strong>
+                        — Users will see <del>&#8377;{{ formOriginalPrice }}</del> <strong class="ms-1">&#8377;{{ formOfferPrice }}</strong>
+                      </div>
+                    </div>
+                  }
+                </div>
               }
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Layout</label>
-            <select [(ngModel)]="formLayout">
-              @for (layout of layouts; track layout) {
-                <option [value]="layout">{{ layout | titlecase }}</option>
-              }
-            </select>
-          </div>
-          <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="formShowPhoto" />
-              <span class="checkmark"></span>
-              Show Photo Section
-            </label>
+            </div>
           </div>
         </div>
 
         <!-- Thumbnail -->
-        <div class="form-section">
-          <h3>Thumbnail</h3>
-          @if (!formThumbnail) {
-            <label class="thumbnail-upload">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              <span>Click to upload thumbnail</span>
-              <small>PNG, JPG up to 2MB</small>
-              <input type="file" accept="image/*" (change)="onThumbnailSelected($event)" hidden />
-            </label>
-          } @else {
-            <div class="thumbnail-preview">
-              <img [src]="formThumbnail" alt="Thumbnail preview" />
-              <button class="remove-thumb" (click)="removeThumbnail()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-                Remove
-              </button>
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm border">
+            <div class="card-header bg-white fw-semibold border-bottom">Thumbnail</div>
+            <div class="card-body">
+              @if (!formThumbnail) {
+                <label class="d-flex flex-column align-items-center gap-2 p-4 border border-2 border-dashed rounded-2 text-center cursor-pointer thumbnail-upload">
+                  <i class="bi bi-image fs-3 text-secondary"></i>
+                  <span class="fw-medium text-body-secondary">Click to upload thumbnail</span>
+                  <small class="text-secondary">PNG, JPG up to 2MB</small>
+                  <input type="file" accept="image/*" (change)="onThumbnailSelected($event)" hidden />
+                </label>
+              } @else {
+                <div class="position-relative">
+                  <img [src]="formThumbnail" alt="Thumbnail preview" class="w-100 rounded-2 border object-fit-cover thumbnail-img" />
+                  <button class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1 mt-2" (click)="removeThumbnail()">
+                    <i class="bi bi-x-lg"></i>
+                    Remove
+                  </button>
+                </div>
+              }
             </div>
-          }
+          </div>
         </div>
 
         <!-- Section Order -->
-        <div class="form-section">
-          <h3>Section Order</h3>
-          <p class="section-hint">Use the arrows to reorder sections.</p>
-          <div class="section-list">
-            @for (section of formSectionOrder; track section; let i = $index) {
-              <div class="section-item">
-                <span class="section-index">{{ i + 1 }}</span>
-                <span class="section-name">{{ section | titlecase }}</span>
-                <div class="section-buttons">
-                  <button
-                    class="move-btn"
-                    (click)="moveSectionUp(i)"
-                    [disabled]="i === 0"
-                    title="Move up"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <polyline points="18 15 12 9 6 15"></polyline>
-                    </svg>
-                  </button>
-                  <button
-                    class="move-btn"
-                    (click)="moveSectionDown(i)"
-                    [disabled]="i === formSectionOrder.length - 1"
-                    title="Move down"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </button>
-                </div>
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm border">
+            <div class="card-header bg-white fw-semibold border-bottom">Section Order</div>
+            <div class="card-body">
+              <p class="text-secondary small mb-3">Use the arrows to reorder sections.</p>
+              <div class="d-flex flex-column gap-1">
+                @for (section of formSectionOrder; track section; let i = $index) {
+                  <div class="d-flex align-items-center gap-2 p-2 bg-body-tertiary border rounded-2 section-item">
+                    <span class="d-flex align-items-center justify-content-center rounded-circle bg-secondary-subtle text-secondary fw-bold flex-shrink-0 section-index">{{ i + 1 }}</span>
+                    <span class="flex-grow-1 fw-medium text-body-secondary">{{ section | titlecase }}</span>
+                    <div class="d-flex gap-1">
+                      <button
+                        class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center move-btn"
+                        (click)="moveSectionUp(i)"
+                        [disabled]="i === 0"
+                        title="Move up">
+                        <i class="bi bi-chevron-up"></i>
+                      </button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center move-btn"
+                        (click)="moveSectionDown(i)"
+                        [disabled]="i === formSectionOrder.length - 1"
+                        title="Move down">
+                        <i class="bi bi-chevron-down"></i>
+                      </button>
+                    </div>
+                  </div>
+                }
               </div>
-            }
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Form Actions -->
-      <div class="form-actions">
-        <button class="cancel-btn" (click)="cancelCreator()" [disabled]="isSubmitting">Cancel</button>
-        <button class="submit-btn" (click)="submitTemplate()" [disabled]="isSubmitting">
+      <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button class="btn btn-outline-secondary fw-semibold px-4" (click)="cancelCreator()" [disabled]="isSubmitting">Cancel</button>
+        <button class="btn btn-primary fw-semibold px-4 d-inline-flex align-items-center gap-2" (click)="submitTemplate()" [disabled]="isSubmitting">
           @if (isSubmitting) {
-            <span class="spinner"></span>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Creating...
           } @else {
             Create Template

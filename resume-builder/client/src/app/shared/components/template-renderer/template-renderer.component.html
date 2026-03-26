@@ -1,6 +1,6 @@
 @if (templateData) {
   <div
-    class="template-artboard"
+    class="template-artboard position-relative bg-white overflow-hidden shadow-sm"
     [style.width.px]="artboardWidth"
     [style.height.px]="artboardHeight"
     [style.transform]="artboardTransform"
@@ -8,7 +8,7 @@
   >
     @for (element of renderedElements; track trackById($index, element)) {
       <div
-        class="template-element"
+        class="template-element position-absolute overflow-hidden"
         [ngStyle]="getElementStyles(element)"
         [class.template-element--text]="element.type === 'text'"
         [class.template-element--image]="element.type === 'image'"
@@ -21,7 +21,7 @@
         @switch (element.type) {
           @case ('text') {
             <div
-              class="text-content"
+              class="text-content w-100 h-100"
               [attr.contenteditable]="isEditable(element) ? 'true' : null"
               (blur)="onTextEdit(element, $event)"
               [class.text-content--multiline]="isSectionBinding(element)"
@@ -30,7 +30,7 @@
           @case ('image') {
             @if (getImageUrl(element)) {
               <img
-                class="image-content"
+                class="image-content d-block w-100 h-100"
                 [src]="getImageUrl(element)"
                 [style.object-fit]="element.imageFit ?? 'cover'"
                 [style.border-radius.px]="element.borderRadius ?? 0"
@@ -38,27 +38,23 @@
                 loading="lazy"
               />
             } @else {
-              <div class="image-placeholder">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
+              <div class="image-placeholder d-flex align-items-center justify-content-center w-100 h-100">
+                <i class="bi bi-image fs-3"></i>
               </div>
             }
           }
           @case ('shape') {
             <div
-              class="shape-fill"
+              class="shape-fill w-100 h-100"
               [style.background-color]="element.fillColor ?? 'transparent'"
               [style.border-radius.px]="element.borderRadius ?? 0"
               [style.opacity]="element.fillOpacity ?? 1"
             ></div>
           }
           @case ('table') {
-            <div class="table-content">
+            <div class="table-content w-100 h-100 overflow-auto">
               @if (element.resolvedTableData && element.resolvedTableData.length > 0) {
-                <table class="rendered-table"
+                <table class="table table-bordered table-sm mb-0 rendered-table"
                   [style.border-color]="element.tableBorderColor ?? '#dee2e6'"
                 >
                   @for (row of element.resolvedTableData; track $index; let rowIdx = $index) {
@@ -72,7 +68,7 @@
                       </thead>
                     } @else {
                       <tbody>
-                        <tr [class.striped]="element.stripedRows && rowIdx % 2 === 0">
+                        <tr [class.table-striped-row]="element.stripedRows && rowIdx % 2 === 0">
                           @for (cell of row; track $index) {
                             <td>{{ cell }}</td>
                           }
@@ -85,7 +81,7 @@
             </div>
           }
           @default {
-            <div class="text-content">{{ getDisplayText(element) }}</div>
+            <div class="text-content w-100 h-100">{{ getDisplayText(element) }}</div>
           }
         }
       </div>

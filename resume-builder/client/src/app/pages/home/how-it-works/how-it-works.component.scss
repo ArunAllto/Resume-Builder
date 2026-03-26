@@ -1,151 +1,40 @@
-.how-it-works {
-  padding: 6rem 0;
-  background: white;
+// Only custom styles Bootstrap cannot handle
 
-  &__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
+.hiw-step {
+  flex: 0 0 280px;
 
-  &__header {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto 4rem;
-  }
-
-  &__label {
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-indigo-600);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.75rem;
-  }
-
-  &__title {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--color-gray-900);
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-
-  &__subtitle {
-    font-size: 1.1rem;
-    color: var(--color-gray-500);
-    line-height: 1.6;
-  }
-
-  &__steps {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0;
-    margin-bottom: 3rem;
-  }
-
-  &__step {
-    flex: 0 0 280px;
-    text-align: center;
-    padding: 0 1rem;
-  }
-
-  &__step-number {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem;
-    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
-
-    span {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: white;
-    }
-  }
-
-  &__step-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-gray-900);
-    margin-bottom: 0.5rem;
-  }
-
-  &__step-description {
-    font-size: 0.925rem;
-    color: var(--color-gray-500);
-    line-height: 1.6;
-  }
-
-  &__connector {
-    flex: 0 0 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 20px;
-    color: var(--color-gray-300);
-
-    svg {
-      width: 80px;
-      height: 24px;
-    }
-  }
-
-  &__cta {
-    text-align: center;
-  }
-
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
-    color: white;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1.05rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
-    }
+  @media (max-width: 767.98px) {
+    flex: none;
+    width: 100%;
+    max-width: 360px;
   }
 }
 
-@media (max-width: 768px) {
-  .how-it-works {
-    padding: 4rem 0;
+.hiw-step-number {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-indigo-700), var(--color-purple-700));
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+}
 
-    &__title {
-      font-size: 1.75rem;
-    }
+.hiw-connector {
+  flex: 0 0 80px;
+  padding-top: 20px;
 
-    &__steps {
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
+  @media (max-width: 767.98px) {
+    flex: 0 0 40px;
+    padding-top: 0;
+  }
+}
 
-    &__step {
-      flex: none;
-      width: 100%;
-      max-width: 360px;
-    }
+.hiw-cta-btn {
+  background: linear-gradient(135deg, var(--color-indigo-700), var(--color-purple-700));
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    &__connector {
-      transform: rotate(90deg);
-      flex: 0 0 40px;
-      padding-top: 0;
-    }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+    color: white;
   }
 }

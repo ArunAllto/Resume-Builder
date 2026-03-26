@@ -36,6 +36,11 @@ export class TemplateManagerComponent implements OnInit {
   formThumbnail = '';
   formSectionOrder: string[] = ['summary', 'experience', 'education', 'skills', 'projects', 'certifications', 'languages'];
 
+  // Pricing
+  formIsFree = true;
+  formOriginalPrice: number | null = null;
+  formOfferPrice: number | null = null;
+
   fontFamilies = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins', 'Merriweather', 'Playfair Display', 'Source Sans Pro', 'Nunito'];
   categories: Array<'professional' | 'modern' | 'minimal' | 'creative'> = ['professional', 'modern', 'minimal', 'creative'];
   layouts: Array<'single-column' | 'two-column' | 'sidebar'> = ['single-column', 'two-column', 'sidebar'];
@@ -140,6 +145,9 @@ export class TemplateManagerComponent implements OnInit {
     this.formShowPhoto = false;
     this.formThumbnail = '';
     this.formSectionOrder = ['summary', 'experience', 'education', 'skills', 'projects', 'certifications', 'languages'];
+    this.formIsFree = true;
+    this.formOriginalPrice = null;
+    this.formOfferPrice = null;
     this.creatorError = '';
   }
 
@@ -200,6 +208,9 @@ export class TemplateManagerComponent implements OnInit {
       layoutConfig,
       isActive: true,
       isPublished: false,
+      isFree: this.formIsFree,
+      originalPrice: this.formIsFree ? undefined : (this.formOriginalPrice ?? undefined),
+      offerPrice: this.formIsFree ? undefined : (this.formOfferPrice ?? undefined),
     };
 
     this.templateService.createTemplate(templateData).subscribe({

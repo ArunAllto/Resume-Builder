@@ -39,6 +39,9 @@ export class SaveDialogComponent implements OnInit {
   category = 'professional';
   isActive = true;
   isPublished = false;
+  isFree = true;
+  originalPrice: number | null = null;
+  offerPrice: number | null = null;
   thumbnailUrl = '';
   isSaving = false;
   saveSuccess = false;
@@ -138,6 +141,9 @@ export class SaveDialogComponent implements OnInit {
         thumbnail: this.thumbnailUrl,
         isActive: this.isActive,
         isPublished: this.isPublished,
+        isFree: this.isFree,
+        originalPrice: this.isFree ? null : this.originalPrice,
+        offerPrice: this.isFree ? null : this.offerPrice,
         layoutConfig: {
           canvasData: JSON.stringify({
             artboardWidth: this.artboardWidth,

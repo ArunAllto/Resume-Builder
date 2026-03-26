@@ -58,7 +58,12 @@
       "Bash(\"C:/Program Files/Microsoft SQL Server/150/Tools/Binn/SqlLocalDB.exe\" delete MSSQLLocalDB)",
       "Bash(\"C:/Program Files/Microsoft SQL Server/150/Tools/Binn/SqlLocalDB.exe\" create MSSQLLocalDB)",
       "Bash(\"C:/Program Files/Microsoft SQL Server/150/Tools/Binn/SqlLocalDB.exe\" start MSSQLLocalDB)",
-      "Bash(wc -l \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/builder/template-list/template-list.component.scss\")"
+      "Bash(wc -l \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/builder/template-list/template-list.component.scss\")",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app\" -name \"*.scss\")",
+      "Bash(grep -v \"^--$\")",
+      "Bash(grep -rn '\\\\$red-\\\\|\\\\$blue-\\\\|\\\\$purple-\\\\|\\\\$green-\\\\|\\\\$yellow-\\\\|\\\\$orange-' \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/\" --include=\"*.scss\")",
+      "Bash(curl -s http://localhost:4200 -o /dev/null -w \"Angular: %{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:5000/api/templates -o /dev/null -w \"API: %{http_code}\\\\n\")"
     ]
   }
 }
