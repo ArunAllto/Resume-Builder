@@ -1,67 +1,44 @@
-<section class="features">
-  <div class="features__container">
-    <div class="features__header">
-      <span class="features__label">Features</span>
-      <h2 class="features__title">Everything You Need to Build a Winning Resume</h2>
-      <p class="features__subtitle">
+<section class="py-5 bg-body-secondary">
+  <div class="container py-lg-4">
+    <!-- Section Header -->
+    <div class="text-center mx-auto mb-5" style="max-width: 640px;">
+      <span class="d-inline-block small fw-semibold text-primary text-uppercase mb-2" style="letter-spacing: 0.1em;">Features</span>
+      <h2 class="display-6 fw-bold text-dark lh-sm mb-3">Everything You Need to Build a Winning Resume</h2>
+      <p class="fs-5 text-muted">
         Our powerful tools and AI technology make resume building effortless and effective.
       </p>
     </div>
 
-    <div class="features__grid">
+    <!-- Features Grid -->
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4">
       @for (feature of features; track feature.title) {
-        <div class="features__card">
-          <div class="features__icon">
-            @switch (feature.icon) {
-              @case ('ai') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2a4 4 0 0 1 4 4c0 1.1-.9 2-2 2h-4a2 2 0 0 1-2-2 4 4 0 0 1 4-4z"/>
-                  <path d="M8 8v2a4 4 0 0 0 8 0V8"/>
-                  <path d="M12 14v4"/>
-                  <path d="M9 18h6"/>
-                  <circle cx="12" cy="6" r="1" fill="currentColor" stroke="none"/>
-                </svg>
+        <div class="col">
+          <div class="card h-100 border rounded-4 p-4 feature-card">
+            <div class="feature-icon d-flex align-items-center justify-content-center rounded-3 mb-3">
+              @switch (feature.icon) {
+                @case ('ai') {
+                  <i class="bi bi-robot fs-4"></i>
+                }
+                @case ('templates') {
+                  <i class="bi bi-grid-1x2 fs-4"></i>
+                }
+                @case ('preview') {
+                  <i class="bi bi-eye fs-4"></i>
+                }
+                @case ('upload') {
+                  <i class="bi bi-cloud-arrow-up fs-4"></i>
+                }
+                @case ('pdf') {
+                  <i class="bi bi-file-earmark-pdf fs-4"></i>
+                }
+                @case ('ats') {
+                  <i class="bi bi-check2-square fs-4"></i>
+                }
               }
-              @case ('templates') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="9" rx="1"/>
-                  <rect x="14" y="3" width="7" height="5" rx="1"/>
-                  <rect x="14" y="12" width="7" height="9" rx="1"/>
-                  <rect x="3" y="16" width="7" height="5" rx="1"/>
-                </svg>
-              }
-              @case ('preview') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-              }
-              @case ('upload') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="17 8 12 3 7 8"/>
-                  <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-              }
-              @case ('pdf') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
-                  <line x1="10" y1="9" x2="8" y2="9"/>
-                </svg>
-              }
-              @case ('ats') {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 11l3 3L22 4"/>
-                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                </svg>
-              }
-            }
+            </div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">{{ feature.title }}</h3>
+            <p class="text-muted mb-0" style="font-size: 0.925rem; line-height: 1.6;">{{ feature.description }}</p>
           </div>
-          <h3 class="features__card-title">{{ feature.title }}</h3>
-          <p class="features__card-description">{{ feature.description }}</p>
         </div>
       }
     </div>

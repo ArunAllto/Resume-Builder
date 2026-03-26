@@ -1,337 +1,151 @@
+// Only custom styles that Bootstrap cannot handle: gradients, animations, special effects
+
 .hero {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #312e81 0%, #4f46e5 40%, #7c3aed 100%);
+  background: linear-gradient(135deg, var(--color-indigo-900) 0%, var(--color-indigo-700) 40%, var(--color-purple-700) 100%);
   padding: 6rem 0 5rem;
   min-height: 90vh;
-  display: flex;
-  align-items: center;
 
-  &__bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  &__circle {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.08;
-    background: white;
-
-    &--1 {
-      width: 600px;
-      height: 600px;
-      top: -200px;
-      right: -100px;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    &--2 {
-      width: 400px;
-      height: 400px;
-      bottom: -150px;
-      left: -100px;
-      animation: float 10s ease-in-out infinite reverse;
-    }
-
-    &--3 {
-      width: 200px;
-      height: 200px;
-      top: 50%;
-      left: 50%;
-      animation: float 6s ease-in-out infinite;
-    }
-  }
-
-  &__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  &__content {
-    animation: fadeInUp 0.8s ease;
-  }
-
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-
-  &__title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: white;
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
-  }
-
-  &__title-accent {
-    display: block;
-    background: linear-gradient(135deg, #c4b5fd, #f0abfc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  &__subtitle {
-    font-size: 1.15rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-    max-width: 520px;
-  }
-
-  &__actions {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-  }
-
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.9rem 1.75rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-
-    &--primary {
-      background: white;
-      color: var(--color-indigo-600);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      }
-    }
-
-    &--secondary {
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(8px);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-      }
-    }
-  }
-
-  &__stats {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  &__stat {
-    text-align: center;
-  }
-
-  &__stat-number {
-    display: block;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: white;
-  }
-
-  &__stat-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &__stat-divider {
-    width: 1px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  &__visual {
-    display: flex;
-    justify-content: center;
-    animation: fadeIn 1s ease 0.3s both;
-  }
-
-  &__mockup {
-    width: 360px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
-    transition: transform 0.5s ease;
-
-    &:hover {
-      transform: perspective(1000px) rotateY(0) rotateX(0);
-    }
-  }
-
-  &__mockup-header {
-    display: flex;
-    gap: 6px;
-    padding: 12px 16px;
-    background: var(--color-gray-50);
-    border-bottom: 1px solid var(--color-gray-100);
-  }
-
-  &__mockup-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-
-    &--red { background: #ef4444; }
-    &--yellow { background: #f59e0b; }
-    &--green { background: #22c55e; }
-  }
-
-  &__mockup-body {
-    display: flex;
-    padding: 20px;
-    gap: 20px;
-    min-height: 400px;
-  }
-
-  &__mockup-sidebar {
-    width: 90px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  &__mockup-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-indigo-200), var(--color-purple-200));
-    margin-bottom: 6px;
-  }
-
-  &__mockup-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  &__mockup-line {
-    height: 8px;
-    border-radius: 4px;
-    background: var(--color-gray-100);
-
-    &--short { width: 50%; }
-    &--medium { width: 75%; }
-    &--long { width: 100%; }
-    &--title {
-      width: 60%;
-      height: 12px;
-      background: linear-gradient(135deg, var(--color-indigo-100), var(--color-purple-100));
-      margin-bottom: 4px;
-    }
-  }
-
-  &__mockup-spacer {
-    height: 12px;
+  @media (max-width: 991.98px) {
+    padding: 4rem 0 3rem;
+    min-height: auto;
   }
 }
 
-@keyframes float {
+// Floating background circles
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: white;
+
+  &--1 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -100px;
+    animation: hero-float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 400px;
+    height: 400px;
+    bottom: -150px;
+    left: -100px;
+    animation: hero-float 10s ease-in-out infinite reverse;
+  }
+
+  &--3 {
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    animation: hero-float 6s ease-in-out infinite;
+  }
+}
+
+// Badge with glassmorphism
+.hero-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+}
+
+// Gradient accent text
+.hero-title-accent {
+  background: linear-gradient(135deg, #c4b5fd, #f0abfc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Button hover effects
+.hero-btn-primary {
+  color: var(--color-indigo-700) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.hero-btn-secondary {
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Stat divider
+.hero-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+// Mockup card with perspective
+.hero-mockup {
+  width: 360px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: perspective(1000px) rotateY(0) rotateX(0);
+  }
+
+  @media (max-width: 991.98px) {
+    width: 300px;
+    transform: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+.hero-mockup-avatar {
+  background: linear-gradient(135deg, var(--color-indigo-200), var(--color-purple-200));
+}
+
+.hero-mockup-title-line {
+  background: linear-gradient(135deg, var(--color-indigo-100), var(--color-purple-200));
+}
+
+// Animations
+.hero-fade-up {
+  animation: hero-fadeInUp 0.8s ease;
+}
+
+.hero-fade-in {
+  animation: hero-fadeIn 1s ease 0.3s both;
+}
+
+@keyframes hero-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-30px); }
 }
 
-@media (max-width: 992px) {
-  .hero {
-    padding: 4rem 0 3rem;
-    min-height: auto;
-
-    &__container {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      text-align: center;
-    }
-
-    &__title {
-      font-size: 2.5rem;
-    }
-
-    &__subtitle {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    &__actions {
-      justify-content: center;
-    }
-
-    &__stats {
-      justify-content: center;
-    }
-
-    &__visual {
-      order: -1;
-    }
-
-    &__mockup {
-      width: 300px;
-      transform: none;
-
-      &:hover {
-        transform: none;
-      }
-    }
+@keyframes hero-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 480px) {
-  .hero {
-    &__title {
-      font-size: 2rem;
-    }
-
-    &__actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    &__btn {
-      justify-content: center;
-    }
-
-    &__stats {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    &__stat-divider {
-      width: 40px;
-      height: 1px;
-    }
-  }
+@keyframes hero-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

@@ -1,33 +1,63 @@
-<nav class="navbar">
-  <div class="navbar__container">
-    <a routerLink="/" class="navbar__brand" (click)="closeMobileMenu()">
-      <svg class="navbar__logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<nav class="navbar navbar-expand-md sticky-top navbar-glass shadow-sm">
+  <div class="container d-flex align-items-center justify-content-between" style="height: 72px;">
+    <a routerLink="/" class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-5 text-decoration-none" (click)="closeMobileMenu()">
+      <svg class="navbar-logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="32" height="32" rx="8" fill="url(#logo-gradient)"/>
         <path d="M9 8h10a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V10a2 2 0 012-2z" fill="white" opacity="0.9"/>
-        <path d="M11 13h8M11 16h6M11 19h7" stroke="var(--color-indigo-600)" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="23" cy="21" r="5" fill="var(--color-indigo-500)"/>
+        <path d="M11 13h8M11 16h6M11 19h7" stroke="var(--bs-indigo)" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="23" cy="21" r="5" fill="var(--bs-indigo)"/>
         <path d="M21.5 21l1 1 2.5-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <defs>
           <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32">
-            <stop stop-color="var(--color-indigo-600)"/>
-            <stop offset="1" stop-color="var(--color-purple-600)"/>
+            <stop stop-color="var(--bs-indigo)"/>
+            <stop offset="1" stop-color="var(--bs-purple)"/>
           </linearGradient>
         </defs>
       </svg>
-      <span class="navbar__brand-text">CV Builder AI</span>
+      <span class="navbar-brand-gradient">CV Builder AI</span>
     </a>
 
-    <div class="navbar__links" [class.navbar__links--open]="mobileMenuOpen">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
-      <a routerLink="/builder" routerLinkActive="active" (click)="closeMobileMenu()">Templates</a>
-      <a routerLink="/upload" routerLinkActive="active" (click)="closeMobileMenu()">Upload Resume</a>
-      <a routerLink="/builder" class="navbar__cta" (click)="closeMobileMenu()">Build Resume</a>
+    <div class="navbar-links d-flex align-items-center gap-4" [class.navbar-links--open]="mobileMenuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link fw-medium" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/builder" routerLinkActive="active" class="nav-link fw-medium" (click)="closeMobileMenu()">Templates</a>
+      <a routerLink="/upload" routerLinkActive="active" class="nav-link fw-medium" (click)="closeMobileMenu()">Upload Resume</a>
+      @if (currentUser) {
+        <a routerLink="/my-drafts" routerLinkActive="active" class="nav-link fw-medium" (click)="closeMobileMenu()">My Drafts</a>
+      }
+
+      <!-- User area -->
+      @if (currentUser) {
+        <div class="navbar-user d-flex align-items-center gap-2 rounded-2 px-2 py-1" role="button" (click)="toggleUserDropdown()">
+          @if (currentUser.avatar) {
+            <img [src]="currentUser.avatar" class="navbar-avatar rounded-circle" alt="">
+          } @else {
+            <span class="navbar-avatar-initials rounded-circle d-flex align-items-center justify-content-center fw-bold text-white">{{ getInitials() }}</span>
+          }
+          <span class="navbar-username fw-medium text-truncate">{{ currentUser.fullName }}</span>
+          <i class="bi bi-chevron-down" style="font-size: 0.75rem;"></i>
+
+          @if (userDropdownOpen) {
+            <div class="dropdown-menu show shadow rounded-3 p-1 border" style="min-width: 180px;">
+              <a routerLink="/my-drafts" class="dropdown-item d-flex align-items-center gap-2 rounded-2 small" (click)="userDropdownOpen = false; closeMobileMenu()">
+                <i class="bi bi-file-earmark-text"></i>
+                My Drafts
+              </a>
+              <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 small text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/builder" class="btn btn-cta text-white fw-semibold px-4 py-2 rounded-3 shadow-sm" (click)="closeMobileMenu()">Build Resume</a>
+      }
     </div>
 
-    <button class="navbar__hamburger" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation menu">
-      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
-      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
-      <span class="navbar__hamburger-line" [class.navbar__hamburger-line--open]="mobileMenuOpen"></span>
+    <button class="navbar-toggler d-md-none border-0 p-1" type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation menu">
+      <span class="hamburger-line" [class.hamburger-line--open]="mobileMenuOpen"></span>
+      <span class="hamburger-line" [class.hamburger-line--open]="mobileMenuOpen"></span>
+      <span class="hamburger-line" [class.hamburger-line--open]="mobileMenuOpen"></span>
     </button>
   </div>
 </nav>

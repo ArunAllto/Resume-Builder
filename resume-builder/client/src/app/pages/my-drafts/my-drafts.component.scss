@@ -1,0 +1,35 @@
+
+.draft-card {
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--bs-box-shadow);
+    transform: translateY(-2px);
+  }
+}
+
+.draft-thumb {
+  height: 120px;
+}
+
+.edit-btn {
+  background: #dbeafe;
+  color: var(--bs-primary);
+  border: 1px solid #93c5fd;
+
+  &:hover {
+    background: #93c5fd;
+    color: #1d4ed8;
+  }
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: var(--bs-danger);
+  border: 1px solid #fecaca;
+
+  &:hover {
+    background: #fecaca;
+    color: #b91c1c;
+  }
+}

@@ -1,15 +1,16 @@
-<div class="toast-container">
+<div class="toast-wrapper position-fixed top-0 end-0 p-3 d-flex flex-column gap-2" style="z-index: 9999; pointer-events: none;">
   @for (toast of toasts; track toast.id) {
-    <div class="toast" [class]="'toast--' + toast.type">
-      <div class="toast__border"></div>
-      <div class="toast__icon" [innerHTML]="getIcon(toast.type)"></div>
-      <div class="toast__message">{{ toast.message }}</div>
-      <button class="toast__close" (click)="remove(toast.id)" aria-label="Close notification">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <div class="toast__progress" [style.animation-duration]="toast.duration + 'ms'"></div>
+    <div class="toast-item d-flex align-items-center bg-white rounded-3 shadow position-relative overflow-hidden"
+         [class.toast-item--success]="toast.type === 'success'"
+         [class.toast-item--error]="toast.type === 'error'"
+         [class.toast-item--warning]="toast.type === 'warning'"
+         [class.toast-item--info]="toast.type === 'info'"
+         style="pointer-events: auto;">
+      <div class="toast-border"></div>
+      <div class="toast-icon d-flex align-items-center justify-content-center flex-shrink-0 ms-3 me-2" [innerHTML]="getIcon(toast.type)"></div>
+      <div class="toast-msg flex-grow-1 small fw-medium text-dark py-3 pe-5">{{ toast.message }}</div>
+      <button class="btn-close btn-close-sm position-absolute top-0 end-0 mt-2 me-2" (click)="remove(toast.id)" aria-label="Close notification"></button>
+      <div class="toast-progress" [style.animation-duration]="toast.duration + 'ms'"></div>
     </div>
   }
 </div>

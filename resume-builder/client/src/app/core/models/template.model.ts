@@ -22,6 +22,9 @@ export interface Template {
   layoutConfig: TemplateConfig;
   isActive: boolean;
   isPublished: boolean;
+  isFree: boolean;
+  originalPrice?: number;
+  offerPrice?: number;
   createdAt: string;
 }
 

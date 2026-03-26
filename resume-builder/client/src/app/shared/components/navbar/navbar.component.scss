@@ -1,169 +1,166 @@
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+// Glass effect for navbar - Bootstrap can't do this
+.navbar-glass {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-gray-100);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  z-index: 1050;
+}
 
-  &__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+// Logo SVG sizing
+.navbar-logo-icon {
+  width: 36px;
+  height: 36px;
+}
+
+// Gradient brand text - Bootstrap has no gradient text utility
+.navbar-brand-gradient {
+  background: linear-gradient(135deg, var(--bs-indigo), var(--bs-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Nav link styling with active underline indicator
+.nav-link {
+  color: var(--bs-gray-700);
+  font-size: 0.95rem;
+  transition: color 0.2s;
+  position: relative;
+
+  &:hover {
+    color: var(--bs-indigo);
   }
 
-  &__brand {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1.35rem;
-    color: var(--color-gray-900);
-    transition: opacity 0.2s;
+  &.active:not(.btn-cta) {
+    color: var(--bs-indigo);
 
-    &:hover {
-      opacity: 0.85;
-    }
-  }
-
-  &__logo-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  &__brand-text {
-    background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  &__links {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-
-    a {
-      text-decoration: none;
-      color: var(--color-gray-600);
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-      position: relative;
-
-      &:hover {
-        color: var(--color-indigo-600);
-      }
-
-      &.active:not(.navbar__cta) {
-        color: var(--color-indigo-600);
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: var(--color-indigo-600);
-          border-radius: 1px;
-        }
-      }
-    }
-  }
-
-  &__cta {
-    background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
-    color: white !important;
-    padding: 0.6rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600 !important;
-    transition: transform 0.2s, box-shadow 0.2s !important;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
-      color: white !important;
-    }
-  }
-
-  &__hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 1001;
-  }
-
-  &__hamburger-line {
-    display: block;
-    width: 24px;
-    height: 2.5px;
-    background: var(--color-gray-700);
-    border-radius: 2px;
-    transition: transform 0.3s, opacity 0.3s;
-
-    &--open {
-      &:nth-child(1) {
-        transform: translateY(7.5px) rotate(45deg);
-      }
-
-      &:nth-child(2) {
-        opacity: 0;
-      }
-
-      &:nth-child(3) {
-        transform: translateY(-7.5px) rotate(-45deg);
-      }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--bs-indigo);
+      border-radius: 1px;
     }
   }
 }
 
-@media (max-width: 768px) {
-  .navbar {
-    &__hamburger {
-      display: flex;
+// CTA button gradient - Bootstrap buttons don't support gradients natively
+.btn-cta {
+  background: linear-gradient(135deg, var(--bs-indigo), var(--bs-purple));
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(var(--bs-indigo-rgb), 0.3);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(var(--bs-indigo-rgb), 0.4);
+    color: white;
+  }
+}
+
+// User dropdown area
+.navbar-user {
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--bs-gray-100);
+  }
+}
+
+.navbar-avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
+.navbar-avatar-initials {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--bs-indigo), var(--bs-purple));
+  font-size: 0.75rem;
+}
+
+.navbar-username {
+  font-size: 0.875rem;
+  color: var(--bs-gray-700);
+  max-width: 120px;
+}
+
+// Dropdown positioning
+.navbar-user > .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  z-index: 1100;
+}
+
+// Hamburger custom animation - Bootstrap toggler doesn't animate to X
+.navbar-toggler {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1051;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: var(--bs-gray-700);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+
+  &--open {
+    &:nth-child(1) {
+      transform: translateY(7.5px) rotate(45deg);
+    }
+    &:nth-child(2) {
+      opacity: 0;
+    }
+    &:nth-child(3) {
+      transform: translateY(-7.5px) rotate(-45deg);
+    }
+  }
+}
+
+// Mobile off-canvas menu - custom slide-in behavior
+@media (max-width: 767.98px) {
+  .navbar-toggler {
+    display: flex;
+  }
+
+  .navbar-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    flex-direction: column;
+    background: var(--bs-white);
+    padding: 5rem 2rem 2rem;
+    gap: 1.5rem !important;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1050;
+
+    &--open {
+      right: 0;
     }
 
-    &__links {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100vh;
-      flex-direction: column;
-      background: white;
-      padding: 5rem 2rem 2rem;
-      gap: 1.5rem;
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-      transition: right 0.3s ease;
-      z-index: 1000;
-
-      &--open {
-        right: 0;
-      }
-
-      a {
-        font-size: 1.1rem;
-        width: 100%;
-        padding: 0.5rem 0;
-      }
+    .nav-link {
+      font-size: 1.1rem;
+      width: 100%;
+      padding: 0.5rem 0;
     }
 
-    &__cta {
+    .btn-cta {
       text-align: center;
       width: 100%;
-      display: block !important;
+      display: block;
     }
   }
 }

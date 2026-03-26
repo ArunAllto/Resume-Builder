@@ -88,6 +88,29 @@
           <span class="toggle-text">{{ isPublished ? 'Published (visible to end users)' : 'Draft (admin only)' }}</span>
         </div>
 
+        <!-- Pricing -->
+        <div class="form-group toggle-group">
+          <label class="field-label">Pricing</label>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="isFree" />
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-text">{{ isFree ? 'Free template' : 'Paid template' }}</span>
+        </div>
+
+        @if (!isFree) {
+          <div class="form-group" style="display: flex; gap: 12px;">
+            <div style="flex: 1;">
+              <label class="field-label">Original Price (&#8377;)</label>
+              <input type="number" class="form-input" [(ngModel)]="originalPrice" placeholder="e.g., 999" min="0" />
+            </div>
+            <div style="flex: 1;">
+              <label class="field-label">Offer Price (&#8377;)</label>
+              <input type="number" class="form-input" [(ngModel)]="offerPrice" placeholder="e.g., 499" min="0" />
+            </div>
+          </div>
+        }
+
         <!-- Error -->
         @if (errorMessage) {
           <div class="error-message">

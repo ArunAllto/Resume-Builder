@@ -1,0 +1,40 @@
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1055;
+  animation: fadeIn 0.2s ease;
+}
+
+.auth-card-animate {
+  animation: slideUp 0.3s ease;
+}
+
+.auth-divider hr {
+  border-color: var(--bs-border-color);
+  opacity: 1;
+}
+
+.nav-tabs .nav-link {
+  border-bottom-width: 2px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bs-secondary-color);
+  transition: color 0.2s, border-color 0.2s;
+
+  &.active {
+    font-weight: 600;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

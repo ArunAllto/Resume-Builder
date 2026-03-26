@@ -1,39 +1,38 @@
-<section class="how-it-works">
-  <div class="how-it-works__container">
-    <div class="how-it-works__header">
-      <span class="how-it-works__label">How It Works</span>
-      <h2 class="how-it-works__title">Create Your Resume in 3 Simple Steps</h2>
-      <p class="how-it-works__subtitle">
+<section class="py-5 bg-white">
+  <div class="container py-lg-4">
+    <!-- Section Header -->
+    <div class="text-center mx-auto mb-5" style="max-width: 640px;">
+      <span class="d-inline-block small fw-semibold text-primary text-uppercase mb-2" style="letter-spacing: 0.1em;">How It Works</span>
+      <h2 class="display-6 fw-bold text-dark lh-sm mb-3">Create Your Resume in 3 Simple Steps</h2>
+      <p class="fs-5 text-muted">
         No complicated software or design skills needed. Our streamlined process gets you from start to finish in minutes.
       </p>
     </div>
 
-    <div class="how-it-works__steps">
+    <!-- Steps -->
+    <div class="d-flex flex-column flex-md-row align-items-start justify-content-center mb-5 hiw-steps">
       @for (step of steps; track step.number; let last = $last) {
-        <div class="how-it-works__step">
-          <div class="how-it-works__step-number">
-            <span>{{ step.number }}</span>
+        <div class="text-center px-3 hiw-step">
+          <div class="hiw-step-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+            <span class="fs-4 fw-bold text-white">{{ step.number }}</span>
           </div>
-          <h3 class="how-it-works__step-title">{{ step.title }}</h3>
-          <p class="how-it-works__step-description">{{ step.description }}</p>
+          <h3 class="fs-5 fw-bold text-dark mb-2">{{ step.title }}</h3>
+          <p class="text-muted mb-0" style="font-size: 0.925rem; line-height: 1.6;">{{ step.description }}</p>
         </div>
         @if (!last) {
-          <div class="how-it-works__connector">
-            <svg viewBox="0 0 80 24" fill="none">
-              <path d="M0 12h72m0 0l-8-8m8 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <div class="hiw-connector d-flex align-items-center justify-content-center text-body-tertiary">
+            <i class="bi bi-arrow-right fs-3 d-none d-md-block"></i>
+            <i class="bi bi-arrow-down fs-3 d-md-none"></i>
           </div>
         }
       }
     </div>
 
-    <div class="how-it-works__cta">
-      <a routerLink="/builder" class="how-it-works__btn">
+    <!-- CTA Button -->
+    <div class="text-center">
+      <a routerLink="/builder" class="btn btn-lg d-inline-flex align-items-center gap-2 fw-semibold rounded-3 text-white hiw-cta-btn">
         Get Started Now
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
-        </svg>
+        <i class="bi bi-arrow-right"></i>
       </a>
     </div>
   </div>

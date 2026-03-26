@@ -20,5 +20,13 @@ public class Template
 
     public bool IsActive { get; set; } = true;
     public bool IsPublished { get; set; } = false;
+    public bool IsFree { get; set; } = true;
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal? OriginalPrice { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal? OfferPrice { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
