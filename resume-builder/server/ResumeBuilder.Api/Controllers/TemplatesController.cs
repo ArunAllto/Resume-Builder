@@ -55,7 +55,7 @@ public class TemplatesController : ControllerBase
         return Ok(new { success = true, data = template });
     }
 
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost]
     public async Task<IActionResult> CreateTemplate([FromBody] CreateTemplateDto dto)
     {
@@ -71,6 +71,9 @@ public class TemplatesController : ControllerBase
                 : "{}",
             IsActive = true,
             IsPublished = dto.IsPublished,
+            IsFree = dto.IsFree,
+            OriginalPrice = dto.OriginalPrice,
+            OfferPrice = dto.OfferPrice,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -80,7 +83,7 @@ public class TemplatesController : ControllerBase
         return Ok(new { success = true, data = template });
     }
 
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTemplate(string id, [FromBody] UpdateTemplateDto dto)
     {
@@ -95,13 +98,16 @@ public class TemplatesController : ControllerBase
         if (dto.LayoutConfig != null) template.LayoutConfig = JsonSerializer.Serialize(dto.LayoutConfig);
         if (dto.IsActive.HasValue) template.IsActive = dto.IsActive.Value;
         if (dto.IsPublished.HasValue) template.IsPublished = dto.IsPublished.Value;
+        if (dto.IsFree.HasValue) template.IsFree = dto.IsFree.Value;
+        if (dto.OriginalPrice.HasValue) template.OriginalPrice = dto.OriginalPrice.Value;
+        if (dto.OfferPrice.HasValue) template.OfferPrice = dto.OfferPrice.Value;
 
         await _context.SaveChangesAsync();
 
         return Ok(new { success = true, data = template });
     }
 
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTemplate(string id)
     {

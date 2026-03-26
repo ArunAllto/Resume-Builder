@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Template, TemplateConfig } from '../../../core/models/template.model';
 import { TemplateService } from '../../../core/services/template.service';
+import { UserService } from '../../../core/services/user.service';
+import { PurchaseService } from '../../../core/services/purchase.service';
 import { ToastService } from '../../../shared/services/toast.service';
+import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-modal.component';
+import { PurchaseModalComponent } from '../../../shared/components/purchase-modal/purchase-modal.component';
 
 type CategoryFilter = 'all' | 'professional' | 'modern' | 'minimal' | 'creative';
 
 @Component({
   selector: 'app-template-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, AuthModalComponent, PurchaseModalComponent],
   templateUrl: './template-list.component.html',
   styleUrls: ['./template-list.component.scss'],
 })
@@ -22,6 +26,14 @@ export class TemplateListComponent implements OnInit {
   error = '';
   searchQuery = '';
   activeCategory: CategoryFilter = 'all';
+
+  // Auth modal
+  showAuthModal = false;
+  selectedTemplateId = '';
+
+  // Purchase modal
+  showPurchaseModal = false;
+  selectedTemplate: Template | null = null;
 
   categories: { key: CategoryFilter; label: string }[] = [
     { key: 'all', label: 'All' },
@@ -38,7 +50,13 @@ export class TemplateListComponent implements OnInit {
     creative: 'linear-gradient(135deg, #c53030 0%, #e53e3e 50%, #fc8181 100%)',
   };
 
-  constructor(private templateService: TemplateService, private toast: ToastService) {}
+  constructor(
+    private templateService: TemplateService,
+    private userService: UserService,
+    private purchaseService: PurchaseService,
+    private toast: ToastService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadTemplates();
@@ -53,39 +71,82 @@ export class TemplateListComponent implements OnInit {
         this.applyFilters();
         this.loading = false;
       },
-      error: (err) => {
+      error: () => {
         this.error = 'Failed to load templates. Please try again.';
         this.loading = false;
-        console.error('Template load error:', err);
         this.toast.error('Failed to load templates');
       },
     });
   }
 
-  /** Parse layoutConfig from JSON string if needed */
+  useTemplate(template: Template): void {
+    // Step 1: Check if logged in
+    if (!this.userService.isLoggedIn()) {
+      this.selectedTemplateId = template.id;
+      this.showAuthModal = true;
+      return;
+    }
+
+    // Step 2: Check if paid template needs purchase
+    if (!template.isFree) {
+      this.purchaseService.checkPurchase(template.id).subscribe({
+        next: (purchased) => {
+          if (purchased) {
+            this.navigateToEditor(template.id);
+          } else {
+            this.selectedTemplate = template;
+            this.showPurchaseModal = true;
+          }
+        },
+        error: () => {
+          // If check fails, try to navigate anyway
+          this.navigateToEditor(template.id);
+        }
+      });
+      return;
+    }
+
+    // Free template + logged in
+    this.navigateToEditor(template.id);
+  }
+
+  onAuthenticated(): void {
+    this.showAuthModal = false;
+    // After auth, re-run the template selection flow
+    const template = this.templates.find(t => t.id === this.selectedTemplateId);
+    if (template) {
+      this.useTemplate(template);
+    } else {
+      this.navigateToEditor(this.selectedTemplateId);
+    }
+  }
+
+  onPurchased(): void {
+    this.showPurchaseModal = false;
+    if (this.selectedTemplate) {
+      this.navigateToEditor(this.selectedTemplate.id);
+    }
+  }
+
+  private navigateToEditor(templateId: string): void {
+    this.router.navigate(['/builder', templateId]);
+  }
+
   private parseLayoutConfig(template: Template): Template {
     if (typeof template.layoutConfig === 'string') {
       try {
         template.layoutConfig = JSON.parse(template.layoutConfig) as TemplateConfig;
-      } catch {
-        // Leave as-is if parsing fails
-      }
+      } catch {}
     }
     return template;
   }
 
-  /** Check if template has a real thumbnail (non-empty base64 data URL) */
   hasThumbnail(template: Template): boolean {
     return typeof template.thumbnail === 'string' && template.thumbnail.trim().length > 0;
   }
 
-  /** Check if template was designed with the canvas designer */
   isCanvasTemplate(template: Template): boolean {
-    return !!(
-      template.layoutConfig &&
-      typeof template.layoutConfig === 'object' &&
-      template.layoutConfig.canvasData
-    );
+    return !!(template.layoutConfig && typeof template.layoutConfig === 'object' && template.layoutConfig.canvasData);
   }
 
   filterByCategory(category: CategoryFilter): void {
@@ -99,20 +160,15 @@ export class TemplateListComponent implements OnInit {
 
   applyFilters(): void {
     let result = [...this.templates];
-
     if (this.activeCategory !== 'all') {
       result = result.filter((t) => t.category === this.activeCategory);
     }
-
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(
-        (t) =>
-          t.name.toLowerCase().includes(query) ||
-          t.description.toLowerCase().includes(query)
+      result = result.filter((t) =>
+        t.name.toLowerCase().includes(query) || t.description.toLowerCase().includes(query)
       );
     }
-
     this.filteredTemplates = result;
   }
 
@@ -122,10 +178,7 @@ export class TemplateListComponent implements OnInit {
 
   getCategoryColor(category: string): string {
     const colors: Record<string, string> = {
-      professional: '#2c5282',
-      modern: '#6b46c1',
-      minimal: '#4a5568',
-      creative: '#e53e3e',
+      professional: '#2c5282', modern: '#6b46c1', minimal: '#4a5568', creative: '#e53e3e',
     };
     return colors[category] || '#4a5568';
   }

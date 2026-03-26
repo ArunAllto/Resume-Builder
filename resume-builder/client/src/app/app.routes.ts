@@ -9,10 +9,13 @@ import { AdminDashboardComponent } from './pages/admin/dashboard/admin-dashboard
 import { TemplateManagerComponent } from './pages/admin/template-manager/template-manager.component';
 import { TemplateDesignerComponent } from './pages/admin/template-designer/template-designer.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { userGuard } from './core/guards/user.guard';
+import { MyDraftsComponent } from './pages/my-drafts/my-drafts.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'builder', component: TemplateListComponent },
+  { path: 'my-drafts', component: MyDraftsComponent, canActivate: [userGuard] },
   { path: 'builder/:templateId', component: EditorComponent },
   { path: 'upload', component: UploadComponent },
   { path: 'admin/login', component: AdminLoginComponent },

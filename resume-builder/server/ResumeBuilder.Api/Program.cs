@@ -52,7 +52,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", p => p.RequireRole("User"));
+});
+
+// HttpClient for Google token verification
+builder.Services.AddHttpClient();
+
+// Settings
+builder.Services.Configure<ResumeBuilder.Api.Models.ResumeSettings>(
+    builder.Configuration.GetSection("ResumeSettings"));
 
 // CORS
 builder.Services.AddCors(options =>

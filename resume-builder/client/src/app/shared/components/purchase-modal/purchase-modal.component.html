@@ -1,0 +1,36 @@
+@if (visible && template) {
+<div class="purchase-overlay" (click)="close()">
+  <div class="purchase-card" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="purchase-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3f7cfe" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+
+    <h3>{{ template.name }}</h3>
+    <p class="subtitle">Premium Template</p>
+
+    <div class="price-section">
+      <span class="offer-price">&#8377;{{ template.offerPrice || template.originalPrice }}</span>
+      @if (template.originalPrice && template.offerPrice && template.originalPrice > template.offerPrice) {
+        <span class="original-price">&#8377;{{ template.originalPrice }}</span>
+        <span class="discount-badge">{{ discount }}% OFF</span>
+      }
+    </div>
+
+    <ul class="features">
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Professional design</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Unlimited downloads</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ATS-friendly format</li>
+    </ul>
+
+    <button class="purchase-btn" (click)="onPurchase()" [disabled]="loading">
+      @if (loading) { <span class="spinner"></span> Processing... } @else { Purchase Template }
+    </button>
+
+    <button class="cancel-link" (click)="close()">Cancel</button>
+  </div>
+</div>
+}

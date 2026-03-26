@@ -108,22 +108,51 @@
                   {{ template.category }}
                 </span>
               </div>
+              <!-- Price badge -->
+              <div class="price-badge-row">
+                @if (template.isFree === false) {
+                  <span class="badge-paid">
+                    &#8377;{{ template.offerPrice || template.originalPrice }}
+                    @if (template.originalPrice && template.offerPrice && template.originalPrice > template.offerPrice) {
+                      <del>&#8377;{{ template.originalPrice }}</del>
+                    }
+                  </span>
+                } @else {
+                  <span class="badge-free">FREE</span>
+                }
+              </div>
               @if (template.description) {
                 <p class="card-description">{{ template.description }}</p>
               }
-              <a
+              <button
                 class="use-template-btn"
-                [routerLink]="['/builder', template.id]">
+                (click)="useTemplate(template)">
                 Use Template
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
-              </a>
+              </button>
             </div>
           </div>
         }
       </div>
     }
   }
+
+  <!-- Auth Modal -->
+  <app-auth-modal
+    [visible]="showAuthModal"
+    [templateId]="selectedTemplateId"
+    (authenticated)="onAuthenticated()"
+    (closed)="showAuthModal = false">
+  </app-auth-modal>
+
+  <!-- Purchase Modal -->
+  <app-purchase-modal
+    [visible]="showPurchaseModal"
+    [template]="selectedTemplate"
+    (purchased)="onPurchased()"
+    (closed)="showPurchaseModal = false">
+  </app-purchase-modal>
 </div>

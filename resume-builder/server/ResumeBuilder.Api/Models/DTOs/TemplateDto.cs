@@ -17,6 +17,9 @@ public class CreateTemplateDto
     public object? LayoutConfig { get; set; }
 
     public bool IsPublished { get; set; } = false;
+    public bool IsFree { get; set; } = true;
+    public decimal? OriginalPrice { get; set; }
+    public decimal? OfferPrice { get; set; }
 }
 
 public class UpdateTemplateDto
@@ -28,4 +31,7 @@ public class UpdateTemplateDto
     public object? LayoutConfig { get; set; }
     public bool? IsActive { get; set; }
     public bool? IsPublished { get; set; }
+    public bool? IsFree { get; set; }
+    public decimal? OriginalPrice { get; set; }
+    public decimal? OfferPrice { get; set; }
 }

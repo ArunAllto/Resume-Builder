@@ -430,3 +430,35 @@ $transition: 0.2s ease;
     height: 160px;
   }
 }
+
+// Price badges
+.price-badge-row {
+  margin-bottom: 8px;
+}
+
+.badge-free {
+  display: inline-block;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.badge-paid {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+
+  del {
+    color: #94a3b8;
+    font-weight: 400;
+    margin-left: 6px;
+    font-size: 12px;
+  }
+}

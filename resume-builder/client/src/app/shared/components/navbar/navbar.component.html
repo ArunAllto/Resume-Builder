@@ -21,7 +21,37 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
       <a routerLink="/builder" routerLinkActive="active" (click)="closeMobileMenu()">Templates</a>
       <a routerLink="/upload" routerLinkActive="active" (click)="closeMobileMenu()">Upload Resume</a>
-      <a routerLink="/builder" class="navbar__cta" (click)="closeMobileMenu()">Build Resume</a>
+      @if (currentUser) {
+        <a routerLink="/my-drafts" routerLinkActive="active" (click)="closeMobileMenu()">My Drafts</a>
+      }
+
+      <!-- User area -->
+      @if (currentUser) {
+        <div class="navbar__user" (click)="toggleUserDropdown()">
+          @if (currentUser.avatar) {
+            <img [src]="currentUser.avatar" class="navbar__avatar" alt="">
+          } @else {
+            <span class="navbar__avatar-initials">{{ getInitials() }}</span>
+          }
+          <span class="navbar__username">{{ currentUser.fullName }}</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+
+          @if (userDropdownOpen) {
+            <div class="navbar__dropdown">
+              <a routerLink="/my-drafts" (click)="userDropdownOpen = false; closeMobileMenu()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                My Drafts
+              </a>
+              <button (click)="logout()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                Logout
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/builder" class="navbar__cta" (click)="closeMobileMenu()">Build Resume</a>
+      }
     </div>
 
     <button class="navbar__hamburger" (click)="toggleMobileMenu()" [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation menu">

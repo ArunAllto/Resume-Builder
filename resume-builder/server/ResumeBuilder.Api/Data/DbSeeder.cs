@@ -56,6 +56,7 @@ public static class DbSeeder
                     }),
                     IsActive = true,
                     IsPublished = true,
+                    IsFree = true,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -77,6 +78,7 @@ public static class DbSeeder
                     }),
                     IsActive = true,
                     IsPublished = true,
+                    IsFree = true,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -98,6 +100,7 @@ public static class DbSeeder
                     }),
                     IsActive = true,
                     IsPublished = true,
+                    IsFree = true,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -119,6 +122,7 @@ public static class DbSeeder
                     }),
                     IsActive = true,
                     IsPublished = true,
+                    IsFree = true,
                     CreatedAt = DateTime.UtcNow
                 }
             };
