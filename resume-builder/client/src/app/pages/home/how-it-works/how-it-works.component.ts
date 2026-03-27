@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 
 interface Step {
   number: string;
+  icon: string;
   title: string;
   description: string;
 }
@@ -18,18 +19,24 @@ export class HowItWorksComponent {
   steps: Step[] = [
     {
       number: '1',
+      icon: 'bi-layout-text-window',
       title: 'Choose a Template',
-      description: 'Browse our collection of professionally designed templates and pick the one that best fits your style and industry.',
+      description:
+        'Browse our collection of 50+ professionally designed templates. Filter by style — professional, modern, minimal, or creative — and pick the one that fits your industry.',
     },
     {
       number: '2',
-      title: 'Fill in Your Details',
-      description: 'Enter your information with the help of AI suggestions. Our smart editor makes it easy to create compelling content.',
+      icon: 'bi-pencil-square',
+      title: 'Fill Your Details',
+      description:
+        'Enter your information with AI-powered suggestions. Our smart editor helps you write compelling bullet points, summaries, and skill descriptions in seconds.',
     },
     {
       number: '3',
-      title: 'Download Your Resume',
-      description: 'Preview your finished resume and download it as a perfectly formatted PDF, ready to impress employers.',
+      icon: 'bi-download',
+      title: 'Download & Apply',
+      description:
+        'Preview your finished resume in real-time, then download it as a perfectly formatted, ATS-optimized PDF ready to impress employers.',
     },
   ];
 }

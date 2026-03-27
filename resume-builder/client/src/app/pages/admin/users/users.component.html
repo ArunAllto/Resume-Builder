@@ -1,0 +1,225 @@
+<div class="p-4 p-sm-3 users-page">
+  <!-- Header -->
+  <div class="d-flex align-items-start justify-content-between mb-4 gap-3 flex-wrap">
+    <div>
+      <h1 class="fs-4 fw-bold text-dark mb-1">User Management</h1>
+      <p class="text-secondary small mb-0">Manage registered users and their accounts.</p>
+    </div>
+    <div class="input-group" style="max-width: 300px;">
+      <span class="input-group-text bg-white border-end-0">
+        <i class="bi bi-search text-secondary"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-start-0 ps-0"
+        placeholder="Search users..."
+        [value]="search"
+        (input)="onSearchInput($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="d-flex justify-content-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 border-start border-4 border-primary">
+          <div class="card-body py-2 px-3 d-flex align-items-center gap-2">
+            <i class="bi bi-people fs-4 text-primary"></i>
+            <div>
+              <div class="fs-5 fw-bold lh-1">{{ total }}</div>
+              <div class="text-secondary small">Total Users</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 border-start border-4 border-success">
+          <div class="card-body py-2 px-3 d-flex align-items-center gap-2">
+            <i class="bi bi-person-check fs-4 text-success"></i>
+            <div>
+              <div class="fs-5 fw-bold lh-1">{{ activeCount }}</div>
+              <div class="text-secondary small">Active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 border-start border-4 border-danger">
+          <div class="card-body py-2 px-3 d-flex align-items-center gap-2">
+            <i class="bi bi-person-x fs-4 text-danger"></i>
+            <div>
+              <div class="fs-5 fw-bold lh-1">{{ inactiveCount }}</div>
+              <div class="text-secondary small">Inactive</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    @if (users.length === 0) {
+      <div class="card border-0 shadow-sm text-center py-5">
+        <div class="card-body">
+          <i class="bi bi-people fs-1 text-secondary opacity-50 mb-3 d-block"></i>
+          <p class="fw-semibold text-body-secondary mb-1">No users found.</p>
+          <span class="text-secondary small">Try adjusting your search criteria.</span>
+        </div>
+      </div>
+    } @else {
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3" style="width: 50px;"></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Joined</th>
+                <th class="text-center">Resumes</th>
+                <th class="text-center">Status</th>
+                <th class="text-end pe-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users; track user._id) {
+                <tr>
+                  <td class="ps-3">
+                    <div class="avatar-circle d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary fw-bold small">
+                      {{ getInitials(user.name) }}
+                    </div>
+                  </td>
+                  <td class="fw-medium">{{ user.name }}</td>
+                  <td class="text-secondary small">{{ user.email }}</td>
+                  <td class="text-secondary small">{{ user.createdAt | date:'mediumDate' }}</td>
+                  <td class="text-center">{{ user.resumeCount }}</td>
+                  <td class="text-center">
+                    @if (user.isActive) {
+                      <span class="badge bg-success-subtle text-success">Active</span>
+                    } @else {
+                      <span class="badge bg-danger-subtle text-danger">Disabled</span>
+                    }
+                  </td>
+                  <td class="text-end pe-3">
+                    <div class="d-flex gap-1 justify-content-end">
+                      <button class="btn btn-sm btn-outline-secondary" title="View Details" (click)="viewDetails(user)">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <button class="btn btn-sm" [class]="user.isActive ? 'btn-outline-warning' : 'btn-outline-success'" title="Toggle Status" (click)="toggleStatus(user)">
+                        <i class="bi" [class]="user.isActive ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" title="Delete" (click)="deleteUser(user)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      @if (totalPages > 1) {
+        <nav aria-label="User pagination">
+          <ul class="pagination pagination-sm justify-content-center mb-0">
+            <li class="page-item" [class.disabled]="page === 1">
+              <a class="page-link" (click)="goToPage(page - 1)" role="button">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+            @for (p of pageNumbers; track p) {
+              <li class="page-item" [class.active]="p === page">
+                <a class="page-link" (click)="goToPage(p)" role="button">{{ p }}</a>
+              </li>
+            }
+            <li class="page-item" [class.disabled]="page === totalPages">
+              <a class="page-link" (click)="goToPage(page + 1)" role="button">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      }
+    }
+  }
+
+  <!-- User Detail Modal -->
+  @if (showModal) {
+    <div class="modal-backdrop fade show" (click)="closeModal()"></div>
+    <div class="modal fade show d-block" tabindex="-1" (click)="closeModal()">
+      <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold">User Details</h5>
+            <button type="button" class="btn-close" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            @if (loadingDetail) {
+              <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            } @else if (selectedUser) {
+              <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="avatar-circle-lg d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold fs-4">
+                  {{ getInitials(selectedUser.name) }}
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-0">{{ selectedUser.name }}</h6>
+                  <span class="text-secondary small">{{ selectedUser.email }}</span>
+                  @if (selectedUser.googleLinked) {
+                    <span class="badge bg-info-subtle text-info ms-2">
+                      <i class="bi bi-google me-1"></i>Google Linked
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="text-secondary small mb-1">Joined</div>
+                <div class="fw-medium">{{ selectedUser.createdAt | date:'fullDate' }}</div>
+              </div>
+              <div class="row g-3">
+                <div class="col-4 text-center">
+                  <div class="card bg-light border-0">
+                    <div class="card-body py-2">
+                      <div class="fs-4 fw-bold text-primary">{{ selectedUser.resumeCount }}</div>
+                      <div class="text-secondary small">Resumes</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="card bg-light border-0">
+                    <div class="card-body py-2">
+                      <div class="fs-4 fw-bold text-success">{{ selectedUser.purchaseCount }}</div>
+                      <div class="text-secondary small">Purchases</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="card bg-light border-0">
+                    <div class="card-body py-2">
+                      <div class="fs-4 fw-bold text-warning">{{ selectedUser.draftCount }}</div>
+                      <div class="text-secondary small">Drafts</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="closeModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

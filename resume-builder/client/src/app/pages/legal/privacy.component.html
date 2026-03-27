@@ -1,0 +1,213 @@
+<!-- Hero Section -->
+<section class="legal-hero position-relative overflow-hidden d-flex align-items-center">
+  <div class="container position-relative" style="z-index: 1;">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center legal-fade-up">
+        <h1 class="display-4 fw-bold text-white mb-3">Privacy Policy</h1>
+        <p class="lead text-white-50 mb-0">Last updated: March 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Content Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Table of Contents -->
+      <div class="col-lg-3">
+        <div class="sticky-top" style="top: 90px;">
+          <h6 class="fw-bold text-uppercase text-muted mb-3 small">Table of Contents</h6>
+          <nav class="d-flex flex-column gap-2">
+            @for (section of sections; track section.id; let i = $index) {
+              <a
+                class="text-decoration-none text-muted legal-toc-link d-flex align-items-start gap-2"
+                (click)="scrollTo(section.id)"
+                role="button"
+              >
+                <span class="text-primary fw-semibold small">{{ i + 1 }}.</span>
+                <span>{{ section.title }}</span>
+              </a>
+            }
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="col-lg-9">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5">
+          <div class="card-body">
+            <p class="text-muted mb-4">
+              At ResumeAI, we are committed to protecting your privacy and ensuring the security of your personal
+              information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information
+              when you use our resume building platform and related services.
+            </p>
+
+            <!-- Section 1 -->
+            <div id="information-collect" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">1. Information We Collect</h2>
+              <p class="text-muted">
+                We collect information that you provide directly to us when you create an account, build a resume,
+                or communicate with us. This includes your name, email address, phone number, employment history,
+                educational background, and any other information you choose to include in your resume.
+              </p>
+              <p class="text-muted">
+                We also automatically collect certain technical information when you access our platform, including
+                your IP address, browser type, operating system, device identifiers, and usage data such as pages
+                visited, time spent on the platform, and features used.
+              </p>
+              <p class="text-muted">
+                If you choose to sign in using a third-party service such as Google or LinkedIn, we may receive
+                profile information associated with your account on that service, in accordance with your privacy
+                settings on that platform.
+              </p>
+            </div>
+
+            <!-- Section 2 -->
+            <div id="how-we-use" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">2. How We Use Your Information</h2>
+              <p class="text-muted">
+                We use the information we collect to provide, maintain, and improve our resume building services.
+                This includes generating AI-powered content suggestions, personalizing your experience, and
+                processing your resume downloads and exports.
+              </p>
+              <p class="text-muted">
+                Your information may also be used to send you service-related communications, respond to your
+                inquiries and support requests, and notify you about updates, new features, or changes to our
+                terms and policies.
+              </p>
+              <p class="text-muted">
+                We analyze usage patterns and trends in aggregate form to improve our platform's functionality,
+                develop new features, and enhance the overall user experience. This analysis does not identify
+                individual users.
+              </p>
+            </div>
+
+            <!-- Section 3 -->
+            <div id="information-sharing" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">3. Information Sharing</h2>
+              <p class="text-muted">
+                We do not sell, rent, or trade your personal information to third parties for their marketing
+                purposes. We may share your information with trusted service providers who assist us in operating
+                our platform, conducting our business, or servicing you, provided those parties agree to keep
+                this information confidential.
+              </p>
+              <p class="text-muted">
+                We may disclose your information if required to do so by law or in response to valid requests by
+                public authorities, such as a court order or government agency. We may also share information
+                to protect the rights, property, or safety of ResumeAI, our users, or others.
+              </p>
+              <p class="text-muted">
+                In the event of a merger, acquisition, or sale of all or a portion of our assets, your personal
+                information may be transferred as part of that transaction. We will notify you via email or
+                prominent notice on our platform of any such change in ownership.
+              </p>
+            </div>
+
+            <!-- Section 4 -->
+            <div id="data-security" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">4. Data Security</h2>
+              <p class="text-muted">
+                We implement industry-standard security measures to protect your personal information from
+                unauthorized access, alteration, disclosure, or destruction. These measures include encryption
+                of data in transit and at rest, regular security assessments, and access controls.
+              </p>
+              <p class="text-muted">
+                While we strive to use commercially acceptable means to protect your personal information, no
+                method of transmission over the Internet or method of electronic storage is 100% secure. We
+                cannot guarantee the absolute security of your data, but we are committed to continuously
+                improving our security practices.
+              </p>
+            </div>
+
+            <!-- Section 5 -->
+            <div id="cookies" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">5. Cookies and Tracking</h2>
+              <p class="text-muted">
+                We use cookies and similar tracking technologies to track activity on our platform and hold
+                certain information. Cookies are small data files stored on your device that help us improve
+                your experience by remembering your preferences and login status.
+              </p>
+              <p class="text-muted">
+                We use both session cookies, which expire when you close your browser, and persistent cookies,
+                which remain on your device until deleted. You can instruct your browser to refuse all cookies
+                or to indicate when a cookie is being sent, though some features of the platform may not
+                function properly without cookies.
+              </p>
+              <p class="text-muted">
+                We may also use third-party analytics services such as Google Analytics to help us understand
+                how users interact with our platform. These services may collect information about your use of
+                our platform and report it to us in aggregate form.
+              </p>
+            </div>
+
+            <!-- Section 6 -->
+            <div id="your-rights" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">6. Your Rights</h2>
+              <p class="text-muted">
+                You have the right to access, correct, update, or delete your personal information at any time.
+                You can do this by logging into your account settings or by contacting us directly. We will
+                respond to your request within a reasonable timeframe.
+              </p>
+              <p class="text-muted">
+                If you are a resident of the European Economic Area, you have additional rights under the General
+                Data Protection Regulation (GDPR), including the right to data portability, the right to restrict
+                processing, and the right to object to certain types of data processing.
+              </p>
+              <p class="text-muted">
+                You may opt out of receiving promotional communications from us by following the unsubscribe
+                instructions included in each email. Even if you opt out, we may still send you non-promotional
+                messages related to your account or ongoing business relations.
+              </p>
+            </div>
+
+            <!-- Section 7 -->
+            <div id="children" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">7. Children's Privacy</h2>
+              <p class="text-muted">
+                Our platform is not intended for use by children under the age of 16. We do not knowingly collect
+                personal information from children under 16. If we become aware that we have collected personal
+                data from a child under 16 without verification of parental consent, we will take steps to remove
+                that information from our servers.
+              </p>
+              <p class="text-muted">
+                If you are a parent or guardian and you are aware that your child has provided us with personal
+                information, please contact us so that we can take the necessary actions to remove such data
+                and terminate the child's account.
+              </p>
+            </div>
+
+            <!-- Section 8 -->
+            <div id="changes" class="mb-5">
+              <h2 class="h4 fw-bold mb-3">8. Changes to This Policy</h2>
+              <p class="text-muted">
+                We may update this Privacy Policy from time to time to reflect changes in our practices, technology,
+                legal requirements, or other factors. We will notify you of any material changes by posting the
+                updated policy on this page and updating the "Last updated" date at the top.
+              </p>
+              <p class="text-muted">
+                We encourage you to review this Privacy Policy periodically to stay informed about how we are
+                protecting your information. Your continued use of the platform after any modifications to this
+                policy constitutes your acknowledgment and acceptance of those changes.
+              </p>
+            </div>
+
+            <!-- Section 9 -->
+            <div id="contact">
+              <h2 class="h4 fw-bold mb-3">9. Contact Us</h2>
+              <p class="text-muted">
+                If you have any questions, concerns, or requests regarding this Privacy Policy or our data
+                practices, please contact us at:
+              </p>
+              <ul class="list-unstyled text-muted">
+                <li class="mb-2"><i class="bi bi-envelope me-2 text-primary"></i> privacy&#64;resumeai.com</li>
+                <li class="mb-2"><i class="bi bi-telephone me-2 text-primary"></i> +91 1234 567 890</li>
+                <li><i class="bi bi-geo-alt me-2 text-primary"></i> ResumeAI Pvt. Ltd., Bangalore, India</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

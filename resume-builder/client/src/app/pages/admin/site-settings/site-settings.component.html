@@ -1,0 +1,274 @@
+<div class="p-4 p-sm-3 site-settings">
+  <!-- Header -->
+  <div class="d-flex align-items-start justify-content-between mb-4 gap-3 flex-wrap">
+    <div>
+      <h1 class="fs-4 fw-bold text-dark mb-1">Site Settings</h1>
+      <p class="text-secondary small mb-0">Configure your site's general settings, branding, and more.</p>
+    </div>
+    <button class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 text-nowrap" (click)="loadSettings()" [disabled]="isLoading">
+      <i class="bi bi-arrow-clockwise" [class.spin-animation]="isLoading"></i>
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="d-flex flex-column gap-3">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="skeleton-row rounded-2"></div>
+      }
+    </div>
+  } @else if (errorMessage) {
+    <div class="alert alert-danger d-flex align-items-center gap-2 fw-medium" role="alert">
+      <i class="bi bi-exclamation-circle"></i>
+      {{ errorMessage }}
+      <button class="btn btn-danger btn-sm ms-auto fw-semibold" (click)="loadSettings()">Retry</button>
+    </div>
+  } @else {
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'general'" (click)="setTab('general')">
+          <i class="bi bi-gear me-1"></i> General
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'branding'" (click)="setTab('branding')">
+          <i class="bi bi-palette me-1"></i> Branding
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'contact'" (click)="setTab('contact')">
+          <i class="bi bi-envelope me-1"></i> Contact
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'social'" (click)="setTab('social')">
+          <i class="bi bi-share me-1"></i> Social
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'announcement'" (click)="setTab('announcement')">
+          <i class="bi bi-megaphone me-1"></i> Announcement
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab: General -->
+    @if (activeTab === 'general') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-gear text-primary me-2"></i>General Settings
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Site Name</label>
+            <input type="text" class="form-control" [(ngModel)]="settings.general.siteName" placeholder="e.g., ResumeBuilder Pro" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Tagline</label>
+            <input type="text" class="form-control" [(ngModel)]="settings.general.tagline" placeholder="e.g., Build your dream resume" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Hero Title</label>
+            <input type="text" class="form-control" [(ngModel)]="settings.general.heroTitle" placeholder="Main hero heading" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Hero Subtitle</label>
+            <textarea class="form-control" [(ngModel)]="settings.general.heroSubtitle" rows="3" placeholder="Hero description text"></textarea>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="maintenanceMode" [(ngModel)]="settings.general.maintenanceMode" />
+            <label class="form-check-label fw-medium" for="maintenanceMode">
+              @if (settings.general.maintenanceMode) {
+                <span class="text-warning"><i class="bi bi-exclamation-triangle-fill me-1"></i>Maintenance Mode ON</span>
+              } @else {
+                <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Site is Live</span>
+              }
+            </label>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Branding -->
+    @if (activeTab === 'branding') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-palette text-primary me-2"></i>Branding
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Primary Color</label>
+            <div class="d-flex align-items-center gap-2 border rounded-2 px-2 py-1" style="max-width: 280px;">
+              <input type="color" class="form-control form-control-color border-0 p-0 color-swatch" [(ngModel)]="settings.branding.primaryColor" />
+              <input type="text" class="form-control form-control-sm border-0 font-monospace" [(ngModel)]="settings.branding.primaryColor" placeholder="#4f46e5" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Logo URL</label>
+            <input type="text" class="form-control" [(ngModel)]="settings.branding.logoUrl" placeholder="https://example.com/logo.png" />
+          </div>
+          @if (settings.branding.logoUrl) {
+            <div>
+              <label class="form-label small fw-semibold">Preview</label>
+              <div class="border rounded-2 p-3 bg-body-tertiary d-inline-block">
+                <img [src]="settings.branding.logoUrl" alt="Logo preview" class="logo-preview" />
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Contact -->
+    @if (activeTab === 'contact') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-envelope text-primary me-2"></i>Contact Information
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Contact Email</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" [(ngModel)]="settings.contact.email" placeholder="contact@example.com" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Contact Phone</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+              <input type="text" class="form-control" [(ngModel)]="settings.contact.phone" placeholder="+91 98765 43210" />
+            </div>
+          </div>
+          <div>
+            <label class="form-label small fw-semibold">Address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+              <input type="text" class="form-control" [(ngModel)]="settings.contact.address" placeholder="123 Main Street, City, Country" />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Social -->
+    @if (activeTab === 'social') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-share text-primary me-2"></i>Social Media Links
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Facebook URL</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-facebook"></i></span>
+              <input type="url" class="form-control" [(ngModel)]="settings.social.facebook" placeholder="https://facebook.com/yourpage" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Twitter URL</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-twitter-x"></i></span>
+              <input type="url" class="form-control" [(ngModel)]="settings.social.twitter" placeholder="https://twitter.com/yourhandle" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">LinkedIn URL</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
+              <input type="url" class="form-control" [(ngModel)]="settings.social.linkedin" placeholder="https://linkedin.com/company/yourcompany" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Instagram URL</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-instagram"></i></span>
+              <input type="url" class="form-control" [(ngModel)]="settings.social.instagram" placeholder="https://instagram.com/yourhandle" />
+            </div>
+          </div>
+          <div>
+            <label class="form-label small fw-semibold">YouTube URL</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-youtube"></i></span>
+              <input type="url" class="form-control" [(ngModel)]="settings.social.youtube" placeholder="https://youtube.com/yourchannel" />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Announcement -->
+    @if (activeTab === 'announcement') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-megaphone text-primary me-2"></i>Announcement Bar
+        </div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="announcementEnabled" [(ngModel)]="settings.announcement.enabled" />
+            <label class="form-check-label fw-medium" for="announcementEnabled">
+              @if (settings.announcement.enabled) {
+                <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Announcement Enabled</span>
+              } @else {
+                <span class="text-secondary"><i class="bi bi-dash-circle me-1"></i>Announcement Disabled</span>
+              }
+            </label>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Announcement Text</label>
+            <input type="text" class="form-control" [(ngModel)]="settings.announcement.text" placeholder="e.g., Special offer! 50% off all premium templates" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Background Color</label>
+            <div class="d-flex align-items-center gap-2 border rounded-2 px-2 py-1" style="max-width: 280px;">
+              <input type="color" class="form-control form-control-color border-0 p-0 color-swatch" [(ngModel)]="settings.announcement.bgColor" />
+              <input type="text" class="form-control form-control-sm border-0 font-monospace" [(ngModel)]="settings.announcement.bgColor" placeholder="#4f46e5" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Link URL</label>
+            <input type="url" class="form-control" [(ngModel)]="settings.announcement.linkUrl" placeholder="https://example.com/offer" />
+          </div>
+          <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" id="announcementDismissible" [(ngModel)]="settings.announcement.dismissible" />
+            <label class="form-check-label fw-medium" for="announcementDismissible">Allow users to dismiss</label>
+          </div>
+
+          <!-- Preview -->
+          @if (settings.announcement.enabled && settings.announcement.text) {
+            <div>
+              <label class="form-label small fw-semibold">Preview</label>
+              <div class="announcement-preview d-flex align-items-center justify-content-center gap-2 py-2 px-3 rounded-2 text-white text-center small fw-medium"
+                   [style.background-color]="settings.announcement.bgColor">
+                <span>{{ settings.announcement.text }}</span>
+                @if (settings.announcement.linkUrl) {
+                  <i class="bi bi-box-arrow-up-right"></i>
+                }
+                @if (settings.announcement.dismissible) {
+                  <i class="bi bi-x-lg ms-2 opacity-75"></i>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Footer Actions -->
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-outline-secondary fw-semibold px-4" (click)="resetSettings()" [disabled]="isSaving">
+        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+      </button>
+      <button class="btn btn-primary fw-semibold px-4 d-inline-flex align-items-center gap-2" (click)="saveSettings()" [disabled]="isSaving">
+        @if (isSaving) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Saving...
+        } @else {
+          <i class="bi bi-check-lg"></i>
+          Save Settings
+        }
+      </button>
+    </div>
+  }
+</div>

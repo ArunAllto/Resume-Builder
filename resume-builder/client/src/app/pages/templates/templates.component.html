@@ -1,0 +1,224 @@
+<!-- Hero Section -->
+<section class="templates-hero position-relative overflow-hidden">
+  <div class="hero-circle hero-circle--1"></div>
+  <div class="hero-circle hero-circle--2"></div>
+  <div class="container position-relative py-5" style="z-index: 1;">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <span class="badge rounded-pill hero-badge mb-3">
+          <i class="bi bi-stars me-1"></i> Premium Collection
+        </span>
+        <h1 class="display-4 fw-bold text-white mb-3">
+          600+ Professional Resume Templates
+        </h1>
+        <p class="lead text-white-50 mb-4">
+          Find the perfect template for your career. Browse our curated collection of
+          professionally designed resume templates.
+        </p>
+        <!-- Search in hero -->
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="input-group input-group-lg shadow-lg rounded-pill overflow-hidden">
+              <span class="input-group-text bg-white border-0 ps-4">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control border-0 py-3"
+                placeholder="Search templates by name or keyword..."
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="onSearchChange()" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="container py-5" style="max-width: 1280px;">
+  <!-- Category Filter Tabs -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <ul class="nav nav-pills gap-2">
+      @for (cat of categories; track cat.key) {
+        <li class="nav-item">
+          <button
+            class="nav-link rounded-pill d-flex align-items-center gap-2"
+            [class.active]="activeCategory === cat.key"
+            (click)="filterByCategory(cat.key)">
+            <i class="bi" [class]="cat.icon"></i>
+            {{ cat.label }}
+          </button>
+        </li>
+      }
+    </ul>
+    <span class="text-muted small">
+      Showing <strong>{{ filteredTemplates.length }}</strong> of <strong>{{ templates.length }}</strong> templates
+    </span>
+  </div>
+
+  <div class="row">
+    <!-- Filter Sidebar -->
+    <div class="col-lg-3 mb-4 mb-lg-0">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">
+            <i class="bi bi-funnel me-2"></i>Filters
+          </h6>
+
+          <!-- Pricing Toggle -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Pricing</label>
+            <div class="btn-group w-100" role="group">
+              <input type="radio" class="btn-check" name="pricing" id="pricing-all"
+                     [checked]="pricingFilter === 'all'" (change)="pricingFilter = 'all'; onPricingChange()">
+              <label class="btn btn-outline-secondary btn-sm" for="pricing-all">All</label>
+
+              <input type="radio" class="btn-check" name="pricing" id="pricing-free"
+                     [checked]="pricingFilter === 'free'" (change)="pricingFilter = 'free'; onPricingChange()">
+              <label class="btn btn-outline-secondary btn-sm" for="pricing-free">Free</label>
+
+              <input type="radio" class="btn-check" name="pricing" id="pricing-paid"
+                     [checked]="pricingFilter === 'paid'" (change)="pricingFilter = 'paid'; onPricingChange()">
+              <label class="btn btn-outline-secondary btn-sm" for="pricing-paid">Paid</label>
+            </div>
+          </div>
+
+          <!-- Layout Type Checkboxes -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Layout Type</label>
+            @for (layout of layoutOptions; track layout.key) {
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [id]="'layout-' + layout.key"
+                  [checked]="isLayoutSelected(layout.key)"
+                  (change)="toggleLayout(layout.key)" />
+                <label class="form-check-label small" [for]="'layout-' + layout.key">
+                  {{ layout.label }}
+                </label>
+              </div>
+            }
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Sort By</label>
+            <select
+              class="form-select form-select-sm"
+              [(ngModel)]="sortOption"
+              (ngModelChange)="onSortChange()">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Templates Grid -->
+    <div class="col-lg-9">
+      <!-- Loading State -->
+      @if (loading) {
+        <div class="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-secondary">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mb-0">Loading templates...</p>
+        </div>
+      }
+
+      <!-- Error State -->
+      @if (error && !loading) {
+        <div class="d-flex flex-column align-items-center justify-content-center py-5 gap-3 text-center">
+          <i class="bi bi-exclamation-triangle fs-1 text-danger"></i>
+          <p class="text-danger mb-2">{{ error }}</p>
+          <button class="btn btn-primary" (click)="loadTemplates()">
+            <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+          </button>
+        </div>
+      }
+
+      <!-- Empty State -->
+      @if (!loading && !error && filteredTemplates.length === 0) {
+        <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted text-center">
+          <i class="bi bi-file-earmark fs-1 opacity-50 mb-2"></i>
+          <h3 class="fs-5 fw-semibold text-secondary mb-1">No templates found</h3>
+          <p class="small mb-0">Try adjusting your search or filter criteria</p>
+        </div>
+      }
+
+      <!-- Template Cards -->
+      @if (!loading && !error && filteredTemplates.length > 0) {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          @for (template of filteredTemplates; track template.id) {
+            <div class="col">
+              <div class="card h-100 border-0 shadow-sm template-card">
+                <!-- Thumbnail -->
+                <div
+                  class="card-thumbnail position-relative overflow-hidden"
+                  [style.background]="getGradient(template.category)">
+                  @if (hasThumbnail(template)) {
+                    <img
+                      class="w-100 h-100 object-fit-cover d-block"
+                      [src]="template.thumbnail"
+                      [alt]="template.name + ' thumbnail'" />
+                  } @else {
+                    <div class="thumbnail-placeholder d-flex align-items-center justify-content-center h-100">
+                      <div class="text-center text-white">
+                        <i class="bi bi-file-earmark-text fs-1 opacity-75"></i>
+                        <div class="small opacity-75 mt-1">Preview</div>
+                      </div>
+                    </div>
+                  }
+                  <!-- Price badge overlay -->
+                  <div class="position-absolute top-0 end-0 p-2" style="z-index: 2;">
+                    @if (template.isFree) {
+                      <span class="badge bg-success">
+                        <i class="bi bi-check-circle me-1"></i>Free
+                      </span>
+                    } @else {
+                      <span class="badge bg-warning text-dark">
+                        &#8377;{{ template.offerPrice || template.originalPrice }}
+                      </span>
+                    }
+                  </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                    <h5 class="fs-6 fw-bold text-dark mb-0">{{ template.name }}</h5>
+                    <span
+                      class="badge rounded-pill text-capitalize flex-shrink-0"
+                      [style.background-color]="getCategoryColor(template.category) + '18'"
+                      [style.color]="getCategoryColor(template.category)">
+                      {{ template.category }}
+                    </span>
+                  </div>
+                  @if (template.description) {
+                    <p class="text-secondary small mb-3 flex-grow-1 card-description">
+                      {{ template.description }}
+                    </p>
+                  }
+                  <button
+                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 mt-auto"
+                    (click)="useTemplate(template)">
+                    <i class="bi bi-pencil-square"></i>
+                    Use Template
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

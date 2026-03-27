@@ -1,0 +1,168 @@
+<!-- Hero Section -->
+<section class="formats-hero position-relative overflow-hidden d-flex align-items-center">
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden pe-none">
+    <div class="formats-circle formats-circle--1"></div>
+    <div class="formats-circle formats-circle--2"></div>
+  </div>
+
+  <div class="container position-relative" style="z-index: 1;">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center formats-fade-up">
+        <span class="badge formats-badge mb-3">Career Guide</span>
+        <h1 class="display-4 fw-bold text-white mb-3">Choose the Right Resume Format</h1>
+        <p class="lead text-white-50 mb-0">Understanding the 3 main resume formats</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Format Cards Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-6 fw-bold">The Three Resume Formats</h2>
+      <p class="text-muted fs-5">Each format serves a different purpose depending on your career situation</p>
+    </div>
+    <div class="row g-4">
+      @for (format of formats; track format.title) {
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100 formats-card overflow-hidden">
+            <div class="card-body p-4">
+              <div class="formats-card-icon mx-auto mb-3 d-flex align-items-center justify-content-center rounded-3">
+                <i class="bi {{ format.icon }} fs-2 text-white"></i>
+              </div>
+              <h3 class="fw-bold text-center mb-2">{{ format.title }}</h3>
+              <p class="text-center mb-3">
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
+                  Best for: {{ format.bestFor }}
+                </span>
+              </p>
+              <p class="text-muted small mb-4">{{ format.description }}</p>
+
+              <h6 class="fw-bold text-success mb-2">
+                <i class="bi bi-check-circle me-1"></i> Pros
+              </h6>
+              <ul class="list-unstyled mb-3">
+                @for (pro of format.pros; track pro) {
+                  <li class="d-flex align-items-start gap-2 mb-1">
+                    <i class="bi bi-plus-circle text-success mt-1 small"></i>
+                    <span class="text-muted small">{{ pro }}</span>
+                  </li>
+                }
+              </ul>
+
+              <h6 class="fw-bold text-danger mb-2">
+                <i class="bi bi-x-circle me-1"></i> Cons
+              </h6>
+              <ul class="list-unstyled mb-0">
+                @for (con of format.cons; track con) {
+                  <li class="d-flex align-items-start gap-2 mb-1">
+                    <i class="bi bi-dash-circle text-danger mt-1 small"></i>
+                    <span class="text-muted small">{{ con }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Table Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-6 fw-bold">Quick Comparison</h2>
+      <p class="text-muted fs-5">See how each format stacks up at a glance</p>
+    </div>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="fw-bold ps-4 py-3">Format</th>
+              <th class="fw-bold py-3">Best For</th>
+              <th class="fw-bold py-3">Experience Level</th>
+              <th class="fw-bold py-3">ATS Score</th>
+              <th class="fw-bold pe-4 py-3">Recommended For</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of comparisonRows; track row.format) {
+              <tr>
+                <td class="fw-semibold ps-4 py-3">{{ row.format }}</td>
+                <td class="text-muted py-3">{{ row.bestFor }}</td>
+                <td class="text-muted py-3">{{ row.experience }}</td>
+                <td class="py-3">
+                  @switch (row.atsScore) {
+                    @case ('Excellent') {
+                      <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">{{ row.atsScore }}</span>
+                    }
+                    @case ('Good') {
+                      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">{{ row.atsScore }}</span>
+                    }
+                    @case ('Fair') {
+                      <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2">{{ row.atsScore }}</span>
+                    }
+                  }
+                </td>
+                <td class="text-muted pe-4 py-3">{{ row.recommended }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- When to Use Each Format Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="display-6 fw-bold">When to Use Each Format</h2>
+      <p class="text-muted fs-5">Find the right format for your specific career situation</p>
+    </div>
+    <div class="row g-4">
+      @for (scenario of scenarios; track scenario.title) {
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 p-4 h-100 formats-scenario-card">
+            <div class="card-body">
+              <div class="formats-scenario-icon mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle">
+                <i class="bi {{ scenario.icon }} fs-4"></i>
+              </div>
+              <h4 class="fw-bold text-center mb-3">{{ scenario.title }}</h4>
+              <p class="text-muted text-center mb-3">{{ scenario.description }}</p>
+              <div class="text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-semibold">
+                  <i class="bi bi-arrow-right me-1"></i>
+                  Use {{ scenario.recommended }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="formats-cta py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center formats-fade-up">
+        <h2 class="display-6 fw-bold text-white mb-3">Build Your Resume Now</h2>
+        <p class="lead text-white-50 mb-4">
+          Now that you know which format is right for you, put it into action with our easy-to-use builder.
+        </p>
+        <a routerLink="/builder" class="btn btn-light btn-lg fw-semibold rounded-3 px-5 d-inline-flex align-items-center gap-2 formats-cta-btn">
+          <i class="bi bi-file-earmark-plus fs-5"></i>
+          Start Building
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

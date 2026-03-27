@@ -1,0 +1,63 @@
+// Only custom styles that Bootstrap cannot handle: gradients, animations, special effects
+
+.templates-hero {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 40%, #6b46c1 100%);
+  padding: 4rem 0 3rem;
+}
+
+// Floating background circles
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.07;
+  background: white;
+
+  &--1 {
+    width: 500px;
+    height: 500px;
+    top: -180px;
+    right: -80px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 350px;
+    height: 350px;
+    bottom: -120px;
+    left: -60px;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white !important;
+}
+
+// Template card hover
+.template-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.card-thumbnail {
+  height: 200px;
+}
+
+.card-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}

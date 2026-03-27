@@ -1,0 +1,80 @@
+// Hero gradient
+.contact-hero {
+  background: linear-gradient(135deg, var(--color-indigo-900) 0%, var(--color-indigo-700) 40%, var(--color-purple-700) 100%);
+  padding: 6rem 0 4rem;
+  min-height: 35vh;
+
+  @media (max-width: 991.98px) {
+    padding: 4rem 0 3rem;
+  }
+}
+
+.contact-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: white;
+
+  &--1 {
+    width: 450px;
+    height: 450px;
+    top: -180px;
+    right: -80px;
+    animation: contact-float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 300px;
+    height: 300px;
+    bottom: -120px;
+    left: -60px;
+    animation: contact-float 10s ease-in-out infinite reverse;
+  }
+}
+
+.contact-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+}
+
+// Info cards
+.contact-info-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
+}
+
+.contact-info-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// Animations
+.contact-fade-up {
+  animation: contact-fadeInUp 0.8s ease;
+}
+
+@keyframes contact-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+@keyframes contact-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

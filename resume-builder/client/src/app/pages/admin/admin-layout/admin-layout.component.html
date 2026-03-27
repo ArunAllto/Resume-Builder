@@ -32,6 +32,39 @@
           <span>Template Designer</span>
         }
       </a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-link d-flex align-items-center gap-2 rounded-2 text-nowrap overflow-hidden nav-item">
+        <i class="bi bi-people fs-5 flex-shrink-0"></i>
+        @if (!sidebarCollapsed) {
+          <span>Users</span>
+        }
+      </a>
+      <a routerLink="/admin/testimonials" routerLinkActive="active" class="nav-link d-flex align-items-center gap-2 rounded-2 text-nowrap overflow-hidden nav-item">
+        <i class="bi bi-chat-quote fs-5 flex-shrink-0"></i>
+        @if (!sidebarCollapsed) {
+          <span>Testimonials</span>
+        }
+      </a>
+      <a routerLink="/admin/coupons" routerLinkActive="active" class="nav-link d-flex align-items-center gap-2 rounded-2 text-nowrap overflow-hidden nav-item">
+        <i class="bi bi-ticket-perforated fs-5 flex-shrink-0"></i>
+        @if (!sidebarCollapsed) {
+          <span>Coupons</span>
+        }
+      </a>
+      <a routerLink="/admin/contact-submissions" routerLinkActive="active" class="nav-link d-flex align-items-center gap-2 rounded-2 text-nowrap overflow-hidden nav-item">
+        <i class="bi bi-envelope fs-5 flex-shrink-0"></i>
+        @if (!sidebarCollapsed) {
+          <span>Contact Submissions</span>
+          @if (unreadContactCount > 0) {
+            <span class="badge bg-danger rounded-pill ms-auto">{{ unreadContactCount }}</span>
+          }
+        }
+      </a>
+      <a routerLink="/admin/site-settings" routerLinkActive="active" class="nav-link d-flex align-items-center gap-2 rounded-2 text-nowrap overflow-hidden nav-item">
+        <i class="bi bi-gear fs-5 flex-shrink-0"></i>
+        @if (!sidebarCollapsed) {
+          <span>Site Settings</span>
+        }
+      </a>
     </nav>
 
     <div class="p-3 border-top border-white border-opacity-10 d-flex flex-column gap-2">

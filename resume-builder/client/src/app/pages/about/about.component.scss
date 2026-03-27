@@ -1,0 +1,142 @@
+// Hero gradient & decorative elements
+.about-hero {
+  background: linear-gradient(135deg, var(--color-indigo-900) 0%, var(--color-indigo-700) 40%, var(--color-purple-700) 100%);
+  padding: 6rem 0 4rem;
+  min-height: 40vh;
+
+  @media (max-width: 991.98px) {
+    padding: 4rem 0 3rem;
+  }
+}
+
+.about-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: white;
+
+  &--1 {
+    width: 500px;
+    height: 500px;
+    top: -200px;
+    right: -100px;
+    animation: about-float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 350px;
+    height: 350px;
+    bottom: -150px;
+    left: -80px;
+    animation: about-float 10s ease-in-out infinite reverse;
+  }
+}
+
+.about-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+}
+
+// Mission card
+.about-mission-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
+}
+
+.about-mission-card {
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+// Stat cards
+.about-stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.about-stat-value {
+  background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Feature cards
+.about-feature-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-indigo-600), var(--color-purple-600));
+}
+
+.about-feature-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// Value cards
+.about-value-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+  color: var(--color-indigo-600);
+}
+
+.about-value-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// CTA section
+.about-cta {
+  background: linear-gradient(135deg, var(--color-indigo-900) 0%, var(--color-indigo-700) 40%, var(--color-purple-700) 100%);
+}
+
+.about-cta-btn {
+  color: var(--color-indigo-700) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Animations
+.about-fade-up {
+  animation: about-fadeInUp 0.8s ease;
+}
+
+@keyframes about-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+@keyframes about-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

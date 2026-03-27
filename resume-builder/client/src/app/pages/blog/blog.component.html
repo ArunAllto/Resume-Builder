@@ -1,0 +1,127 @@
+<!-- Hero Section -->
+<section class="blog-hero py-5 bg-dark text-white">
+  <div class="container py-4">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-3">Career Resources & Resume Tips</h1>
+        <p class="lead text-white-50 mb-0">Expert advice to help you land your dream job</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Filter Tabs -->
+<section class="py-4 bg-light border-bottom">
+  <div class="container">
+    <nav class="d-flex flex-wrap justify-content-center gap-2">
+      @for (category of categories; track category) {
+        <button
+          class="btn btn-sm rounded-pill px-3"
+          [class.btn-primary]="activeCategory === category"
+          [class.btn-outline-secondary]="activeCategory !== category"
+          (click)="setCategory(category)"
+        >
+          {{ category }}
+          <span class="badge rounded-pill ms-1"
+            [class.bg-white]="activeCategory === category"
+            [class.text-primary]="activeCategory === category"
+            [class.bg-secondary]="activeCategory !== category"
+            [class.bg-opacity-25]="activeCategory !== category"
+          >
+            {{ getCategoryCount(category) }}
+          </span>
+        </button>
+      }
+    </nav>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+
+    <!-- Featured Article -->
+    @if (featuredArticle) {
+      <div class="mb-5">
+        <a [routerLink]="['/blog', featuredArticle.slug]" class="text-decoration-none">
+          <div class="card border-0 shadow-lg overflow-hidden featured-card">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="featured-thumbnail d-flex align-items-center justify-content-center h-100"
+                     [style.background]="getGradient(0)">
+                  <div class="text-center text-white p-4">
+                    <i class="bi bi-star-fill fs-1 mb-3 d-block opacity-75"></i>
+                    <span class="badge bg-white text-dark fs-6 px-3 py-2">Featured Article</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-center">
+                  <span class="badge rounded-pill mb-3 align-self-start" [class]="getCategoryClass(featuredArticle.category)">
+                    {{ featuredArticle.category }}
+                  </span>
+                  <h2 class="card-title h3 fw-bold text-dark mb-3">{{ featuredArticle.title }}</h2>
+                  <p class="card-text text-muted mb-3">{{ featuredArticle.excerpt }}</p>
+                  <div class="d-flex align-items-center text-muted small">
+                    <i class="bi bi-person-circle me-1"></i>
+                    <span class="me-3">{{ featuredArticle.author }}</span>
+                    <i class="bi bi-calendar3 me-1"></i>
+                    <span class="me-3">{{ featuredArticle.date | date:'mediumDate' }}</span>
+                    <i class="bi bi-clock me-1"></i>
+                    <span>{{ featuredArticle.readTime }} min read</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    }
+
+    <!-- Article Grid -->
+    @if (gridArticles.length > 0) {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @for (article of gridArticles; track article.slug; let i = $index) {
+          <div class="col">
+            <a [routerLink]="['/blog', article.slug]" class="text-decoration-none">
+              <div class="card h-100 border-0 shadow-sm article-card">
+                <div class="card-img-top article-thumbnail d-flex align-items-center justify-content-center"
+                     [style.background]="getGradient(i + 1)">
+                  <i class="bi bi-file-earmark-text text-white opacity-50" style="font-size: 2.5rem;"></i>
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <span class="badge rounded-pill mb-2 align-self-start" [class]="getCategoryClass(article.category)">
+                    {{ article.category }}
+                  </span>
+                  <h5 class="card-title fw-bold text-dark mb-2">{{ article.title }}</h5>
+                  <p class="card-text text-muted small flex-grow-1 article-excerpt">{{ article.excerpt }}</p>
+                  <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                    <div class="d-flex align-items-center text-muted small">
+                      <i class="bi bi-person-circle me-1"></i>
+                      <span>{{ article.author }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-muted small">
+                      <i class="bi bi-clock me-1"></i>
+                      <span>{{ article.readTime }} min</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-3 px-3">
+                  <span class="btn btn-outline-primary btn-sm w-100">
+                    Read More <i class="bi bi-arrow-right ms-1"></i>
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="text-center py-5">
+        <i class="bi bi-journal-text display-1 text-muted mb-3 d-block"></i>
+        <h3 class="text-muted">No articles found in this category</h3>
+        <p class="text-muted">Try selecting a different category above.</p>
+      </div>
+    }
+
+  </div>
+</section>

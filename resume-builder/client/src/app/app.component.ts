@@ -4,11 +4,12 @@ import { filter } from 'rxjs/operators';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { AnnouncementBarComponent } from './shared/components/announcement-bar/announcement-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastComponent, AnnouncementBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

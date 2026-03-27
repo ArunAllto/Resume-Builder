@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 interface Feature {
   icon: string;
+  color: string;
   title: string;
   description: string;
 }
@@ -16,34 +17,46 @@ interface Feature {
 export class FeaturesComponent {
   features: Feature[] = [
     {
-      icon: 'ai',
-      title: 'AI-Powered Content',
-      description: 'Get intelligent suggestions to improve your resume content. Our AI helps you write compelling descriptions and summaries.',
+      icon: 'bi-robot',
+      color: '#4f46e5',
+      title: 'AI Content Writer',
+      description:
+        'AI generates bullet points and summaries tailored to your role. Just describe your job and get professional content instantly.',
     },
     {
-      icon: 'templates',
-      title: 'Multiple Templates',
-      description: 'Choose from a wide variety of professionally designed templates. From modern to classic, find the perfect style for your industry.',
+      icon: 'bi-shield-check',
+      color: '#059669',
+      title: 'ATS Optimization',
+      description:
+        'Pass applicant tracking systems with confidence. Our templates and content are optimized for automated screening.',
     },
     {
-      icon: 'preview',
+      icon: 'bi-eye',
+      color: '#7c3aed',
       title: 'Live Preview',
-      description: 'See your changes in real-time as you build your resume. What you see is exactly what you get in the final PDF.',
+      description:
+        'See changes in real-time as you type. What you see on screen is exactly what you get in the final PDF download.',
     },
     {
-      icon: 'upload',
+      icon: 'bi-file-earmark-pdf',
+      color: '#dc2626',
+      title: 'Multiple Formats',
+      description:
+        'Download your resume as a high-quality PDF, perfectly formatted and ready to send to employers worldwide.',
+    },
+    {
+      icon: 'bi-palette',
+      color: '#d97706',
+      title: 'Template Designer',
+      description:
+        'Admin-built custom templates designed by professionals. Each one crafted for maximum visual impact and readability.',
+    },
+    {
+      icon: 'bi-cloud-arrow-up',
+      color: '#0891b2',
       title: 'Upload & Edit',
-      description: 'Already have a resume? Upload it and our AI will parse the content so you can edit and enhance it with new templates.',
-    },
-    {
-      icon: 'pdf',
-      title: 'PDF Download',
-      description: 'Download your finished resume as a high-quality PDF. Perfectly formatted and ready to send to employers.',
-    },
-    {
-      icon: 'ats',
-      title: 'ATS Friendly',
-      description: 'All our templates are optimized for Applicant Tracking Systems. Ensure your resume passes automated screening.',
+      description:
+        'Upload your existing resume and our AI parses the content so you can edit, enhance, and apply new templates.',
     },
   ];
 }

@@ -1,7 +1,7 @@
 // Only custom styles that Bootstrap can't handle
 
 .dashboard {
-  max-width: 1100px;
+  max-width: 1200px;
 }
 
 // Spin animation for refresh icon
@@ -15,7 +15,7 @@
 
 // Skeleton loading
 .skeleton-card {
-  height: 120px;
+  height: 100px;
   background: linear-gradient(90deg, var(--bs-gray-200) 25%, var(--bs-gray-300) 50%, var(--bs-gray-200) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
@@ -35,40 +35,61 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
   }
 
-  &.stat-purple { border-left: 4px solid var(--bs-primary); }
-  &.stat-green  { border-left: 4px solid var(--bs-success); }
-  &.stat-blue   { border-left: 4px solid var(--bs-info); }
+  &.stat-purple  { border-left: 4px solid var(--bs-primary); }
+  &.stat-green   { border-left: 4px solid var(--bs-success); }
+  &.stat-blue    { border-left: 4px solid var(--bs-info); }
+  &.stat-indigo  { border-left: 4px solid #6610f2; }
+  &.stat-orange  { border-left: 4px solid var(--bs-warning); }
 }
 
 .stat-icon {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
 }
 
-// Action cards
-.action-card {
-  transition: all 0.2s ease;
+.bg-indigo-subtle {
+  background-color: rgba(102, 16, 242, 0.12);
+  color: #6610f2;
+}
+
+// CSS Bar Charts
+.chart-container {
+  height: 160px;
+}
+
+.chart-container-sm {
+  height: 110px;
+}
+
+.chart-bar {
+  flex: 1;
+  min-width: 0;
+  min-height: 4px;
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+
+  .chart-tooltip {
+    display: none;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.7rem;
+    z-index: 10;
+    pointer-events: none;
+  }
 
   &:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    opacity: 0.8;
 
-    .action-arrow {
-      transform: translateX(3px);
+    .chart-tooltip {
+      display: block;
     }
   }
 }
 
-.action-icon {
-  width: 44px;
-  height: 44px;
-}
-
-.action-arrow {
-  transition: transform 0.2s ease;
-}
-
-// Dashed border card
-.border-dashed {
-  border-style: dashed !important;
-  border-color: var(--bs-gray-300) !important;
+// Activity feed icon
+.activity-icon {
+  width: 36px;
+  height: 36px;
 }

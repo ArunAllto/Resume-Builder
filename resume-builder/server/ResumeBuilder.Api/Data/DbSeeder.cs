@@ -130,5 +130,68 @@ public static class DbSeeder
             context.Templates.AddRange(templates);
             context.SaveChanges();
         }
+
+        // Seed default SiteSettings (singleton)
+        if (!context.SiteSettings.Any())
+        {
+            context.SiteSettings.Add(new SiteSettings
+            {
+                Id = 1,
+                SiteName = "ResumeAI",
+                Tagline = "Build Professional Resumes with AI",
+                HeroTitle = "Build Your Perfect Resume with AI",
+                HeroSubtitle = "Create professional, ATS-friendly resumes in minutes",
+                PrimaryColor = "#4f46e5",
+                ContactEmail = "support@resumeai.com",
+                ContactPhone = "+91 1234 567 890",
+                FooterText = "© 2026 ResumeAI. All rights reserved.",
+                SocialLinks = "{}",
+            });
+            context.SaveChanges();
+        }
+
+        // Seed sample testimonials
+        if (!context.Testimonials.Any())
+        {
+            var testimonials = new List<Testimonial>
+            {
+                new()
+                {
+                    Name = "Priya Sharma",
+                    Role = "Software Engineer",
+                    Company = "Infosys",
+                    Content = "ResumeAI helped me land my dream job! The AI suggestions were incredibly accurate and the templates are stunning.",
+                    Rating = 5,
+                    IsActive = true,
+                    SortOrder = 1,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new()
+                {
+                    Name = "Rahul Patel",
+                    Role = "Marketing Manager",
+                    Company = "Flipkart",
+                    Content = "I was able to create a professional resume in under 10 minutes. The ATS-friendly format got me more interview calls than ever before.",
+                    Rating = 5,
+                    IsActive = true,
+                    SortOrder = 2,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new()
+                {
+                    Name = "Ananya Gupta",
+                    Role = "Data Analyst",
+                    Company = "TCS",
+                    Content = "The variety of templates and the ease of customization make ResumeAI stand out from every other resume builder I have tried.",
+                    Rating = 4,
+                    IsActive = true,
+                    SortOrder = 3,
+                    CreatedAt = DateTime.UtcNow
+                }
+            };
+
+            context.Testimonials.AddRange(testimonials);
+            context.SaveChanges();
+        }
     }
 }

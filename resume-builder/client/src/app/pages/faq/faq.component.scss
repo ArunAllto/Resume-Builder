@@ -1,0 +1,33 @@
+/* Gradient hero — custom SCSS for gradient & animation only */
+.faq-hero {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6366f1 100%);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -25%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+    animation: faq-glow 8s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes faq-glow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-5%, 5%) scale(1.1); }
+}
+
+/* Active pill style enhancement */
+.nav-pills .nav-link.active {
+  background-color: #4f46e5;
+}
+
+/* Smooth accordion transitions */
+.accordion-button:not(.collapsed) {
+  color: #4f46e5;
+  background-color: rgba(79, 70, 229, 0.05);
+}

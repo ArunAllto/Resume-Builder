@@ -63,7 +63,20 @@
       "Bash(grep -v \"^--$\")",
       "Bash(grep -rn '\\\\$red-\\\\|\\\\$blue-\\\\|\\\\$purple-\\\\|\\\\$green-\\\\|\\\\$yellow-\\\\|\\\\$orange-' \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/\" --include=\"*.scss\")",
       "Bash(curl -s http://localhost:4200 -o /dev/null -w \"Angular: %{http_code}\\\\n\")",
-      "Bash(curl -s http://localhost:5000/api/templates -o /dev/null -w \"API: %{http_code}\\\\n\")"
+      "Bash(curl -s http://localhost:5000/api/templates -o /dev/null -w \"API: %{http_code}\\\\n\")",
+      "Bash(find 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages' -name *.ts -newer 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/pricing/pricing.component.ts')",
+      "Bash(find 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app' -name *.ts -newer 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/pricing/pricing.component.ts')",
+      "Bash(find 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app' -name *.html -newer 'E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/pricing/pricing.component.ts')",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/home\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/testimonials\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/coupons\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/dashboard\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/shared/components/purchase-modal\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/site-settings\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/users\" -type f)",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/client/src/app/pages/admin/contact-submissions\" -type f)",
+      "Bash(grep -v \"^\\\\s*$\")",
+      "Bash(find \"E:/Project/New folder \\(2\\)/resume-builder/server/ResumeBuilder.Api/Models\" -name \"*.cs\")"
     ]
   }
 }

@@ -1,0 +1,12 @@
+@if (settings && settings.announcementEnabled && !dismissed) {
+  <div class="announcement-bar d-flex align-items-center justify-content-center gap-2 py-2 px-3 text-white text-center small"
+       [style.background-color]="settings.announcementColor">
+    <span>{{ settings.announcementText }}</span>
+    @if (settings.announcementLink) {
+      <a [href]="settings.announcementLink" class="text-white fw-semibold text-decoration-underline">Learn More</a>
+    }
+    @if (settings.announcementDismissible) {
+      <button class="btn-close btn-close-white ms-2" (click)="dismiss()"></button>
+    }
+  </div>
+}

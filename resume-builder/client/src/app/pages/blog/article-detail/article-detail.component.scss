@@ -1,0 +1,64 @@
+.article-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+
+  ::ng-deep {
+    h2 {
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: #444;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    strong {
+      color: #222;
+    }
+  }
+}
+
+.sidebar-related-item {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.related-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.related-thumbnail {
+  height: 120px;
+}
+
+.cta-card {
+  background: linear-gradient(180deg, #fff 0%, #f0f4ff 100%);
+}

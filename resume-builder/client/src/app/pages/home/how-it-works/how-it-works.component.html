@@ -2,27 +2,36 @@
   <div class="container py-lg-4">
     <!-- Section Header -->
     <div class="text-center mx-auto mb-5" style="max-width: 640px;">
-      <span class="d-inline-block small fw-semibold text-primary text-uppercase mb-2" style="letter-spacing: 0.1em;">How It Works</span>
+      <span class="d-inline-block small fw-semibold text-primary text-uppercase mb-2"
+            style="letter-spacing: 0.1em;">How It Works</span>
       <h2 class="display-6 fw-bold text-dark lh-sm mb-3">Create Your Resume in 3 Simple Steps</h2>
       <p class="fs-5 text-muted">
-        No complicated software or design skills needed. Our streamlined process gets you from start to finish in minutes.
+        No complicated software or design skills needed. Our streamlined process gets you
+        from start to finish in minutes.
       </p>
     </div>
 
-    <!-- Steps -->
-    <div class="d-flex flex-column flex-md-row align-items-start justify-content-center mb-5 hiw-steps">
-      @for (step of steps; track step.number; let last = $last) {
-        <div class="text-center px-3 hiw-step">
-          <div class="hiw-step-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
-            <span class="fs-4 fw-bold text-white">{{ step.number }}</span>
+    <!-- Steps Row -->
+    <div class="row g-4 g-lg-5 align-items-start mb-5">
+      @for (step of steps; track step.number; let idx = $index; let last = $last) {
+        <div class="col-md-4">
+          <div class="text-center hiw-step-card p-4">
+            <!-- Numbered Circle with Icon -->
+            <div class="hiw-step-circle mx-auto mb-3 d-flex align-items-center justify-content-center position-relative">
+              <span class="hiw-step-number position-absolute">{{ step.number }}</span>
+              <i class="bi {{ step.icon }} fs-2 text-white"></i>
+            </div>
+            <h3 class="fs-5 fw-bold text-dark mb-2">{{ step.title }}</h3>
+            <p class="text-muted mb-0" style="font-size: 0.925rem; line-height: 1.7;">
+              {{ step.description }}
+            </p>
           </div>
-          <h3 class="fs-5 fw-bold text-dark mb-2">{{ step.title }}</h3>
-          <p class="text-muted mb-0" style="font-size: 0.925rem; line-height: 1.6;">{{ step.description }}</p>
         </div>
+
+        <!-- Connecting Arrow (desktop only, between cards) -->
         @if (!last) {
-          <div class="hiw-connector d-flex align-items-center justify-content-center text-body-tertiary">
-            <i class="bi bi-arrow-right fs-3 d-none d-md-block"></i>
-            <i class="bi bi-arrow-down fs-3 d-md-none"></i>
+          <div class="hiw-connector d-none d-md-flex position-absolute">
+            <i class="bi bi-arrow-right fs-3 text-body-tertiary"></i>
           </div>
         }
       }
@@ -30,7 +39,8 @@
 
     <!-- CTA Button -->
     <div class="text-center">
-      <a routerLink="/builder" class="btn btn-lg d-inline-flex align-items-center gap-2 fw-semibold rounded-3 text-white hiw-cta-btn">
+      <a routerLink="/builder"
+         class="btn btn-lg d-inline-flex align-items-center gap-2 fw-semibold rounded-3 text-white hiw-cta-btn">
         Get Started Now
         <i class="bi bi-arrow-right"></i>
       </a>

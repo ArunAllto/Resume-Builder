@@ -1,0 +1,209 @@
+<!-- ── Hero Section ── -->
+<section class="pricing-hero py-5 text-center text-white">
+  <div class="container py-5">
+    <h1 class="display-5 fw-bold mb-3">Simple, Transparent Pricing</h1>
+    <p class="lead text-white-50 mx-auto" style="max-width: 560px;">
+      Choose the plan that fits your career goals. Start free and upgrade anytime.
+    </p>
+
+    <!-- Billing Toggle -->
+    <div class="d-inline-flex align-items-center gap-3 mt-4 bg-white bg-opacity-10 rounded-pill px-4 py-2">
+      <span class="fw-semibold" [class.text-white-50]="isAnnual">Monthly</span>
+      <div class="form-check form-switch mb-0">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="billingToggle"
+          [checked]="isAnnual"
+          (change)="toggleBilling()"
+        />
+        <label class="form-check-label visually-hidden" for="billingToggle">Annual billing</label>
+      </div>
+      <span class="fw-semibold" [class.text-white-50]="!isAnnual">Annual</span>
+      @if (isAnnual) {
+        <span class="badge bg-success rounded-pill ms-1">Save 20%</span>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing Cards ── -->
+<section class="py-5" style="margin-top: -60px;">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      @for (plan of plans; track plan.name) {
+        <div class="col-md-4">
+          <div
+            class="card border-0 rounded-4 overflow-hidden h-100"
+            [class.shadow-lg]="plan.popular"
+            [class.shadow]="!plan.popular"
+            [class.pricing-card--popular]="plan.popular"
+          >
+            <!-- Card Header -->
+            <div class="card-header text-center py-4 border-0" [ngClass]="getCardHeaderClass(plan)">
+              @if (plan.popular) {
+                <span class="badge bg-warning text-dark rounded-pill mb-2">
+                  <i class="bi bi-star-fill me-1"></i>Most Popular
+                </span>
+              }
+              <h3 class="fw-bold mb-1">{{ plan.name }}</h3>
+              <p class="mb-0 opacity-75 small">{{ plan.description }}</p>
+            </div>
+
+            <!-- Price -->
+            <div class="card-body text-center pt-4 pb-0">
+              <div class="mb-3">
+                <span class="display-4 fw-bold">{{ getDisplayPrice(plan) }}</span>
+                <span class="text-muted fs-6">{{ getDisplayPeriod(plan) }}</span>
+              </div>
+              @if (getAnnualSavings(plan); as savings) {
+                <span class="badge bg-success-subtle text-success rounded-pill mb-3">
+                  Save &#8377;{{ savings.toLocaleString('en-IN') }}/year
+                </span>
+              }
+            </div>
+
+            <!-- Features -->
+            <div class="card-body pt-2">
+              <ul class="list-unstyled mb-0">
+                @for (feature of plan.features; track feature.text) {
+                  <li class="d-flex align-items-start gap-2 py-2 border-bottom">
+                    @if (feature.included) {
+                      <i class="bi bi-check-lg text-success fs-5 flex-shrink-0"></i>
+                    } @else {
+                      <i class="bi bi-x text-secondary fs-5 flex-shrink-0 opacity-50"></i>
+                    }
+                    <span [class.text-muted]="!feature.included" [class.opacity-50]="!feature.included">
+                      {{ feature.text }}
+                    </span>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <!-- CTA -->
+            <div class="card-footer bg-transparent border-0 p-4 pt-2">
+              <a routerLink="/builder" [class]="getCtaClass(plan)">
+                {{ plan.cta }}
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Money-Back Guarantee ── -->
+<section class="py-4">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-center gap-3 bg-success-subtle rounded-4 p-4 mx-auto" style="max-width: 600px;">
+      <i class="bi bi-shield-check fs-1 text-success"></i>
+      <div>
+        <h6 class="fw-bold mb-1">7-Day Money-Back Guarantee</h6>
+        <p class="mb-0 text-muted small">
+          Not satisfied? Get a full refund within 7 days of purchase. No questions asked.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Feature Comparison Table ── -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-2">Compare Plans</h2>
+    <p class="text-center text-muted mb-4">See what each plan includes at a glance</p>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" style="min-width: 200px;">Feature</th>
+            <th scope="col" class="text-center">Free</th>
+            <th scope="col" class="text-center table-primary">Pro</th>
+            <th scope="col" class="text-center">Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of comparisonFeatures; track row.name) {
+            <tr>
+              <td class="fw-semibold">{{ row.name }}</td>
+              <td class="text-center">
+                @if (row.free === '\u2713') {
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                } @else if (row.free === '\u2014') {
+                  <i class="bi bi-dash text-muted"></i>
+                } @else {
+                  {{ row.free }}
+                }
+              </td>
+              <td class="text-center bg-primary-subtle bg-opacity-10">
+                @if (row.pro === '\u2713') {
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                } @else if (row.pro === '\u2014') {
+                  <i class="bi bi-dash text-muted"></i>
+                } @else {
+                  {{ row.pro }}
+                }
+              </td>
+              <td class="text-center">
+                @if (row.premium === '\u2713') {
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                } @else if (row.premium === '\u2014') {
+                  <i class="bi bi-dash text-muted"></i>
+                } @else {
+                  {{ row.premium }}
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ Section ── -->
+<section class="py-5 bg-body-secondary">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-2">Pricing Questions</h2>
+    <p class="text-center text-muted mb-4">Common questions about our plans and billing</p>
+
+    <div class="accordion accordion-flush mx-auto" style="max-width: 800px;" id="pricingFaq">
+      @for (faq of pricingFaqs; track faq.question; let i = $index) {
+        <div class="accordion-item rounded-3 mb-2 border">
+          <h2 class="accordion-header" [id]="'pFaqHead' + i">
+            <button
+              class="accordion-button collapsed fw-semibold"
+              type="button"
+              [attr.data-bs-toggle]="'collapse'"
+              [attr.data-bs-target]="'#pFaqBody' + i"
+              [attr.aria-expanded]="'false'"
+              [attr.aria-controls]="'pFaqBody' + i"
+            >
+              {{ faq.question }}
+            </button>
+          </h2>
+          <div
+            [id]="'pFaqBody' + i"
+            class="accordion-collapse collapse"
+            [attr.aria-labelledby]="'pFaqHead' + i"
+            data-bs-parent="#pricingFaq"
+          >
+            <div class="accordion-body text-muted">
+              {{ faq.answer }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-4">
+      <a routerLink="/faq" class="btn btn-outline-primary">
+        View All FAQs <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+  </div>
+</section>
