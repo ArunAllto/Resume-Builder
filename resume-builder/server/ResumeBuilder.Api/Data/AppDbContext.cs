@@ -36,6 +36,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Category).HasMaxLength(100);
             entity.Property(e => e.Thumbnail).HasColumnType("nvarchar(max)");
             entity.Property(e => e.LayoutConfig).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.IsFree).HasMaxLength(50);
             entity.Property(e => e.OriginalPrice).HasColumnType("decimal(10,2)");
             entity.Property(e => e.OfferPrice).HasColumnType("decimal(10,2)");
         });

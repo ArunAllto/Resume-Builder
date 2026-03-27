@@ -57,6 +57,8 @@ public static class DbSeeder
                     IsActive = true,
                     IsPublished = true,
                     IsFree = true,
+                    OriginalPrice = (decimal)50.00,
+                    OfferPrice = (decimal)50.00,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -79,6 +81,8 @@ public static class DbSeeder
                     IsActive = true,
                     IsPublished = true,
                     IsFree = true,
+                    OriginalPrice = (decimal)50.00,
+                    OfferPrice = (decimal)50.00,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -101,6 +105,8 @@ public static class DbSeeder
                     IsActive = true,
                     IsPublished = true,
                     IsFree = true,
+                    OriginalPrice = (decimal)50.00,
+                    OfferPrice = (decimal)50.00,
                     CreatedAt = DateTime.UtcNow
                 },
                 new()
@@ -123,6 +129,8 @@ public static class DbSeeder
                     IsActive = true,
                     IsPublished = true,
                     IsFree = true,
+                    OriginalPrice = (decimal)50.00,
+                    OfferPrice = (decimal)50.00,
                     CreatedAt = DateTime.UtcNow
                 }
             };
