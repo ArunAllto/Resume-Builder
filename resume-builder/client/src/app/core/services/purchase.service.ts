@@ -12,8 +12,4 @@ export class PurchaseService {
       map(res => res.purchased)
     );
   }
-
-  purchaseTemplate(templateId: string): Observable<any> {
-    return this.api.post('/purchases', { templateId });
-  }
 }

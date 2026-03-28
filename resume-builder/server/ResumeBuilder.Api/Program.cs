@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using ResumeBuilder.Api.Data;
+using ResumeBuilder.Api.Models;
 using ResumeBuilder.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,6 +84,9 @@ builder.Services.AddScoped<AiService>();
 builder.Services.AddScoped<PdfService>();
 builder.Services.AddScoped<CanvasTemplateService>();
 builder.Services.AddScoped<ResumeParserService>();
+builder.Services.Configure<RazorpaySettings>(builder.Configuration.GetSection("Razorpay"));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+builder.Services.AddScoped<PaymentService>();
 
 // Controllers + JSON options
 builder.Services.AddControllers()

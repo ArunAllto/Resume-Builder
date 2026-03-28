@@ -14,6 +14,7 @@ import { MyDraftsComponent } from './pages/my-drafts/my-drafts.component';
 import { UsersComponent } from './pages/admin/users/users.component';
 import { TestimonialsComponent } from './pages/admin/testimonials/testimonials.component';
 import { CouponsComponent } from './pages/admin/coupons/coupons.component';
+import { OrdersComponent } from './pages/admin/orders/orders.component';
 import { ContactSubmissionsComponent } from './pages/admin/contact-submissions/contact-submissions.component';
 import { SiteSettingsComponent } from './pages/admin/site-settings/site-settings.component';
 
@@ -59,6 +60,7 @@ export const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'testimonials', component: TestimonialsComponent },
       { path: 'coupons', component: CouponsComponent },
+      { path: 'orders', component: OrdersComponent },
       { path: 'contact-submissions', component: ContactSubmissionsComponent },
       { path: 'site-settings', component: SiteSettingsComponent },
     ],

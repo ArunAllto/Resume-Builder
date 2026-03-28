@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<Testimonial> Testimonials => Set<Testimonial>();
     public DbSet<ContactSubmission> ContactSubmissions => Set<ContactSubmission>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
+    public DbSet<Order> Orders => Set<Order>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,6 +136,38 @@ public class AppDbContext : DbContext
             entity.HasIndex(e => e.Code).IsUnique();
             entity.Property(e => e.DiscountType).HasMaxLength(20).IsRequired();
             entity.Property(e => e.DiscountValue).HasColumnType("decimal(10,2)");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.Property(e => e.Id).HasMaxLength(36);
+            entity.HasIndex(e => e.OrderNumber).IsUnique();
+            entity.Property(e => e.OrderNumber).HasMaxLength(50);
+            entity.Property(e => e.UserId).HasMaxLength(36).IsRequired();
+            entity.Property(e => e.TemplateId).HasMaxLength(36).IsRequired();
+            entity.Property(e => e.Amount).HasColumnType("decimal(10,2)");
+            entity.Property(e => e.DiscountAmount).HasColumnType("decimal(10,2)");
+            entity.Property(e => e.FinalAmount).HasColumnType("decimal(10,2)");
+            entity.Property(e => e.Currency).HasMaxLength(10);
+            entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.PaymentGateway).HasMaxLength(20);
+            entity.Property(e => e.GatewayOrderId).HasMaxLength(255);
+            entity.Property(e => e.GatewayPaymentId).HasMaxLength(255);
+            entity.Property(e => e.GatewaySignature).HasMaxLength(500);
+            entity.Property(e => e.CouponCode).HasMaxLength(100);
+
+            entity.HasOne(e => e.User)
+                  .WithMany()
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Template)
+                  .WithMany()
+                  .HasForeignKey(e => e.TemplateId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => new { e.UserId, e.TemplateId, e.Status });
         });
     }
 }

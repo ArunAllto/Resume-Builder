@@ -1,27 +1,118 @@
-
-.purchase-overlay {
+.modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1040;
   backdrop-filter: blur(4px);
-  z-index: 1055;
-  animation: fadeIn 0.2s ease;
 }
 
-.purchase-card-animate {
-  animation: slideUp 0.3s ease;
+.purchase-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-.btn-link:hover {
-  text-decoration: underline !important;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.modal-card {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+
+  &:hover { background: #f0f0f0; }
+}
+
+.icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-card {
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { border-color: #4f46e5 !important; background: #f8f7ff; }
+  &.selected { border-color: #4f46e5 !important; background: #f0efff; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
+}
+
+.radio-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s;
+
+  &.active {
+    border-color: #4f46e5;
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: #4f46e5;
+    }
+  }
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #dcfce7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i { font-size: 32px; color: #16a34a; }
+}
+
+.failure-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i { font-size: 32px; color: #dc2626; }
+}
+
+.current-price {
+  font-size: 2.5rem;
+}
+
+.original-price {
+  font-size: 1.1rem;
 }

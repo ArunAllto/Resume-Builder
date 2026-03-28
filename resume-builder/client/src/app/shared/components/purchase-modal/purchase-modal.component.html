@@ -1,66 +1,190 @@
-@if (visible && template) {
-<div class="modal d-flex align-items-center justify-content-center show purchase-overlay" (click)="close()">
-  <div class="modal-dialog m-0" style="max-width: 380px; width: 90%;" (click)="$event.stopPropagation()">
-    <div class="modal-content border-0 rounded-4 shadow-lg p-4 text-center position-relative purchase-card-animate">
-      <button class="btn-close position-absolute top-0 end-0 mt-3 me-3" (click)="close()" aria-label="Close"></button>
+<div class="modal-backdrop" (click)="onClose()"></div>
+<div class="purchase-modal">
+  <div class="modal-card">
+    <!-- Close button -->
+    <button class="btn-close-modal" (click)="onClose()" [disabled]="currentStep === 'processing'">
+      <i class="bi bi-x-lg"></i>
+    </button>
 
-      <div class="mb-3">
-        <i class="bi bi-layers fs-1 text-primary"></i>
-      </div>
+    <!-- Step 1: Pricing -->
+    @if (currentStep === 'pricing') {
+      <div class="step-content">
+        <div class="text-center mb-4">
+          <div class="icon-circle bg-primary-subtle mb-3 mx-auto">
+            <i class="bi bi-cart fs-4 text-primary"></i>
+          </div>
+          <h5 class="fw-bold">{{ template?.name }}</h5>
+          <p class="text-muted small">Premium Resume Template</p>
+        </div>
 
-      <h3 class="fs-5 fw-bold text-dark mb-1">{{ template.name }}</h3>
-      <p class="small text-secondary mb-3">Premium Template</p>
+        <!-- Price -->
+        <div class="price-section text-center mb-4">
+          @if (hasDiscount) {
+            <span class="original-price text-muted text-decoration-line-through me-2">&#8377;{{ originalPrice }}</span>
+            <span class="badge bg-success-subtle text-success small mb-1">{{ discountPercent }}% OFF</span>
+          }
+          <div class="current-price display-6 fw-bold text-primary">&#8377;{{ price }}</div>
+        </div>
 
-      <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
-        <span class="fs-2 fw-bold text-dark">&#8377;{{ template.offerPrice || template.originalPrice }}</span>
-        @if (template.originalPrice && template.offerPrice && template.originalPrice > template.offerPrice) {
-          <span class="fs-6 text-secondary text-decoration-line-through">&#8377;{{ template.originalPrice }}</span>
-          <span class="badge bg-success-subtle text-success fw-semibold">{{ discount }}% OFF</span>
+        <!-- Coupon -->
+        <div class="coupon-section mb-4">
+          @if (!couponApplied) {
+            <label class="form-label small fw-semibold text-muted">Have a coupon code?</label>
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="couponCode" placeholder="Enter coupon code"
+                     (keyup.enter)="applyCoupon()" [class.is-invalid]="couponError" />
+              <button class="btn btn-outline-primary" (click)="applyCoupon()" [disabled]="couponLoading || !couponCode.trim()">
+                @if (couponLoading) { <span class="spinner-border spinner-border-sm"></span> }
+                @else { Apply }
+              </button>
+            </div>
+            @if (couponError) {
+              <div class="invalid-feedback d-block">{{ couponError }}</div>
+            }
+          } @else {
+            <div class="alert alert-success d-flex align-items-center py-2 mb-0">
+              <i class="bi bi-check-circle me-2"></i>
+              <div class="flex-grow-1">
+                <strong>{{ couponCode }}</strong> &mdash; {{ discountLabel }}
+              </div>
+              <button class="btn btn-sm btn-outline-success" (click)="removeCoupon()">Remove</button>
+            </div>
+          }
+        </div>
+
+        <!-- Summary -->
+        @if (couponApplied) {
+          <div class="summary-section border-top pt-3 mb-4">
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="text-muted">Subtotal</span>
+              <span>&#8377;{{ price }}</span>
+            </div>
+            <div class="d-flex justify-content-between small mb-1 text-success">
+              <span>Coupon Discount</span>
+              <span>-&#8377;{{ discountAmount }}</span>
+            </div>
+            <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+              <span>Total</span>
+              <span class="text-primary">&#8377;{{ finalPrice }}</span>
+            </div>
+          </div>
         }
+
+        <button class="btn btn-primary w-100 fw-semibold py-2" (click)="continueToPay()">
+          Continue to Payment &mdash; &#8377;{{ finalPrice }}
+        </button>
       </div>
+    }
 
-      <ul class="list-unstyled text-start mb-4">
-        <li class="d-flex align-items-center gap-2 py-1 small text-body-secondary">
-          <i class="bi bi-check-lg text-success"></i> Professional design
-        </li>
-        <li class="d-flex align-items-center gap-2 py-1 small text-body-secondary">
-          <i class="bi bi-check-lg text-success"></i> Unlimited downloads
-        </li>
-        <li class="d-flex align-items-center gap-2 py-1 small text-body-secondary">
-          <i class="bi bi-check-lg text-success"></i> ATS-friendly format
-        </li>
-      </ul>
+    <!-- Step 2: Payment Method -->
+    @if (currentStep === 'payment-method') {
+      <div class="step-content">
+        <div class="text-center mb-4">
+          <h5 class="fw-bold">Select Payment Method</h5>
+          <p class="text-muted small">Choose how you'd like to pay &#8377;{{ finalPrice }}</p>
+        </div>
 
-      <div class="mb-3">
-        <label class="form-label small fw-semibold">Have a coupon code?</label>
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]="couponCode" placeholder="Enter code" [disabled]="couponApplied" />
-          <button class="btn btn-outline-primary" (click)="applyCoupon()" [disabled]="!couponCode || couponApplied || applyingCoupon">
-            @if (applyingCoupon) { <span class="spinner-border spinner-border-sm"></span> }
-            @else { Apply }
+        <div class="d-flex flex-column gap-3 mb-4">
+          <!-- Razorpay -->
+          <div class="payment-card p-3 rounded-3 border" [class.selected]="selectedGateway === 'razorpay'"
+               (click)="selectGateway('razorpay')">
+            <div class="d-flex align-items-center gap-3">
+              <div class="radio-dot" [class.active]="selectedGateway === 'razorpay'"></div>
+              <div>
+                <div class="fw-semibold">Razorpay</div>
+                <div class="small text-muted">UPI &middot; Cards &middot; Net Banking &middot; Wallets</div>
+              </div>
+              <div class="ms-auto">
+                <span class="badge bg-success-subtle text-success">Recommended</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stripe -->
+          <div class="payment-card p-3 rounded-3 border" [class.selected]="selectedGateway === 'stripe'"
+               (click)="selectGateway('stripe')">
+            <div class="d-flex align-items-center gap-3">
+              <div class="radio-dot" [class.active]="selectedGateway === 'stripe'"></div>
+              <div>
+                <div class="fw-semibold">Stripe</div>
+                <div class="small text-muted">International Cards &middot; Apple Pay &middot; Google Pay</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary flex-grow-1" (click)="currentStep = 'pricing'">Back</button>
+          <button class="btn btn-primary flex-grow-1 fw-semibold py-2" (click)="startPayment()">
+            <i class="bi bi-lock me-1"></i> Pay &#8377;{{ finalPrice }}
           </button>
         </div>
-        @if (couponApplied) {
-          <div class="text-success small mt-1"><i class="bi bi-check-circle"></i> Coupon applied! {{ discountText }}</div>
-        }
-        @if (couponError) {
-          <div class="text-danger small mt-1">{{ couponError }}</div>
-        }
+
+        <p class="text-center small text-muted mt-3">
+          <i class="bi bi-shield-check me-1"></i> Secured with 256-bit SSL encryption
+        </p>
       </div>
+    }
 
-      @if (couponApplied) {
-        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
-          <span class="fs-2 fw-bold text-dark">&#8377;{{ finalPrice }}</span>
-          <span class="fs-6 text-secondary text-decoration-line-through">&#8377;{{ template.offerPrice || template.originalPrice }}</span>
+    <!-- Step 3: Processing -->
+    @if (currentStep === 'processing') {
+      <div class="step-content text-center py-5">
+        <div class="spinner-border text-primary mb-3" style="width:3rem;height:3rem;"></div>
+        <h5 class="fw-bold">Processing Payment</h5>
+        <p class="text-muted">Please complete the payment in the popup window.<br>Do not close this page.</p>
+      </div>
+    }
+
+    <!-- Step 4: Success -->
+    @if (currentStep === 'success') {
+      <div class="step-content text-center">
+        <div class="success-icon mb-3 mx-auto">
+          <i class="bi bi-check-lg"></i>
         </div>
-      }
+        <h5 class="fw-bold text-success">Payment Successful!</h5>
+        <p class="text-muted mb-4">Your template has been unlocked.</p>
 
-      <button class="btn btn-primary w-100 fw-semibold d-flex align-items-center justify-content-center gap-2" (click)="onPurchase()" [disabled]="loading">
-        @if (loading) { <span class="spinner-border spinner-border-sm"></span> Processing... } @else { Purchase Template }
-      </button>
+        <div class="bg-light rounded-3 p-3 mb-4 text-start">
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="text-muted">Order Number</span>
+            <span class="fw-semibold">{{ orderNumber }}</span>
+          </div>
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="text-muted">Payment ID</span>
+            <span class="fw-semibold">{{ paymentId }}</span>
+          </div>
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="text-muted">Amount Paid</span>
+            <span class="fw-bold text-primary">&#8377;{{ orderData?.finalAmount }}</span>
+          </div>
+          <div class="d-flex justify-content-between small">
+            <span class="text-muted">Gateway</span>
+            <span class="fw-semibold text-capitalize">{{ orderData?.gateway }}</span>
+          </div>
+        </div>
 
-      <button class="btn btn-link text-secondary small mt-2 text-decoration-none" (click)="close()">Cancel</button>
-    </div>
+        <button class="btn btn-primary w-100 fw-semibold py-2" (click)="onSuccess()">
+          <i class="bi bi-pencil-square me-2"></i> Start Using Template
+        </button>
+      </div>
+    }
+
+    <!-- Step 5: Failure -->
+    @if (currentStep === 'failure') {
+      <div class="step-content text-center">
+        <div class="failure-icon mb-3 mx-auto">
+          <i class="bi bi-x-lg"></i>
+        </div>
+        <h5 class="fw-bold text-danger">Payment Failed</h5>
+        <p class="text-muted mb-4">{{ errorMessage }}</p>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary flex-grow-1" (click)="onClose()">Cancel</button>
+          <button class="btn btn-primary flex-grow-1 fw-semibold" (click)="retryPayment()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Try Again
+          </button>
+        </div>
+      </div>
+    }
   </div>
 </div>
-}

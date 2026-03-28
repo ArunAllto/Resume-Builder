@@ -199,4 +199,68 @@ public class AdminController : ControllerBase
 
         return Ok(new { success = true, data = activity });
     }
+
+    [HttpGet("orders")]
+    public async Task<IActionResult> GetOrders(
+        [FromQuery] string? status = null,
+        [FromQuery] string? gateway = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20)
+    {
+        var query = _context.Orders.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(status))
+            query = query.Where(o => o.Status == status);
+        if (!string.IsNullOrWhiteSpace(gateway))
+            query = query.Where(o => o.PaymentGateway == gateway);
+
+        var total = await query.CountAsync();
+        var successCount = await query.CountAsync(o => o.Status == "Success");
+        var pendingCount = await query.CountAsync(o => o.Status == "Pending");
+        var failedCount = await query.CountAsync(o => o.Status == "Failed");
+        var totalRevenue = await query.Where(o => o.Status == "Success").SumAsync(o => (decimal?)o.FinalAmount) ?? 0m;
+
+        var orders = await query
+            .Include(o => o.User)
+            .Include(o => o.Template)
+            .OrderByDescending(o => o.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(o => new
+            {
+                id = o.Id,
+                orderNumber = o.OrderNumber,
+                userEmail = o.User != null ? o.User.Email : "",
+                userName = o.User != null ? o.User.FullName : "",
+                templateName = o.Template != null ? o.Template.Name : "",
+                amount = o.Amount,
+                discountAmount = o.DiscountAmount,
+                couponCode = o.CouponCode,
+                finalAmount = o.FinalAmount,
+                currency = o.Currency,
+                status = o.Status,
+                gateway = o.PaymentGateway,
+                paymentId = o.GatewayPaymentId,
+                createdAt = o.CreatedAt,
+                paidAt = o.PaidAt
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                orders,
+                total,
+                page,
+                pageSize,
+                totalPages = (int)Math.Ceiling((double)total / pageSize),
+                successCount,
+                pendingCount,
+                failedCount,
+                totalRevenue
+            }
+        });
+    }
 }

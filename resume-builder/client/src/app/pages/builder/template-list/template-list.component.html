@@ -142,10 +142,11 @@
   </app-auth-modal>
 
   <!-- Purchase Modal -->
-  <app-purchase-modal
-    [visible]="showPurchaseModal"
-    [template]="selectedTemplate"
-    (purchased)="onPurchased()"
-    (closed)="showPurchaseModal = false">
-  </app-purchase-modal>
+  @if (showPurchaseModal) {
+    <app-purchase-modal
+      [template]="selectedTemplate"
+      (purchased)="onPurchased()"
+      (close)="showPurchaseModal = false">
+    </app-purchase-modal>
+  }
 </div>
