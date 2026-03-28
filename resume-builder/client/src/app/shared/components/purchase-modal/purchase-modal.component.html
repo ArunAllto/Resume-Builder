@@ -31,6 +31,30 @@
         </li>
       </ul>
 
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Have a coupon code?</label>
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="couponCode" placeholder="Enter code" [disabled]="couponApplied" />
+          <button class="btn btn-outline-primary" (click)="applyCoupon()" [disabled]="!couponCode || couponApplied || applyingCoupon">
+            @if (applyingCoupon) { <span class="spinner-border spinner-border-sm"></span> }
+            @else { Apply }
+          </button>
+        </div>
+        @if (couponApplied) {
+          <div class="text-success small mt-1"><i class="bi bi-check-circle"></i> Coupon applied! {{ discountText }}</div>
+        }
+        @if (couponError) {
+          <div class="text-danger small mt-1">{{ couponError }}</div>
+        }
+      </div>
+
+      @if (couponApplied) {
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+          <span class="fs-2 fw-bold text-dark">&#8377;{{ finalPrice }}</span>
+          <span class="fs-6 text-secondary text-decoration-line-through">&#8377;{{ template.offerPrice || template.originalPrice }}</span>
+        </div>
+      }
+
       <button class="btn btn-primary w-100 fw-semibold d-flex align-items-center justify-content-center gap-2" (click)="onPurchase()" [disabled]="loading">
         @if (loading) { <span class="spinner-border spinner-border-sm"></span> Processing... } @else { Purchase Template }
       </button>

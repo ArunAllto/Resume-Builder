@@ -1,0 +1,51 @@
+/* Gradient hero — custom SCSS for gradient & animations only */
+.pricing-hero {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6366f1 100%);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -25%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+    animation: pricing-glow 8s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes pricing-glow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 5%) scale(1.1); }
+}
+
+/* Card header variants */
+.pricing-card-header--free {
+  background: #f8f9fa;
+  color: #212529;
+}
+
+.pricing-card-header--pro {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff;
+}
+
+.pricing-card-header--premium {
+  background: #212529;
+  color: #fff;
+}
+
+/* Popular card lift */
+.pricing-card--popular {
+  transform: scale(1.03);
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+/* Custom toggle appearance */
+.form-check-input:checked {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}

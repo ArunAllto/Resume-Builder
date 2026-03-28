@@ -1,0 +1,252 @@
+@if (example) {
+  <!-- Breadcrumb -->
+  <nav class="bg-body-tertiary border-bottom py-3">
+    <div class="container">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="text-decoration-none">
+            <i class="bi bi-house-door me-1"></i>Home
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a routerLink="/resume-examples" class="text-decoration-none">Resume Examples</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ example.jobTitle }}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Left Column: Resume Preview -->
+        <div class="col-lg-8">
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3">
+              <h1 class="h4 fw-bold mb-0">{{ example.jobTitle }} Resume Example</h1>
+              <span class="badge {{ getLevelBadgeClass(example.experienceLevel) }}">
+                {{ example.experienceLevel }}
+              </span>
+            </div>
+            <div class="card-body p-4">
+              <!-- Mock Resume Preview -->
+              <div class="resume-preview border rounded-3 p-4 bg-white">
+                <!-- Header -->
+                <div class="text-center mb-4 pb-3 border-bottom">
+                  <div class="rounded-circle bg-primary-subtle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                    <i class="bi bi-person-fill fs-3 text-primary"></i>
+                  </div>
+                  <h2 class="h5 fw-bold mb-1">Alex Johnson</h2>
+                  <p class="text-primary fw-semibold mb-1">{{ example.jobTitle }}</p>
+                  <p class="text-muted small mb-0">
+                    <i class="bi bi-envelope me-1"></i>alex.johnson&#64;email.com
+                    <span class="mx-2">|</span>
+                    <i class="bi bi-telephone me-1"></i>(555) 123-4567
+                    <span class="mx-2">|</span>
+                    <i class="bi bi-geo-alt me-1"></i>New York, NY
+                  </p>
+                </div>
+
+                <!-- Summary -->
+                <div class="mb-4">
+                  <h6 class="text-uppercase fw-bold text-primary small border-bottom pb-2 mb-3">
+                    <i class="bi bi-person-lines-fill me-2"></i>Professional Summary
+                  </h6>
+                  <p class="small text-muted mb-0">{{ example.description }}</p>
+                </div>
+
+                <!-- Skills -->
+                <div class="mb-4">
+                  <h6 class="text-uppercase fw-bold text-primary small border-bottom pb-2 mb-3">
+                    <i class="bi bi-tools me-2"></i>Key Skills
+                  </h6>
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (skill of example.skills; track skill) {
+                      <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2">{{ skill }}</span>
+                    }
+                  </div>
+                </div>
+
+                <!-- Experience Placeholder -->
+                <div class="mb-4">
+                  <h6 class="text-uppercase fw-bold text-primary small border-bottom pb-2 mb-3">
+                    <i class="bi bi-briefcase me-2"></i>Work Experience
+                  </h6>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                      <div>
+                        <span class="fw-semibold small">Senior {{ example.jobTitle }}</span>
+                        <span class="text-muted small"> - Acme Corporation</span>
+                      </div>
+                      <span class="text-muted small">2021 - Present</span>
+                    </div>
+                    <ul class="small text-muted mb-0 ps-3">
+                      @for (highlight of example.highlights.slice(0, 2); track highlight) {
+                        <li>{{ highlight }}</li>
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                      <div>
+                        <span class="fw-semibold small">{{ example.jobTitle }}</span>
+                        <span class="text-muted small"> - Globex Inc.</span>
+                      </div>
+                      <span class="text-muted small">2018 - 2021</span>
+                    </div>
+                    <ul class="small text-muted mb-0 ps-3">
+                      @for (highlight of example.highlights.slice(2, 4); track highlight) {
+                        <li>{{ highlight }}</li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Education Placeholder -->
+                <div>
+                  <h6 class="text-uppercase fw-bold text-primary small border-bottom pb-2 mb-3">
+                    <i class="bi bi-mortarboard me-2"></i>Education
+                  </h6>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <span class="fw-semibold small">Bachelor's Degree</span>
+                      <span class="text-muted small d-block">State University</span>
+                    </div>
+                    <span class="text-muted small">2014 - 2018</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-lg-4">
+          <!-- Key Highlights -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">
+                <i class="bi bi-star-fill text-warning me-2"></i>Key Highlights
+              </h5>
+              <ul class="list-unstyled mb-0">
+                @for (highlight of example.highlights; track highlight) {
+                  <li class="d-flex align-items-start gap-2 mb-2">
+                    <i class="bi bi-check-circle-fill text-success flex-shrink-0 mt-1"></i>
+                    <span class="small">{{ highlight }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+          <!-- Skills Used -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">
+                <i class="bi bi-tags-fill text-primary me-2"></i>Skills Used
+              </h5>
+              <div class="d-flex flex-wrap gap-2">
+                @for (skill of example.skills; track skill) {
+                  <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Level -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">
+                <i class="bi bi-bar-chart-fill text-info me-2"></i>Details
+              </h5>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small">Experience Level</span>
+                <span class="badge {{ getLevelBadgeClass(example.experienceLevel) }}">
+                  {{ example.experienceLevel }}
+                </span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small">Industry</span>
+                <span class="badge bg-primary-subtle text-primary-emphasis">{{ example.industry }}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small">Template</span>
+                <span class="badge bg-secondary-subtle text-secondary-emphasis text-capitalize">
+                  {{ example.templateCategory }}
+                </span>
+              </div>
+              <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="text-muted small">ATS Score</span>
+                  <span class="fw-bold small">{{ example.atsScore }}%</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div
+                    class="progress-bar {{ getScoreBarClass(example.atsScore) }}"
+                    role="progressbar"
+                    [style.width.%]="example.atsScore"
+                    [attr.aria-valuenow]="example.atsScore"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="card shadow-sm border-0 bg-primary text-white">
+            <div class="card-body text-center py-4">
+              <i class="bi bi-file-earmark-plus fs-1 d-block mb-2"></i>
+              <h5 class="fw-bold mb-2">Use This Example</h5>
+              <p class="small text-white-50 mb-3">
+                Start building your own {{ example.jobTitle }} resume with our builder.
+              </p>
+              <a routerLink="/builder" class="btn btn-light fw-semibold w-100 d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-pencil-square"></i>
+                Start Building Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Examples -->
+      @if (relatedExamples.length > 0) {
+        <div class="mt-5 pt-4 border-top">
+          <h3 class="fw-bold mb-4">
+            <i class="bi bi-collection me-2 text-primary"></i>Related {{ example.industry }} Examples
+          </h3>
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            @for (related of relatedExamples; track related.slug) {
+              <div class="col">
+                <div class="card h-100 shadow-sm border-0 related-card">
+                  <div class="card-body d-flex flex-column">
+                    <h6 class="fw-bold mb-2">{{ related.jobTitle }}</h6>
+                    <div class="d-flex gap-2 mb-2">
+                      <span class="badge {{ getLevelBadgeClass(related.experienceLevel) }} small">
+                        {{ related.experienceLevel }}
+                      </span>
+                      <span class="badge {{ getScoreBadgeClass(related.atsScore) }} small">
+                        ATS {{ related.atsScore }}%
+                      </span>
+                    </div>
+                    <p class="text-muted small flex-grow-1 mb-3">{{ related.description | slice:0:100 }}...</p>
+                    <a
+                      [routerLink]="['/resume-examples', related.slug]"
+                      class="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center gap-1"
+                    >
+                      <i class="bi bi-eye"></i>
+                      View Example
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+}

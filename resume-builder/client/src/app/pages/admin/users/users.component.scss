@@ -1,0 +1,121 @@
+.users-page {
+  min-height: 100%;
+}
+
+// Avatar circle with gradient
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+
+  &.avatar-lg {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+  }
+}
+
+.user-avatar {
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+// Loading skeleton shimmer
+.skeleton-row {
+  height: 56px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Modal overlay
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+// Table styles
+.table th {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6c757d;
+  border-bottom: 2px solid #e9ecef;
+  white-space: nowrap;
+}
+
+.table td {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+// Inline code ref ID
+.ref-id {
+  font-size: 12px;
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #6c757d;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+// Filters
+.search-input-group {
+  max-width: 400px;
+}
+
+.filter-select {
+  width: auto;
+  min-width: 130px;
+}
+
+// Detail modal label column
+.detail-label {
+  width: 140px;
+}
+
+// Purple badge for Enterprise plan
+.bg-purple {
+  background-color: #7c3aed !important;
+}
+
+// Stat cards hover effect
+.card.bg-primary-subtle,
+.card.bg-success-subtle,
+.card.bg-danger-subtle,
+.card.bg-secondary-subtle,
+.card.bg-warning-subtle {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  }
+}

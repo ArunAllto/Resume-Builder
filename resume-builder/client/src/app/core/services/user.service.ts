@@ -48,7 +48,9 @@ export class UserService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token || token === 'undefined' || token === 'null') return null;
+    return token;
   }
 
   getUser(): User | null {

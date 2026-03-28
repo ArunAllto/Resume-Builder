@@ -19,6 +19,35 @@
   background-clip: text;
 }
 
+// Hover-open dropdowns on desktop
+@media (min-width: 768px) {
+  .nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+}
+
+// Dropdown menu styling
+.dropdown-menu {
+  min-width: 200px;
+}
+
+.dropdown-item {
+  font-size: 0.9rem;
+  color: var(--bs-gray-700);
+  transition: background 0.15s, color 0.15s;
+
+  &:hover, &.active {
+    background: rgba(var(--bs-indigo-rgb), 0.08);
+    color: var(--bs-indigo);
+  }
+}
+
+// Mobile category headers
+.ls-wide {
+  letter-spacing: 0.05em;
+}
+
 // Nav link styling with active underline indicator
 .nav-link {
   color: var(--bs-gray-700);

@@ -5,7 +5,7 @@
       <h1 class="fs-4 fw-bold text-dark mb-1">Dashboard</h1>
       <p class="text-secondary small mb-0">Welcome back! Here's an overview of your resume builder.</p>
     </div>
-    <button class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 text-nowrap" (click)="loadStats()" [disabled]="isLoading">
+    <button class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 text-nowrap" (click)="loadAll()" [disabled]="isLoading">
       <i class="bi bi-arrow-clockwise" [class.spin-animation]="isLoading"></i>
       Refresh
     </button>
@@ -13,9 +13,9 @@
 
   @if (isLoading) {
     <!-- Loading Skeletons -->
-    <div class="row g-3">
-      @for (i of [1, 2, 3]; track i) {
-        <div class="col-12 col-md-4">
+    <div class="row row-cols-2 row-cols-lg-5 g-3 mb-4">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="col">
           <div class="skeleton-card rounded-3"></div>
         </div>
       }
@@ -25,96 +25,243 @@
     <div class="alert alert-danger d-flex align-items-center gap-2 fw-medium" role="alert">
       <i class="bi bi-exclamation-circle"></i>
       {{ errorMessage }}
-      <button class="btn btn-danger btn-sm ms-auto fw-semibold" (click)="loadStats()">Retry</button>
+      <button class="btn btn-danger btn-sm ms-auto fw-semibold" (click)="loadAll()">Retry</button>
     </div>
   } @else {
-    <!-- Stat Cards -->
-    <div class="row g-3 mb-4">
-      <div class="col-12 col-md-4">
+
+    <!-- Row 1: 5 Stat Cards -->
+    <div class="row row-cols-2 row-cols-lg-5 g-3 mb-4">
+      <!-- Total Templates -->
+      <div class="col">
         <div class="card shadow-sm border-0 h-100 stat-card stat-purple">
           <div class="card-body d-flex align-items-center gap-3 p-3">
             <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 stat-icon bg-primary-subtle text-primary">
-              <i class="bi bi-layout-text-window-reverse fs-4"></i>
+              <i class="bi bi-layout-text-window fs-4"></i>
             </div>
             <div class="d-flex flex-column">
-              <span class="fs-3 fw-bold text-dark lh-1">{{ stats?.totalTemplates ?? 0 }}</span>
+              <span class="fs-4 fw-bold text-dark lh-1">{{ stats?.totalTemplates ?? 0 }}</span>
               <span class="text-secondary small fw-medium mt-1">Total Templates</span>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="col-12 col-md-4">
+      <!-- Active Templates -->
+      <div class="col">
         <div class="card shadow-sm border-0 h-100 stat-card stat-green">
           <div class="card-body d-flex align-items-center gap-3 p-3">
             <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 stat-icon bg-success-subtle text-success">
               <i class="bi bi-check-circle fs-4"></i>
             </div>
             <div class="d-flex flex-column">
-              <span class="fs-3 fw-bold text-dark lh-1">{{ stats?.activeTemplates ?? 0 }}</span>
+              <span class="fs-4 fw-bold text-dark lh-1">{{ stats?.activeTemplates ?? 0 }}</span>
               <span class="text-secondary small fw-medium mt-1">Active Templates</span>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="col-12 col-md-4">
+      <!-- Total Resumes -->
+      <div class="col">
         <div class="card shadow-sm border-0 h-100 stat-card stat-blue">
           <div class="card-body d-flex align-items-center gap-3 p-3">
             <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 stat-icon bg-info-subtle text-info">
               <i class="bi bi-file-earmark-text fs-4"></i>
             </div>
             <div class="d-flex flex-column">
-              <span class="fs-3 fw-bold text-dark lh-1">{{ stats?.totalResumes ?? 0 }}</span>
+              <span class="fs-4 fw-bold text-dark lh-1">{{ stats?.totalResumes ?? 0 }}</span>
               <span class="text-secondary small fw-medium mt-1">Total Resumes</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="mb-4">
-      <h2 class="fs-5 fw-semibold text-dark mb-3">Quick Actions</h2>
-      <div class="d-flex flex-column gap-2">
-        <a routerLink="/admin/templates" class="card border shadow-sm text-decoration-none action-card">
-          <div class="card-body d-flex align-items-center gap-3 py-3">
-            <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 action-icon bg-primary-subtle text-primary">
-              <i class="bi bi-layout-text-window-reverse fs-5"></i>
+      <!-- Total Users -->
+      <div class="col">
+        <div class="card shadow-sm border-0 h-100 stat-card stat-indigo">
+          <div class="card-body d-flex align-items-center gap-3 p-3">
+            <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 stat-icon bg-indigo-subtle">
+              <i class="bi bi-people fs-4"></i>
             </div>
-            <div class="flex-grow-1 d-flex flex-column">
-              <span class="fw-semibold text-dark">Manage Templates</span>
-              <span class="text-secondary small">Create, edit, and organize templates</span>
+            <div class="d-flex flex-column">
+              <span class="fs-4 fw-bold text-dark lh-1">{{ stats?.totalUsers ?? 0 }}</span>
+              <span class="text-secondary small fw-medium mt-1">Total Users</span>
             </div>
-            <i class="bi bi-chevron-right text-secondary flex-shrink-0 action-arrow"></i>
           </div>
-        </a>
-
-        <a routerLink="/" class="card border shadow-sm text-decoration-none action-card">
-          <div class="card-body d-flex align-items-center gap-3 py-3">
-            <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 action-icon bg-info-subtle text-info">
-              <i class="bi bi-box-arrow-up-right fs-5"></i>
-            </div>
-            <div class="flex-grow-1 d-flex flex-column">
-              <span class="fw-semibold text-dark">View Site</span>
-              <span class="text-secondary small">Preview the public-facing site</span>
-            </div>
-            <i class="bi bi-chevron-right text-secondary flex-shrink-0 action-arrow"></i>
-          </div>
-        </a>
+        </div>
       </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="mb-4">
-      <h2 class="fs-5 fw-semibold text-dark mb-3">Recent Activity</h2>
-      <div class="card border-dashed bg-white text-center py-5 px-4">
-        <div class="card-body d-flex flex-column align-items-center">
-          <i class="bi bi-clock fs-1 text-secondary opacity-50 mb-3"></i>
-          <p class="fw-semibold text-body-secondary mb-1">Activity tracking coming soon.</p>
-          <span class="text-secondary small">Recent template changes and resume creations will appear here.</span>
+      <!-- Revenue -->
+      <div class="col">
+        <div class="card shadow-sm border-0 h-100 stat-card stat-orange">
+          <div class="card-body d-flex align-items-center gap-3 p-3">
+            <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0 stat-icon bg-warning-subtle text-warning">
+              <i class="bi bi-currency-rupee fs-4"></i>
+            </div>
+            <div class="d-flex flex-column">
+              <span class="fs-4 fw-bold text-dark lh-1">&#8377;{{ (stats?.totalRevenue ?? 0) | number }}</span>
+              <span class="text-secondary small fw-medium mt-1">Revenue</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Row 2: Charts -->
+    <div class="row g-3 mb-4">
+      <!-- Resume Creation Trend (30 days bar chart) -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="fw-bold text-dark mb-3">
+              <i class="bi bi-graph-up me-2 text-primary"></i>Resume Creation Trend
+              <span class="text-secondary fw-normal small ms-1">(30 days)</span>
+            </h6>
+            <div class="chart-container d-flex align-items-end gap-1">
+              @for (item of resumeTrends; track item.date) {
+                <div
+                  class="chart-bar bg-primary rounded-top position-relative"
+                  [style.height.%]="getBarHeight(item.count, resumeTrendMax)"
+                  [title]="formatDate(item.date) + ': ' + item.count + ' resumes'"
+                >
+                  <span class="chart-tooltip position-absolute bg-dark text-white px-2 py-1 rounded small">
+                    {{ formatDate(item.date) }}: {{ item.count }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Templates (horizontal bars) -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="fw-bold text-dark mb-3">
+              <i class="bi bi-star me-2 text-warning"></i>Popular Templates
+            </h6>
+            <div class="d-flex flex-column gap-3">
+              @for (tpl of popularTemplates; track tpl.name) {
+                <div>
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-medium text-truncate me-2">{{ tpl.name }}</span>
+                    <span class="small text-secondary flex-shrink-0">{{ tpl.count }}</span>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-warning" [style.width.%]="getBarWidth(tpl.count, popularTemplateMax)"></div>
+                  </div>
+                </div>
+              }
+              @if (popularTemplates.length === 0) {
+                <p class="text-secondary small mb-0">No template data yet.</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: User Trend + Revenue Summary -->
+    <div class="row g-3 mb-4">
+      <!-- User Registration Trend -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="fw-bold text-dark mb-3">
+              <i class="bi bi-person-plus me-2 text-success"></i>User Registration Trend
+              <span class="text-secondary fw-normal small ms-1">(30 days)</span>
+            </h6>
+            <div class="chart-container chart-container-sm d-flex align-items-end gap-1">
+              @for (item of userTrends; track item.date) {
+                <div
+                  class="chart-bar bg-success rounded-top position-relative"
+                  [style.height.%]="getBarHeight(item.count, userTrendMax)"
+                  [title]="formatDate(item.date) + ': ' + item.count + ' users'"
+                >
+                  <span class="chart-tooltip position-absolute bg-dark text-white px-2 py-1 rounded small">
+                    {{ formatDate(item.date) }}: {{ item.count }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Summary -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="fw-bold text-dark mb-3">
+              <i class="bi bi-currency-rupee me-2 text-warning"></i>Revenue Summary
+            </h6>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="card bg-light border-0">
+                  <div class="card-body text-center py-3">
+                    <div class="fs-4 fw-bold text-dark">&#8377;{{ (revenue?.totalRevenue ?? 0) | number }}</div>
+                    <div class="text-secondary small">Total Revenue</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card bg-light border-0">
+                  <div class="card-body text-center py-3">
+                    <div class="fs-4 fw-bold text-success">&#8377;{{ (revenue?.thisMonthRevenue ?? 0) | number }}</div>
+                    <div class="text-secondary small">This Month</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card bg-light border-0">
+                  <div class="card-body text-center py-3">
+                    <div class="fs-4 fw-bold text-primary">{{ revenue?.totalPurchases ?? 0 }}</div>
+                    <div class="text-secondary small">Total Purchases</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card bg-light border-0">
+                  <div class="card-body text-center py-3">
+                    <div class="fs-4 fw-bold text-info">{{ revenue?.thisMonthPurchases ?? 0 }}</div>
+                    <div class="text-secondary small">This Month</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4: Recent Activity -->
+    <div class="mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6 class="fw-bold text-dark mb-0">
+              <i class="bi bi-clock-history me-2 text-secondary"></i>Recent Activity
+            </h6>
+            <a href="javascript:void(0)" class="small text-decoration-none">View All</a>
+          </div>
+          @if (recentActivity.length === 0) {
+            <p class="text-secondary small mb-0">No recent activity.</p>
+          } @else {
+            <div class="list-group list-group-flush">
+              @for (item of recentActivity; track $index) {
+                <div class="list-group-item border-0 d-flex align-items-center gap-3 px-0 py-2">
+                  <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0 activity-icon"
+                       [ngClass]="getActivityBg(item.type)">
+                    <i class="bi" [ngClass]="[getActivityIcon(item.type), getActivityColor(item.type)]"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <span class="small">{{ item.description }}</span>
+                  </div>
+                  <span class="text-secondary small flex-shrink-0 text-nowrap">{{ getRelativeTime(item.time) }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
   }
 </div>

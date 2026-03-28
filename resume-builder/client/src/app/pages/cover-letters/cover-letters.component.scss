@@ -1,0 +1,117 @@
+// Only custom styles that Bootstrap cannot handle: gradients, animations, special effects
+
+.cl-hero {
+  background: linear-gradient(135deg, #065f46 0%, #059669 40%, #6b46c1 100%);
+  padding: 4rem 0 3rem;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.07;
+  background: white;
+
+  &--1 {
+    width: 450px;
+    height: 450px;
+    top: -160px;
+    right: -60px;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  &--2 {
+    width: 300px;
+    height: 300px;
+    bottom: -100px;
+    left: -40px;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white !important;
+}
+
+.hero-btn {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Step cards
+.step-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-card {
+  transition: transform 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+// Template cards
+.card-thumbnail {
+  height: 200px;
+}
+
+.cl-template-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+// Tip cards
+.tip-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip-card {
+  transition: transform 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+}
+
+// CTA card
+.cta-card {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%);
+  border-radius: 1rem !important;
+}
+
+.cta-btn {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}

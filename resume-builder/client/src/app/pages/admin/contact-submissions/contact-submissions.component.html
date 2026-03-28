@@ -1,0 +1,124 @@
+<div class="p-4 p-sm-3 contact-page">
+  <!-- Header -->
+  <div class="d-flex align-items-start justify-content-between mb-4 gap-3 flex-wrap">
+    <div>
+      <h1 class="fs-4 fw-bold text-dark mb-1">
+        Contact Submissions
+        @if (unreadCount > 0) {
+          <span class="badge bg-danger ms-2 fs-6">{{ unreadCount }}</span>
+        }
+      </h1>
+      <p class="text-secondary small mb-0">Review and manage contact form submissions.</p>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2" (click)="loadSubmissions()" [disabled]="isLoading">
+      <i class="bi bi-arrow-clockwise" [class.spin-animation]="isLoading"></i>
+      Refresh
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="d-flex justify-content-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Filter Pills -->
+    <div class="d-flex gap-2 mb-4">
+      <button class="btn btn-sm" [class]="filter === 'all' ? 'btn-primary' : 'btn-outline-secondary'" (click)="setFilter('all')">
+        All <span class="badge bg-white text-dark ms-1">{{ submissions.length }}</span>
+      </button>
+      <button class="btn btn-sm" [class]="filter === 'unread' ? 'btn-primary' : 'btn-outline-secondary'" (click)="setFilter('unread')">
+        Unread <span class="badge bg-white text-dark ms-1">{{ unreadCount }}</span>
+      </button>
+      <button class="btn btn-sm" [class]="filter === 'read' ? 'btn-primary' : 'btn-outline-secondary'" (click)="setFilter('read')">
+        Read <span class="badge bg-white text-dark ms-1">{{ readCount }}</span>
+      </button>
+    </div>
+
+    @if (filteredSubmissions.length === 0) {
+      <div class="card border-0 shadow-sm text-center py-5">
+        <div class="card-body">
+          <i class="bi bi-envelope-open fs-1 text-secondary opacity-50 mb-3 d-block"></i>
+          <p class="fw-semibold text-body-secondary mb-1">No submissions found.</p>
+          <span class="text-secondary small">
+            @if (filter !== 'all') {
+              Try switching to a different filter.
+            } @else {
+              No contact form submissions yet.
+            }
+          </span>
+        </div>
+      </div>
+    } @else {
+      <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 12px;" class="ps-3"></th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th class="text-end pe-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sub of filteredSubmissions; track sub._id) {
+                <tr
+                  class="cursor-pointer"
+                  [class.fw-semibold]="!sub.isRead"
+                  [class.bg-primary-subtle]="!sub.isRead"
+                  (click)="toggleExpand(sub)"
+                >
+                  <td class="ps-3">
+                    @if (!sub.isRead) {
+                      <span class="status-dot bg-primary rounded-circle d-inline-block"></span>
+                    }
+                  </td>
+                  <td class="text-secondary small text-nowrap">{{ sub.createdAt | date:'shortDate' }}</td>
+                  <td>{{ sub.name }}</td>
+                  <td class="text-secondary small">{{ sub.email }}</td>
+                  <td class="text-truncate" style="max-width: 200px;">{{ sub.subject }}</td>
+                  <td class="text-end pe-3">
+                    <div class="d-flex gap-1 justify-content-end">
+                      <button
+                        class="btn btn-sm btn-outline-secondary"
+                        [title]="sub.isRead ? 'Mark Unread' : 'Mark Read'"
+                        (click)="toggleReadStatus(sub, $event)"
+                      >
+                        <i class="bi" [class]="sub.isRead ? 'bi-envelope' : 'bi-envelope-open'"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" title="Delete" (click)="deleteSubmission(sub, $event)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Expanded Message Row -->
+                @if (expandedId === sub._id) {
+                  <tr>
+                    <td colspan="6" class="p-0">
+                      <div class="card border-0 bg-light m-3 mt-0">
+                        <div class="card-body">
+                          <div class="mb-2">
+                            <span class="fw-semibold small text-secondary">Message from {{ sub.name }}:</span>
+                          </div>
+                          <p class="mb-3 text-dark" style="white-space: pre-wrap;">{{ sub.message }}</p>
+                          <a href="mailto:{{ sub.email }}?subject=Re: {{ sub.subject }}" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                            <i class="bi bi-reply"></i> Reply via Email
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  }
+</div>

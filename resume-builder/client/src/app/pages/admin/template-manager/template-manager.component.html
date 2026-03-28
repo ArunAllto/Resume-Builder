@@ -107,6 +107,12 @@
                   <i class="bi" [ngClass]="template.isActive ? 'bi-power' : 'bi-check-circle'"></i>
                 </button>
                 <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn"
+                  (click)="openSettings(template)"
+                  title="Template Settings">
+                  <i class="bi bi-gear"></i>
+                </button>
+                <button
                   class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center action-btn hover-danger"
                   (click)="deleteTemplate(template)"
                   title="Delete">
@@ -118,6 +124,97 @@
         }
       </div>
     }
+  }
+
+  <!-- Settings Modal -->
+  @if (showSettingsModal && settingsTemplate) {
+    <div class="modal-backdrop fade show" (click)="closeSettings()"></div>
+    <div class="modal d-block" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">
+              <i class="bi bi-gear me-2"></i>Template Settings
+            </h5>
+            <button type="button" class="btn-close" (click)="closeSettings()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-semibold">Template Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="settingsForm.name" placeholder="e.g. Modern Professional" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Description</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="settingsForm.description" placeholder="Brief description of the template"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Category</label>
+                <select class="form-select" [(ngModel)]="settingsForm.category">
+                  <option value="professional">Professional</option>
+                  <option value="modern">Modern</option>
+                  <option value="minimal">Minimal</option>
+                  <option value="creative">Creative</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Thumbnail URL</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" [(ngModel)]="settingsForm.thumbnail" placeholder="https://..." />
+                  <label class="btn btn-outline-secondary" title="Upload image">
+                    <i class="bi bi-upload"></i>
+                    <input type="file" accept="image/*" class="d-none" (change)="onSettingsThumbnailSelected($event)" />
+                  </label>
+                </div>
+                @if (settingsForm.thumbnail) {
+                  <img [src]="settingsForm.thumbnail" class="mt-2 rounded" style="max-height:80px;max-width:100%;object-fit:cover;" alt="thumbnail" />
+                }
+              </div>
+              <div class="col-12">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="settingsIsFree" [(ngModel)]="settingsForm.isFree" />
+                  <label class="form-check-label fw-semibold" for="settingsIsFree">Free Template</label>
+                </div>
+              </div>
+              @if (!settingsForm.isFree) {
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Original Price (&#8377;)</label>
+                  <input type="number" class="form-control" [(ngModel)]="settingsForm.originalPrice" min="0" step="1" placeholder="e.g. 299" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Offer Price (&#8377;)</label>
+                  <input type="number" class="form-control" [(ngModel)]="settingsForm.offerPrice" min="0" step="1" placeholder="e.g. 199" />
+                </div>
+              }
+              <div class="col-md-6">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="settingsIsPublished" [(ngModel)]="settingsForm.isPublished" />
+                  <label class="form-check-label fw-semibold" for="settingsIsPublished">Published</label>
+                </div>
+                <small class="text-muted">Published templates are visible to end users</small>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="settingsIsActive" [(ngModel)]="settingsForm.isActive" />
+                  <label class="form-check-label fw-semibold" for="settingsIsActive">Active</label>
+                </div>
+                <small class="text-muted">Inactive templates are hidden from listings</small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="closeSettings()" [disabled]="isSavingSettings">Cancel</button>
+            <button type="button" class="btn btn-primary fw-semibold" (click)="saveSettings()" [disabled]="isSavingSettings">
+              @if (isSavingSettings) {
+                <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+              } @else {
+                <i class="bi bi-check2 me-1"></i>Save Settings
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   }
 
   <!-- Template Creator View -->

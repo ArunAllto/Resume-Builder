@@ -12,6 +12,10 @@ public class AppDbContext : DbContext
     public DbSet<Resume> Resumes => Set<Resume>();
     public DbSet<User> Users => Set<User>();
     public DbSet<UserPurchase> UserPurchases => Set<UserPurchase>();
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
+    public DbSet<Testimonial> Testimonials => Set<Testimonial>();
+    public DbSet<ContactSubmission> ContactSubmissions => Set<ContactSubmission>();
+    public DbSet<Coupon> Coupons => Set<Coupon>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +36,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Category).HasMaxLength(100);
             entity.Property(e => e.Thumbnail).HasColumnType("nvarchar(max)");
             entity.Property(e => e.LayoutConfig).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.IsFree).HasMaxLength(50);
             entity.Property(e => e.OriginalPrice).HasColumnType("decimal(10,2)");
             entity.Property(e => e.OfferPrice).HasColumnType("decimal(10,2)");
         });
@@ -87,6 +92,49 @@ public class AppDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(e => e.TemplateId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SiteSettings>(entity =>
+        {
+            entity.Property(e => e.SiteName).HasMaxLength(255);
+            entity.Property(e => e.Tagline).HasMaxLength(500);
+            entity.Property(e => e.HeroTitle).HasMaxLength(500);
+            entity.Property(e => e.HeroSubtitle).HasMaxLength(1000);
+            entity.Property(e => e.PrimaryColor).HasMaxLength(50);
+            entity.Property(e => e.LogoUrl).HasMaxLength(1000);
+            entity.Property(e => e.ContactEmail).HasMaxLength(255);
+            entity.Property(e => e.ContactPhone).HasMaxLength(50);
+            entity.Property(e => e.Address).HasMaxLength(1000);
+            entity.Property(e => e.SocialLinks).HasColumnType("nvarchar(max)");
+            entity.Property(e => e.FooterText).HasMaxLength(1000);
+            entity.Property(e => e.AnnouncementText).HasMaxLength(1000);
+            entity.Property(e => e.AnnouncementColor).HasMaxLength(50);
+            entity.Property(e => e.AnnouncementLink).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<Testimonial>(entity =>
+        {
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Role).HasMaxLength(255);
+            entity.Property(e => e.Company).HasMaxLength(255);
+            entity.Property(e => e.Content).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.AvatarUrl).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<ContactSubmission>(entity =>
+        {
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Email).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Subject).HasMaxLength(500).IsRequired();
+            entity.Property(e => e.Message).HasColumnType("nvarchar(max)").IsRequired();
+        });
+
+        modelBuilder.Entity<Coupon>(entity =>
+        {
+            entity.Property(e => e.Code).HasMaxLength(100).IsRequired();
+            entity.HasIndex(e => e.Code).IsUnique();
+            entity.Property(e => e.DiscountType).HasMaxLength(20).IsRequired();
+            entity.Property(e => e.DiscountValue).HasColumnType("decimal(10,2)");
         });
     }
 }

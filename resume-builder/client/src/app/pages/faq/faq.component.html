@@ -1,0 +1,134 @@
+<!-- ── Hero Section ── -->
+<section class="faq-hero py-5 text-center text-white">
+  <div class="container py-5">
+    <h1 class="display-5 fw-bold mb-3">Frequently Asked Questions</h1>
+    <p class="lead text-white-50 mx-auto" style="max-width: 560px;">
+      Find answers to common questions about ResumeAI, our templates, pricing, and more.
+    </p>
+
+    <!-- Search Input -->
+    <div class="mx-auto mt-4" style="max-width: 500px;">
+      <div class="input-group input-group-lg">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0"
+          placeholder="Search questions..."
+          [(ngModel)]="searchText"
+        />
+        @if (searchText) {
+          <button class="btn btn-outline-secondary bg-white" type="button" (click)="searchText = ''">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Category Tabs + Accordion ── -->
+<section class="py-5">
+  <div class="container">
+    <!-- Category Pills -->
+    <ul class="nav nav-pills justify-content-center flex-wrap gap-2 mb-4">
+      @for (cat of categories; track cat) {
+        <li class="nav-item">
+          <button
+            class="nav-link d-inline-flex align-items-center gap-2 rounded-pill"
+            [class.active]="activeCategory === cat"
+            (click)="setCategory(cat)"
+          >
+            <i [class]="'bi ' + getCategoryIcon(cat)"></i>
+            {{ cat }}
+            <span class="badge rounded-pill ms-1"
+              [class.bg-white]="activeCategory === cat"
+              [class.text-primary]="activeCategory === cat"
+              [class.bg-primary-subtle]="activeCategory !== cat"
+              [class.text-primary-emphasis]="activeCategory !== cat"
+            >
+              {{ getCategoryCount(cat) }}
+            </span>
+          </button>
+        </li>
+      }
+    </ul>
+
+    <!-- Results count -->
+    @if (searchText) {
+      <p class="text-center text-muted mb-3">
+        <i class="bi bi-funnel me-1"></i>
+        Showing {{ filteredFaqs.length }} result{{ filteredFaqs.length !== 1 ? 's' : '' }}
+        for "<strong>{{ searchText }}</strong>"
+      </p>
+    }
+
+    <!-- Accordion -->
+    <div class="mx-auto" style="max-width: 850px;">
+      @if (filteredFaqs.length === 0) {
+        <div class="text-center py-5">
+          <i class="bi bi-emoji-frown display-1 text-muted opacity-50"></i>
+          <h5 class="mt-3 text-muted">No questions found</h5>
+          <p class="text-muted">Try a different search term or category.</p>
+          <button class="btn btn-outline-primary" (click)="searchText = ''; activeCategory = 'All'">
+            Clear Filters
+          </button>
+        </div>
+      } @else {
+        <div class="accordion accordion-flush" id="faqAccordion">
+          @for (faq of filteredFaqs; track faq.question; let i = $index) {
+            <div class="accordion-item rounded-3 mb-2 border">
+              <h2 class="accordion-header" [id]="'faqHead' + i">
+                <button
+                  class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  [attr.data-bs-toggle]="'collapse'"
+                  [attr.data-bs-target]="'#faqBody' + i"
+                  [attr.aria-expanded]="'false'"
+                  [attr.aria-controls]="'faqBody' + i"
+                >
+                  <span class="me-2">{{ faq.question }}</span>
+                  <span class="badge bg-body-secondary text-muted rounded-pill ms-auto me-2 small">
+                    {{ faq.category }}
+                  </span>
+                </button>
+              </h2>
+              <div
+                [id]="'faqBody' + i"
+                class="accordion-collapse collapse"
+                [attr.aria-labelledby]="'faqHead' + i"
+                data-bs-parent="#faqAccordion"
+              >
+                <div class="accordion-body text-muted">
+                  {{ faq.answer }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ── Still Need Help CTA ── -->
+<section class="py-5 bg-body-secondary">
+  <div class="container">
+    <div class="card border-0 rounded-4 shadow-sm mx-auto overflow-hidden" style="max-width: 700px;">
+      <div class="card-body text-center p-5">
+        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+          style="width: 64px; height: 64px;">
+          <i class="bi bi-headset fs-2 text-primary"></i>
+        </div>
+        <h3 class="fw-bold mb-2">Still Need Help?</h3>
+        <p class="text-muted mb-4 mx-auto" style="max-width: 420px;">
+          Can't find what you're looking for? Our support team is ready to assist you with any questions.
+        </p>
+        <a routerLink="/contact" class="btn btn-primary btn-lg px-5">
+          <i class="bi bi-envelope me-2"></i>Contact Support
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

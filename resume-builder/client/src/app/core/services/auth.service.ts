@@ -36,7 +36,9 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token || token === 'undefined' || token === 'null') return null;
+    return token;
   }
 
   getEmail(): string | null {

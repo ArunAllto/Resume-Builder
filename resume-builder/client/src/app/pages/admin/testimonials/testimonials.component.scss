@@ -1,0 +1,94 @@
+// Only custom styles that Bootstrap can't handle
+
+.testimonials-manager {
+  max-width: 1100px;
+}
+
+// Skeleton loading
+.skeleton-row {
+  height: 72px;
+  background: linear-gradient(90deg, var(--bs-gray-200) 25%, var(--bs-gray-300) 50%, var(--bs-gray-200) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+// Dashed border
+.border-dashed {
+  border-style: dashed !important;
+  border-color: var(--bs-gray-300) !important;
+}
+
+// Testimonial card hover
+.testimonial-card {
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// Quote text
+.testimonial-quote {
+  font-style: italic;
+  line-height: 1.6;
+}
+
+// Avatar
+.avatar-preview {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.avatar-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  font-size: 1.1rem;
+}
+
+// Star button
+.star-btn {
+  text-decoration: none;
+  line-height: 1;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+}
+
+// Action buttons hover colors
+.action-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.hover-danger:hover {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+    background-color: var(--bs-danger-bg-subtle) !important;
+  }
+
+  &.hover-success:hover {
+    color: var(--bs-success) !important;
+    border-color: var(--bs-success) !important;
+    background-color: var(--bs-success-bg-subtle) !important;
+  }
+
+  &.hover-warning:hover {
+    color: var(--bs-warning) !important;
+    border-color: var(--bs-warning) !important;
+    background-color: var(--bs-warning-bg-subtle) !important;
+  }
+}

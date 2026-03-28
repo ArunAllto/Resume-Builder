@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ArtboardElement, PageSettings, PAGE_SIZES, MARGIN_PRESETS, SHAPE_DEFS, ICON_DEFS, RESUME_FIELD_BINDINGS } from '../../../core/models/artboard.model';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
@@ -127,6 +128,7 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
   propStrokeColor = '#94a3b8';
   propStrokeWidth = 1;
   propStrokeStyle = 'solid';
+  propStrokeOpacity = 100;
 
   propHasShadow = false;
   propShadowColor = '#00000040';
@@ -178,6 +180,7 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
     private ngZone: NgZone,
     private http: HttpClient,
     private toast: ToastService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════════════
@@ -255,11 +258,18 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
 
   private baseElement(type: ArtboardElement['type'], w: number, h: number): ArtboardElement {
     const id = this.nextElementId++;
+    const marginLeft = this.pageSettings.marginLeft * this.PX_PER_MM;
+    const marginTop = this.pageSettings.marginTop * this.PX_PER_MM;
+    const marginRight = this.pageSettings.marginRight * this.PX_PER_MM;
+    const marginBottom = this.pageSettings.marginBottom * this.PX_PER_MM;
+    const usableW = this.artboardWidth - marginLeft - marginRight;
+    const usableH = this.artboardHeight - marginTop - marginBottom;
+
     return {
       id,
       type,
-      x: Math.round((this.artboardWidth - w) / 2),
-      y: Math.round((this.artboardHeight - h) / 4),
+      x: Math.round(marginLeft + Math.max(0, (usableW - w) / 2)),
+      y: Math.round(marginTop + Math.max(0, (usableH - h) / 4)),
       width: w,
       height: h,
       rotation: 0,
@@ -372,6 +382,8 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
       strokeColor: '#94a3b8',
       strokeWidth: 1,
       strokeStyle: 'solid',
+      strokeOpacity: 100,
+      strokeAlignment: 'center',
       borderRadius: shapeType === 'rectangle' ? 4 : 0,
       cornerCount: 5,
       cornerRatio: 0.5,
@@ -518,12 +530,23 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
   @HostListener('document:mousemove', ['$event'])
   onDocMouseMove(event: MouseEvent): void {
     if (this.isDragging && this.dragElement) {
-      const newX = (event.clientX / this.zoom) - this.dragOffsetX;
-      const newY = (event.clientY / this.zoom) - this.dragOffsetY;
-      this.dragElement.x = Math.round(newX);
-      this.dragElement.y = Math.round(newY);
-      this.propX = this.dragElement.x;
-      this.propY = this.dragElement.y;
+      const el = this.dragElement;
+      let newX = (event.clientX / this.zoom) - this.dragOffsetX;
+      let newY = (event.clientY / this.zoom) - this.dragOffsetY;
+
+      // Clamp to margin bounds
+      const mLeft = this.pageSettings.marginLeft * this.PX_PER_MM;
+      const mTop = this.pageSettings.marginTop * this.PX_PER_MM;
+      const mRight = this.artboardWidth - (this.pageSettings.marginRight * this.PX_PER_MM);
+      const mBottom = this.artboardHeight - (this.pageSettings.marginBottom * this.PX_PER_MM);
+
+      newX = Math.max(mLeft, Math.min(newX, mRight - el.width));
+      newY = Math.max(mTop, Math.min(newY, mBottom - el.height));
+
+      el.x = Math.round(newX);
+      el.y = Math.round(newY);
+      this.propX = el.x;
+      this.propY = el.y;
       return;
     }
 
@@ -712,6 +735,7 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
     this.propStrokeColor = el.strokeColor ?? '#94a3b8';
     this.propStrokeWidth = el.strokeWidth ?? 1;
     this.propStrokeStyle = el.strokeStyle ?? 'solid';
+    this.propStrokeOpacity = el.strokeOpacity ?? 100;
 
     // Shadow
     this.propHasShadow = el.hasShadow ?? false;
@@ -777,6 +801,7 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
       case 'strokeColor': el.strokeColor = this.propStrokeColor; break;
       case 'strokeWidth': el.strokeWidth = this.propStrokeWidth; break;
       case 'strokeStyle': el.strokeStyle = this.propStrokeStyle; break;
+      case 'strokeOpacity': el.strokeOpacity = this.propStrokeOpacity; break;
 
       // Shadow
       case 'hasShadow':
@@ -813,6 +838,9 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
         el.columnWidths = Array(this.propColumnCount).fill(Math.round(100 / this.propColumnCount));
         break;
       case 'columnGap': el.columnGap = this.propColumnGap; break;
+
+      // Data binding
+      case 'dataBinding': break; // Already set directly on element
     }
 
     this.saveHistory();
@@ -839,12 +867,15 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
 
   onMarginPresetChange(preset: string): void {
     this.pageSettings.marginPreset = preset as PageSettings['marginPreset'];
-    const presetValues = MARGIN_PRESETS[preset];
-    if (presetValues && preset !== 'custom') {
-      this.pageSettings.marginTop = presetValues.top;
-      this.pageSettings.marginRight = presetValues.right;
-      this.pageSettings.marginBottom = presetValues.bottom;
-      this.pageSettings.marginLeft = presetValues.left;
+    // Only apply preset values for non-custom presets; for custom, preserve current values
+    if (preset !== 'custom') {
+      const presetValues = MARGIN_PRESETS[preset];
+      if (presetValues) {
+        this.pageSettings.marginTop = presetValues.top;
+        this.pageSettings.marginRight = presetValues.right;
+        this.pageSettings.marginBottom = presetValues.bottom;
+        this.pageSettings.marginLeft = presetValues.left;
+      }
     }
   }
 
@@ -1163,6 +1194,13 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  onArtboardMouseDown(event: MouseEvent): void {
+    // Deselect when clicking directly on the artboard background (not on a child element)
+    if (event.target === event.currentTarget) {
+      this.deselectAll();
+    }
+  }
+
   // ═══════════════════════════════════════════════════════════════════════
   // Helper methods
   // ═══════════════════════════════════════════════════════════════════════
@@ -1184,31 +1222,61 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
       'border-radius': `${el.borderRadius}px`,
     };
 
-    // Stroke / border
-    if (el.strokeWidth && el.strokeWidth > 0 && el.strokeColor) {
-      style['border'] = `${el.strokeWidth}px ${el.strokeStyle || 'solid'} ${el.strokeColor}`;
-    }
+    // For shapes that are SVG-rendered, the fill/stroke are inside the SVG element —
+    // do NOT apply background-color or CSS border to the container div.
+    const isSvgShape = el.type === 'shape';
 
-    // Fill
-    if (el.type === 'shape' || el.type === 'columns' || el.type === 'table') {
-      if (el.fillColor) {
-        const fillOp = (el.fillOpacity ?? 100) / 100;
-        if (fillOp < 1) {
-          style['background-color'] = this.hexToRgba(el.fillColor, fillOp);
-        } else {
-          style['background-color'] = el.fillColor;
+    // Stroke / border — only for non-shape elements (columns, table)
+    if (!isSvgShape) {
+      if (el.strokeWidth && el.strokeWidth > 0 && el.strokeColor) {
+        const sw = el.strokeWidth;
+        const sc = this.getColorWithOpacity(el.strokeColor, el.strokeOpacity ?? 100);
+        const dashStyle = el.strokeStyle === 'dashed' ? 'dashed' : el.strokeStyle === 'dotted' ? 'dotted' : 'solid';
+        const alignment = el.strokeAlignment || 'center';
+
+        switch (alignment) {
+          case 'inside':
+            style['box-shadow'] = `inset 0 0 0 ${sw}px ${sc}`;
+            style['border'] = 'none';
+            break;
+          case 'outside':
+            style['outline'] = `${sw}px ${dashStyle} ${sc}`;
+            style['outline-offset'] = '0px';
+            style['border'] = 'none';
+            break;
+          default: // center
+            style['border'] = `${sw}px ${dashStyle} ${sc}`;
+            break;
         }
       }
     }
 
-    // Shadow
+    // Fill — apply fillOpacity using rgba for non-shape elements
+    if (el.type === 'columns' || el.type === 'table') {
+      if (el.fillColor) {
+        style['background-color'] = this.getColorWithOpacity(el.fillColor, el.fillOpacity ?? 100);
+      }
+    }
+
+    // Fill for text elements
+    if (el.type === 'text' && el.fillColor) {
+      style['background-color'] = this.getColorWithOpacity(el.fillColor, el.fillOpacity ?? 100);
+    }
+
+    // Shadow — combine with any existing inset box-shadow from stroke alignment
     if (el.hasShadow) {
       const sx = el.shadowOffsetX ?? 2;
       const sy = el.shadowOffsetY ?? 2;
       const sb = el.shadowBlur ?? 4;
       const ss = el.shadowSpread ?? 0;
       const sc = el.shadowColor ?? '#00000040';
-      style['box-shadow'] = `${sx}px ${sy}px ${sb}px ${ss}px ${sc}`;
+      const dropShadow = `${sx}px ${sy}px ${sb}px ${ss}px ${sc}`;
+      if (style['box-shadow']) {
+        // prepend drop shadow before existing inset shadow
+        style['box-shadow'] = `${dropShadow}, ${style['box-shadow']}`;
+      } else {
+        style['box-shadow'] = dropShadow;
+      }
     }
 
     // Text styling
@@ -1254,6 +1322,32 @@ export class TemplateDesignerComponent implements AfterViewInit, OnDestroy {
       b = parseInt(hex.substring(5, 7), 16);
     }
     return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  getColorWithOpacity(hex: string, opacity: number): string {
+    if (!hex || hex === 'none' || hex === 'transparent') return hex || 'transparent';
+    if (!hex.startsWith('#')) return hex; // Not a hex color, return as-is
+    let r = 0, g = 0, b = 0;
+    if (hex.length === 4) {
+      r = parseInt(hex[1] + hex[1], 16);
+      g = parseInt(hex[2] + hex[2], 16);
+      b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length >= 7) {
+      r = parseInt(hex.slice(1, 3), 16);
+      g = parseInt(hex.slice(3, 5), 16);
+      b = parseInt(hex.slice(5, 7), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${(opacity ?? 100) / 100})`;
+  }
+
+  getSafeIconHtml(svgStr: string, color: string): SafeHtml {
+    if (!svgStr) return '';
+    const colored = svgStr.replace(/currentColor/g, color || '#000000');
+    return this.sanitizer.bypassSecurityTrustHtml(colored);
+  }
+
+  getFieldLabel(field: string): string {
+    return this.RESUME_FIELD_BINDINGS.find(b => b.value === field)?.label || field;
   }
 
   getShapeSvgPath(shapeType: string, w: number, h: number, radius?: number, cornerCount?: number, cornerRatio?: number): string {

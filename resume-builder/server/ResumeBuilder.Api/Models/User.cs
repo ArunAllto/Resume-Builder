@@ -11,7 +11,19 @@ public class User
     public string FullName { get; set; } = string.Empty;
 
     [MaxLength(255)]
+    public string FirstName { get; set; } = string.Empty;
+
+    [MaxLength(255)]
+    public string LastName { get; set; } = string.Empty;
+
+    [MaxLength(255)]
+    public string Username { get; set; } = string.Empty;
+
+    [MaxLength(255)]
     public string Email { get; set; } = string.Empty;
+
+    [MaxLength(50)]
+    public string Phone { get; set; } = string.Empty;
 
     public string PasswordHash { get; set; } = string.Empty;
 
@@ -19,6 +31,9 @@ public class User
     public string? GoogleId { get; set; }
 
     public string? Avatar { get; set; }
+
+    [MaxLength(50)]
+    public string PlanPurchased { get; set; } = "Free";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

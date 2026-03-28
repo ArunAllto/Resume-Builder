@@ -33,6 +33,8 @@ export interface ArtboardElement {
   strokeColor?: string;
   strokeWidth?: number;
   strokeStyle?: string; // solid | dashed | dotted
+  strokeAlignment?: string; // inside | center | outside
+  strokeOpacity?: number;
 
   // Shadow (drop shadow)
   hasShadow?: boolean;

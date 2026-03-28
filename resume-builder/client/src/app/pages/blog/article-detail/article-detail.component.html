@@ -1,0 +1,170 @@
+@if (article) {
+  <!-- Breadcrumb -->
+  <nav class="bg-light border-bottom py-3">
+    <div class="container">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a routerLink="/" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="/blog" class="text-decoration-none">Blog</a></li>
+        <li class="breadcrumb-item active text-truncate" style="max-width: 300px;" aria-current="page">{{ article.title }}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5">
+
+        <!-- Left Column: Article -->
+        <div class="col-lg-8">
+          <!-- Category Badge -->
+          <span class="badge rounded-pill mb-3" [class]="getCategoryClass(article.category)">
+            {{ article.category }}
+          </span>
+
+          <!-- Title -->
+          <h1 class="display-5 fw-bold mb-3">{{ article.title }}</h1>
+
+          <!-- Meta -->
+          <div class="d-flex flex-wrap align-items-center text-muted mb-4 pb-4 border-bottom gap-3">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-person-circle me-2 fs-5"></i>
+              <span>{{ article.author }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-calendar3 me-2"></i>
+              <span>{{ article.date | date:'longDate' }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-clock me-2"></i>
+              <span>{{ article.readTime }} min read</span>
+            </div>
+          </div>
+
+          <!-- Article Content -->
+          <div class="article-content" [innerHTML]="article.content"></div>
+
+          <!-- Share Buttons -->
+          <div class="mt-5 pt-4 border-top">
+            <h6 class="fw-bold text-muted text-uppercase small mb-3">Share this article</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-secondary btn-sm" (click)="copyLink()">
+                <i class="bi me-1" [class.bi-check-lg]="linkCopied" [class.bi-link-45deg]="!linkCopied"></i>
+                {{ linkCopied ? 'Copied!' : 'Copy Link' }}
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="shareOnTwitter()">
+                <i class="bi bi-twitter-x me-1"></i> Twitter / X
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="shareOnLinkedIn()">
+                <i class="bi bi-linkedin me-1"></i> LinkedIn
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-lg-4">
+
+          <!-- About the Author -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">About the Author</h6>
+              <div class="d-flex align-items-center mb-3">
+                <div class="author-avatar rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3"
+                     style="width: 48px; height: 48px; min-width: 48px;">
+                  <i class="bi bi-person-fill text-primary fs-4"></i>
+                </div>
+                <div>
+                  <h6 class="mb-0 fw-bold">{{ article.author }}</h6>
+                  <small class="text-muted">Career Expert & Writer</small>
+                </div>
+              </div>
+              <p class="text-muted small mb-0">
+                A seasoned career development professional dedicated to helping job seekers navigate the modern employment landscape with practical, actionable advice.
+              </p>
+            </div>
+          </div>
+
+          <!-- Related Articles -->
+          @if (sidebarRelated.length > 0) {
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-body p-4">
+                <h6 class="fw-bold text-uppercase small text-muted mb-3">Related Articles</h6>
+                <div class="d-flex flex-column gap-3">
+                  @for (related of sidebarRelated; track related.slug) {
+                    <a [routerLink]="['/blog', related.slug]" class="text-decoration-none">
+                      <div class="d-flex align-items-start sidebar-related-item p-2 rounded">
+                        <div class="sidebar-thumb rounded me-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                             [style.background]="getGradient($index)"
+                             style="width: 48px; height: 48px;">
+                          <i class="bi bi-file-earmark-text text-white small"></i>
+                        </div>
+                        <div>
+                          <h6 class="mb-1 small fw-bold text-dark lh-sm">{{ related.title }}</h6>
+                          <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>{{ related.readTime }} min read
+                          </small>
+                        </div>
+                      </div>
+                    </a>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Build Your Resume CTA -->
+          <div class="card border-0 shadow-sm cta-card overflow-hidden">
+            <div class="card-body p-4 text-center">
+              <div class="cta-icon-wrapper mx-auto mb-3 rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center"
+                   style="width: 64px; height: 64px;">
+                <i class="bi bi-file-earmark-person text-primary fs-3"></i>
+              </div>
+              <h5 class="fw-bold mb-2">Build Your Resume</h5>
+              <p class="text-muted small mb-3">
+                Put these tips into action. Create a professional, ATS-friendly resume in minutes with our free builder.
+              </p>
+              <a routerLink="/builder" class="btn btn-primary w-100">
+                <i class="bi bi-pencil-square me-2"></i>Start Building
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Related Articles -->
+  @if (relatedArticles.length > 0) {
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h3 class="fw-bold mb-4">You Might Also Like</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+          @for (related of relatedArticles; track related.slug) {
+            <div class="col">
+              <a [routerLink]="['/blog', related.slug]" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm related-card">
+                  <div class="related-thumbnail d-flex align-items-center justify-content-center"
+                       [style.background]="getGradient($index)">
+                    <i class="bi bi-file-earmark-text text-white opacity-50" style="font-size: 2rem;"></i>
+                  </div>
+                  <div class="card-body">
+                    <span class="badge rounded-pill mb-2" [class]="getCategoryClass(related.category)">
+                      {{ related.category }}
+                    </span>
+                    <h6 class="card-title fw-bold text-dark mb-2">{{ related.title }}</h6>
+                    <div class="d-flex align-items-center text-muted small">
+                      <i class="bi bi-clock me-1"></i>
+                      <span>{{ related.readTime }} min read</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  }
+}

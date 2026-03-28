@@ -1,34 +1,48 @@
-// Only custom styles Bootstrap cannot handle
+// How It Works — custom gradients & effects only
 
-.hiw-step {
-  flex: 0 0 280px;
+.hiw-step-card {
+  transition: transform 0.3s ease;
 
-  @media (max-width: 767.98px) {
-    flex: none;
-    width: 100%;
-    max-width: 360px;
+  &:hover {
+    transform: translateY(-4px);
   }
+}
+
+.hiw-step-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3);
 }
 
 .hiw-step-number {
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(135deg, var(--color-indigo-700), var(--color-purple-700));
-  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+  top: -8px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  color: #4f46e5;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .hiw-connector {
-  flex: 0 0 80px;
-  padding-top: 20px;
-
-  @media (max-width: 767.98px) {
-    flex: 0 0 40px;
-    padding-top: 0;
-  }
+  // Positioned between md columns via negative offset — hidden on mobile
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  top: 140px;
+  opacity: 0.4;
 }
 
 .hiw-cta-btn {
-  background: linear-gradient(135deg, var(--color-indigo-700), var(--color-purple-700));
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 

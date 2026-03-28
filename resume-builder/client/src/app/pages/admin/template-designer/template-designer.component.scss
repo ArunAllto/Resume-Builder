@@ -1415,3 +1415,51 @@ input[type="range"] {
     opacity: 1;
   }
 }
+
+// ============================================================
+// Advanced Color Picker
+// ============================================================
+.color-picker-advanced {
+  padding: 2px 0 4px;
+}
+
+.color-swatch-wrapper {
+  flex-shrink: 0;
+}
+
+.color-swatch {
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%),
+                    linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-range {
+  height: 4px;
+  &::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.prop-group {
+  margin-bottom: 12px;
+
+  .prop-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -95,6 +95,86 @@ export class TemplateManagerComponent implements OnInit {
     });
   }
 
+  // Settings modal state
+  showSettingsModal = false;
+  settingsTemplate: Template | null = null;
+  settingsForm = {
+    name: '',
+    description: '',
+    category: 'professional' as 'professional' | 'modern' | 'minimal' | 'creative',
+    thumbnail: '',
+    isFree: true,
+    originalPrice: null as number | null,
+    offerPrice: null as number | null,
+    isPublished: false,
+    isActive: true,
+  };
+  isSavingSettings = false;
+
+  openSettings(template: Template): void {
+    this.settingsTemplate = template;
+    this.settingsForm = {
+      name: template.name,
+      description: template.description || '',
+      category: (template.category as any) || 'professional',
+      thumbnail: template.thumbnail || '',
+      isFree: template.isFree !== false,
+      originalPrice: template.originalPrice ?? null,
+      offerPrice: template.offerPrice ?? null,
+      isPublished: template.isPublished || false,
+      isActive: template.isActive !== false,
+    };
+    this.showSettingsModal = true;
+  }
+
+  closeSettings(): void {
+    this.showSettingsModal = false;
+    this.settingsTemplate = null;
+  }
+
+  saveSettings(): void {
+    if (!this.settingsTemplate) return;
+    if (!this.settingsForm.name.trim()) {
+      this.toast.warning('Template name is required');
+      return;
+    }
+    this.isSavingSettings = true;
+
+    const payload: Partial<Template> = {
+      name: this.settingsForm.name.trim(),
+      description: this.settingsForm.description.trim(),
+      category: this.settingsForm.category,
+      thumbnail: this.settingsForm.thumbnail.trim(),
+      isFree: this.settingsForm.isFree,
+      originalPrice: this.settingsForm.isFree ? undefined : (this.settingsForm.originalPrice ?? undefined),
+      offerPrice: this.settingsForm.isFree ? undefined : (this.settingsForm.offerPrice ?? undefined),
+      isPublished: this.settingsForm.isPublished,
+      isActive: this.settingsForm.isActive,
+    };
+
+    this.templateService.updateTemplate(this.settingsTemplate.id, payload).subscribe({
+      next: () => {
+        const idx = this.templates.findIndex(t => t.id === this.settingsTemplate!.id);
+        if (idx !== -1) this.templates[idx] = { ...this.templates[idx], ...payload };
+        this.isSavingSettings = false;
+        this.closeSettings();
+        this.toast.success('Template settings saved');
+      },
+      error: (err) => {
+        this.isSavingSettings = false;
+        this.toast.error('Failed to save: ' + (err.error?.error || 'Unknown error'));
+      },
+    });
+  }
+
+  onSettingsThumbnailSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    const reader = new FileReader();
+    reader.onload = () => { this.settingsForm.thumbnail = reader.result as string; };
+    reader.readAsDataURL(input.files[0]);
+  }
+
   togglePublish(template: Template): void {
     const newValue = !template.isPublished;
     this.templateService.updateTemplate(template.id, { isPublished: newValue } as Partial<Template>).subscribe({
@@ -103,8 +183,11 @@ export class TemplateManagerComponent implements OnInit {
         if (idx !== -1) {
           this.templates[idx] = { ...this.templates[idx], isPublished: newValue };
         }
+        this.toast.info(newValue ? 'Template published' : 'Template unpublished');
       },
-      error: () => {},
+      error: (err) => {
+        this.toast.error('Operation failed: ' + (err.error?.error || 'Could not update template'));
+      },
     });
   }
 

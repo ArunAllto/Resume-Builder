@@ -1,0 +1,93 @@
+// Only custom styles that Bootstrap can't handle
+
+.coupons-manager {
+  max-width: 1100px;
+}
+
+// Skeleton loading
+.skeleton-row {
+  height: 72px;
+  background: linear-gradient(90deg, var(--bs-gray-200) 25%, var(--bs-gray-300) 50%, var(--bs-gray-200) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+// Dashed border
+.border-dashed {
+  border-style: dashed !important;
+  border-color: var(--bs-gray-300) !important;
+}
+
+// Stat cards
+.stat-card {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  &.stat-purple { border-left: 4px solid var(--bs-primary); }
+  &.stat-green  { border-left: 4px solid var(--bs-success); }
+  &.stat-blue   { border-left: 4px solid var(--bs-info); }
+}
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+}
+
+// Coupon code styling
+.coupon-code {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+// Copy button
+.copy-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    background-color: var(--bs-primary-bg-subtle) !important;
+  }
+}
+
+// Action buttons hover colors
+.action-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.hover-danger:hover {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+    background-color: var(--bs-danger-bg-subtle) !important;
+  }
+
+  &.hover-success:hover {
+    color: var(--bs-success) !important;
+    border-color: var(--bs-success) !important;
+    background-color: var(--bs-success-bg-subtle) !important;
+  }
+
+  &.hover-warning:hover {
+    color: var(--bs-warning) !important;
+    border-color: var(--bs-warning) !important;
+    background-color: var(--bs-warning-bg-subtle) !important;
+  }
+}

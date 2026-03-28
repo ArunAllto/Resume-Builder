@@ -1,0 +1,519 @@
+<div class="p-4 p-sm-3 users-page">
+  <!-- Header -->
+  <div class="d-flex align-items-start justify-content-between mb-4 gap-3 flex-wrap">
+    <div>
+      <h1 class="fs-4 fw-bold text-dark mb-1">Users</h1>
+      <p class="text-secondary small mb-0">Manage registered users. {{ total }} total.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <label class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
+        <i class="bi bi-upload"></i> Import CSV
+        <input type="file" accept=".csv" class="d-none" (change)="onImportCSV($event)" />
+      </label>
+      <button
+        class="btn btn-outline-success d-inline-flex align-items-center gap-2"
+        (click)="exportCSV()"
+      >
+        <i class="bi bi-download"></i> Export CSV
+      </button>
+      <button
+        class="btn btn-primary d-inline-flex align-items-center gap-2 fw-semibold"
+        (click)="openAddModal()"
+      >
+        <i class="bi bi-plus-lg"></i> Add User
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card border-0 bg-primary-subtle rounded-3 p-3">
+        <div class="small text-primary fw-semibold">Total Users</div>
+        <div class="fs-3 fw-bold text-primary">{{ total }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 bg-success-subtle rounded-3 p-3">
+        <div class="small text-success fw-semibold">Active</div>
+        <div class="fs-3 fw-bold text-success">{{ activeCount }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 bg-danger-subtle rounded-3 p-3">
+        <div class="small text-danger fw-semibold">Blocked</div>
+        <div class="fs-3 fw-bold text-danger">{{ inactiveCount }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 bg-secondary-subtle rounded-3 p-3">
+        <div class="small text-secondary fw-semibold">Current Page</div>
+        <div class="fs-3 fw-bold text-secondary">{{ page }} / {{ totalPages }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
+    <div class="flex-grow-1 input-group search-input-group">
+      <span class="input-group-text bg-white border-end-0">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-start-0 ps-0"
+        placeholder="Search by name, email, username, or phone..."
+        [value]="search"
+        (input)="onSearchInput($any($event.target).value)"
+      />
+    </div>
+    <select
+      class="form-select filter-select"
+      [(ngModel)]="statusFilter"
+      (change)="onStatusFilterChange()"
+    >
+      <option value="all">All Status</option>
+      <option value="active">Active Only</option>
+      <option value="inactive">Blocked Only</option>
+    </select>
+    <select class="form-select filter-select" [(ngModel)]="pageSize" (change)="loadUsers()">
+      <option [ngValue]="10">10 / page</option>
+      <option [ngValue]="20">20 / page</option>
+      <option [ngValue]="50">50 / page</option>
+    </select>
+  </div>
+
+  <!-- Loading skeleton -->
+  @if (isLoading) {
+    <div class="d-flex flex-column gap-2">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="skeleton-row rounded-2"></div>
+      }
+    </div>
+  } @else if (!users.length) {
+    <!-- Empty state -->
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-people fs-1 d-block mb-2"></i>
+      <p class="mb-0 fw-semibold">No users found.</p>
+      <span class="small">Try adjusting your search or filter criteria.</span>
+    </div>
+  } @else {
+    <!-- Users Table -->
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-3">#</th>
+              <th>Photo</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Ref ID</th>
+              <th>Plan</th>
+              <th>Resumes</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th class="text-end pe-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track user.id; let i = $index) {
+              <tr>
+                <td class="ps-3 text-muted small">{{ (page - 1) * pageSize + i + 1 }}</td>
+                <td>
+                  @if (user.avatar) {
+                    <img
+                      [src]="user.avatar"
+                      class="rounded-circle user-avatar"
+                      width="36"
+                      height="36"
+                      alt="avatar"
+                    />
+                  } @else {
+                    <div class="avatar-circle">{{ getInitials(user.fullName) }}</div>
+                  }
+                </td>
+                <td class="fw-semibold">{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td class="small text-secondary">{{ user.username || '—' }}</td>
+                <td class="small text-secondary">{{ user.email }}</td>
+                <td class="small text-secondary">{{ user.phone || '—' }}</td>
+                <td>
+                  <code class="ref-id">{{ user.id.slice(0, 8) }}...</code>
+                </td>
+                <td>
+                  <span class="badge" [class]="getPlanBadgeClass(user.planPurchased)">
+                    {{ user.planPurchased || 'Free' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-primary-subtle text-primary">{{ user.resumeCount }}</span>
+                </td>
+                <td>
+                  @if (user.isActive) {
+                    <span class="badge bg-success-subtle text-success">
+                      <i class="bi bi-check-circle me-1"></i>Active
+                    </span>
+                  } @else {
+                    <span class="badge bg-danger-subtle text-danger">
+                      <i class="bi bi-slash-circle me-1"></i>Blocked
+                    </span>
+                  }
+                </td>
+                <td class="small text-muted">{{ formatDate(user.createdAt) }}</td>
+                <td class="text-end pe-3">
+                  <div class="d-flex gap-1 justify-content-end">
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      (click)="viewDetails(user)"
+                      title="View Details"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      (click)="openEditModal(user)"
+                      title="Edit"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm"
+                      [class]="user.isActive ? 'btn-outline-warning' : 'btn-outline-success'"
+                      (click)="toggleStatus(user)"
+                      [title]="user.isActive ? 'Block User' : 'Activate User'"
+                    >
+                      <i
+                        class="bi"
+                        [class]="user.isActive ? 'bi-slash-circle' : 'bi-check-circle'"
+                      ></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      (click)="deleteUser(user)"
+                      title="Delete"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <nav class="mt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <small class="text-muted">
+          Showing {{ (page - 1) * pageSize + 1 }} &ndash; {{ getPageEnd() }} of {{ total }}
+        </small>
+        <ul class="pagination mb-0">
+          <li class="page-item" [class.disabled]="page === 1">
+            <button class="page-link" (click)="goToPage(page - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+          @for (p of pageNumbers; track p) {
+            <li class="page-item" [class.active]="p === page">
+              <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button class="page-link" (click)="goToPage(page + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    }
+  }
+
+  <!-- ===== Detail Modal ===== -->
+  @if (showDetailModal) {
+    <div class="modal-backdrop fade show" (click)="closeDetailModal()"></div>
+    <div class="modal d-block" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">
+              <i class="bi bi-person me-2"></i>User Details
+            </h5>
+            <button type="button" class="btn-close" (click)="closeDetailModal()"></button>
+          </div>
+          <div class="modal-body">
+            @if (loadingDetail) {
+              <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            } @else if (selectedUser) {
+              <!-- Avatar & Name Header -->
+              <div class="text-center mb-4">
+                @if (selectedUser.avatar) {
+                  <img
+                    [src]="selectedUser.avatar"
+                    class="rounded-circle mb-2"
+                    width="80"
+                    height="80"
+                    style="object-fit: cover"
+                    alt="avatar"
+                  />
+                } @else {
+                  <div class="avatar-circle avatar-lg mx-auto mb-2">
+                    {{ getInitials(selectedUser.fullName) }}
+                  </div>
+                }
+                <h5 class="mb-0 fw-bold">{{ selectedUser.fullName }}</h5>
+                <p class="text-muted small mb-2">{{ selectedUser.email }}</p>
+                <span
+                  class="badge me-1"
+                  [class]="selectedUser.isActive ? 'bg-success' : 'bg-danger'"
+                >
+                  {{ selectedUser.isActive ? 'Active' : 'Blocked' }}
+                </span>
+                <span class="badge" [class]="getPlanBadgeClass(selectedUser.planPurchased)">
+                  {{ selectedUser.planPurchased || 'Free' }}
+                </span>
+              </div>
+
+              <!-- User Info Section -->
+              <h6 class="fw-bold mb-2">User Information</h6>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <small class="text-muted">First Name</small>
+                  <div class="fw-semibold">{{ selectedUser.firstName || '—' }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Last Name</small>
+                  <div class="fw-semibold">{{ selectedUser.lastName || '—' }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Username</small>
+                  <div class="fw-semibold">{{ selectedUser.username || '—' }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Email</small>
+                  <div class="fw-semibold">{{ selectedUser.email }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Phone</small>
+                  <div class="fw-semibold">{{ selectedUser.phone || '—' }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Plan</small>
+                  <div>
+                    <span class="badge" [class]="getPlanBadgeClass(selectedUser.planPurchased)">
+                      {{ selectedUser.planPurchased || 'Free' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Reference ID</small>
+                  <div><code class="small">{{ selectedUser.id }}</code></div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Joined</small>
+                  <div class="fw-semibold">{{ formatDate(selectedUser.createdAt) }}</div>
+                </div>
+              </div>
+
+              <!-- Activity Section -->
+              <h6 class="fw-bold mt-3 mb-2">Activity</h6>
+              <div class="row g-3">
+                <div class="col-4 text-center">
+                  <div class="card border-0 bg-primary-subtle rounded-3 p-3">
+                    <div class="fs-3 fw-bold text-primary">{{ selectedUser.resumeCount }}</div>
+                    <div class="small text-primary">Resumes</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="card border-0 bg-success-subtle rounded-3 p-3">
+                    <div class="fs-3 fw-bold text-success">{{ selectedUser.purchaseCount }}</div>
+                    <div class="small text-success">Purchases</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="card border-0 bg-warning-subtle rounded-3 p-3">
+                    <div class="fs-3 fw-bold text-warning">{{ selectedUser.draftCount }}</div>
+                    <div class="small text-warning">Drafts</div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline-secondary" (click)="closeDetailModal()">Close</button>
+            @if (selectedUser) {
+              <button
+                class="btn btn-outline-secondary"
+                (click)="openEditModal({ id: selectedUser.id, firstName: selectedUser.firstName, lastName: selectedUser.lastName, fullName: selectedUser.fullName, email: selectedUser.email, username: selectedUser.username, phone: selectedUser.phone, avatar: selectedUser.avatar, planPurchased: selectedUser.planPurchased, isActive: selectedUser.isActive, createdAt: selectedUser.createdAt, resumeCount: selectedUser.resumeCount, purchaseCount: selectedUser.purchaseCount }); closeDetailModal()"
+              >
+                <i class="bi bi-pencil me-1"></i>Edit
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ===== Add / Edit Modal ===== -->
+  @if (showEditModal) {
+    <div class="modal-backdrop fade show" (click)="closeEditModal()"></div>
+    <div class="modal d-block" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">
+              <i class="bi" [class]="isEditMode ? 'bi-pencil' : 'bi-person-plus'"></i>
+              {{ isEditMode ? 'Edit User' : 'Add User' }}
+            </h5>
+            <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  First Name <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="editForm.firstName"
+                  placeholder="Arjun"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="editForm.lastName"
+                  placeholder="Mehta"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="editForm.username"
+                  placeholder="arjun_m"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  Email <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  [(ngModel)]="editForm.email"
+                  placeholder="arjun@example.com"
+                  [readonly]="isEditMode"
+                  [class.bg-light]="isEditMode"
+                />
+                @if (isEditMode) {
+                  <div class="form-text text-muted">Email cannot be changed after creation.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Phone</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  [(ngModel)]="editForm.phone"
+                  placeholder="+91 XXXXX XXXXX"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  {{ isEditMode ? 'New Password (leave blank to keep)' : 'Password' }}
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="editForm.password"
+                  placeholder="Enter password"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Plan</label>
+                <select class="form-select" [(ngModel)]="editForm.planPurchased">
+                  <option value="Free">Free</option>
+                  <option value="Pro">Pro</option>
+                  <option value="Enterprise">Enterprise</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Avatar URL</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="editForm.avatar"
+                  placeholder="https://example.com/photo.jpg"
+                />
+              </div>
+              @if (editForm.avatar) {
+                <div class="col-12">
+                  <div class="d-flex align-items-center gap-2">
+                    <img
+                      [src]="editForm.avatar"
+                      class="rounded-circle"
+                      width="40"
+                      height="40"
+                      style="object-fit: cover"
+                      alt="preview"
+                      onerror="this.style.display='none'"
+                    />
+                    <small class="text-muted">Avatar preview</small>
+                  </div>
+                </div>
+              }
+              <div class="col-12">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="editIsActive"
+                    [(ngModel)]="editForm.isActive"
+                  />
+                  <label class="form-check-label" for="editIsActive">
+                    {{ editForm.isActive ? 'Active' : 'Blocked' }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-outline-secondary"
+              (click)="closeEditModal()"
+              [disabled]="isSubmitting"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary fw-semibold"
+              (click)="saveUser()"
+              [disabled]="isSubmitting"
+            >
+              @if (isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>Saving...
+              } @else {
+                <i class="bi bi-check2 me-1"></i>{{ isEditMode ? 'Update' : 'Create' }}
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
