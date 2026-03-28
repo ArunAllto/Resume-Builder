@@ -27,28 +27,53 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-4">
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'general'" (click)="setTab('general')">
+        <button class="nav-link" [class.active]="activeTab === 'general'" (click)="switchTab('general')">
           <i class="bi bi-gear me-1"></i> General
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'branding'" (click)="setTab('branding')">
+        <button class="nav-link" [class.active]="activeTab === 'branding'" (click)="switchTab('branding')">
           <i class="bi bi-palette me-1"></i> Branding
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'contact'" (click)="setTab('contact')">
+        <button class="nav-link" [class.active]="activeTab === 'contact'" (click)="switchTab('contact')">
           <i class="bi bi-envelope me-1"></i> Contact
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'social'" (click)="setTab('social')">
+        <button class="nav-link" [class.active]="activeTab === 'social'" (click)="switchTab('social')">
           <i class="bi bi-share me-1"></i> Social
         </button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'announcement'" (click)="setTab('announcement')">
+        <button class="nav-link" [class.active]="activeTab === 'announcement'" (click)="switchTab('announcement')">
           <i class="bi bi-megaphone me-1"></i> Announcement
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'blog'" (click)="switchTab('blog')">
+          <i class="bi bi-journal-text me-2"></i>Blog
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'resume-examples'" (click)="switchTab('resume-examples')">
+          <i class="bi bi-file-earmark-person me-2"></i>Resume Examples
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'pricing'" (click)="switchTab('pricing')">
+          <i class="bi bi-tag me-2"></i>Pricing
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'finance'" (click)="switchTab('finance')">
+          <i class="bi bi-graph-up me-2"></i>Finance
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" [class.active]="activeTab === 'admin'" (click)="switchTab('admin')">
+          <i class="bi bi-shield-lock me-2"></i>Admin
         </button>
       </li>
     </ul>
@@ -251,6 +276,278 @@
               </div>
             </div>
           }
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Blog -->
+    @if (activeTab === 'blog') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-journal-text text-primary me-2"></i>Blog Articles</span>
+          <button class="btn btn-primary btn-sm" (click)="openAddBlog()"><i class="bi bi-plus-lg me-1"></i>Add Article</button>
+        </div>
+        <div class="card-body">
+          @if (showBlogForm) {
+            <div class="card border-0 bg-light rounded-3 p-3 mb-3">
+              <h6 class="fw-bold mb-3">{{ editingBlog ? 'Edit Article' : 'New Article' }}</h6>
+              <div class="row g-3">
+                <div class="col-12"><label class="form-label fw-semibold">Title *</label>
+                  <input type="text" class="form-control" [(ngModel)]="blogForm.title" /></div>
+                <div class="col-md-6"><label class="form-label fw-semibold">Category</label>
+                  <select class="form-select" [(ngModel)]="blogForm.category">
+                    <option value="tips">Tips & Tricks</option>
+                    <option value="guides">Guides</option>
+                    <option value="news">News</option>
+                    <option value="career">Career Advice</option>
+                  </select></div>
+                <div class="col-md-6"><label class="form-label fw-semibold">Author</label>
+                  <input type="text" class="form-control" [(ngModel)]="blogForm.author" /></div>
+                <div class="col-12"><label class="form-label fw-semibold">Image URL</label>
+                  <input type="text" class="form-control" [(ngModel)]="blogForm.imageUrl" placeholder="https://..." /></div>
+                <div class="col-12"><label class="form-label fw-semibold">Excerpt</label>
+                  <textarea class="form-control" rows="2" [(ngModel)]="blogForm.excerpt"></textarea></div>
+                <div class="col-12"><label class="form-label fw-semibold">Content (HTML)</label>
+                  <textarea class="form-control" rows="5" [(ngModel)]="blogForm.content"></textarea></div>
+                <div class="col-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="blogPublished" [(ngModel)]="blogForm.isPublished" />
+                    <label class="form-check-label" for="blogPublished">Published</label>
+                  </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="saveBlog()">Save</button>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="cancelBlogForm()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          }
+          <div class="list-group list-group-flush">
+            @for (article of blogArticles; track article.id) {
+              <div class="list-group-item px-0 py-2">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold">{{ article.title }}</div>
+                    <div class="small text-muted">{{ article.category }} · {{ article.author }}</div>
+                  </div>
+                  <span class="badge" [class]="article.isPublished ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'">
+                    {{ article.isPublished ? 'Published' : 'Draft' }}
+                  </span>
+                  <div class="d-flex gap-1">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="toggleBlogPublish(article)" title="Toggle publish">
+                      <i class="bi" [class]="article.isPublished ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" (click)="openEditBlog(article)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="deleteBlog(article)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            }
+            @if (!blogArticles.length) {
+              <p class="text-muted text-center py-3">No articles yet.</p>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Resume Examples -->
+    @if (activeTab === 'resume-examples') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-file-earmark-person text-primary me-2"></i>Resume Examples</span>
+          <button class="btn btn-primary btn-sm" (click)="openAddExample()"><i class="bi bi-plus-lg me-1"></i>Add Example</button>
+        </div>
+        <div class="card-body">
+          @if (showExampleForm) {
+            <div class="card border-0 bg-light rounded-3 p-3 mb-3">
+              <h6 class="fw-bold mb-3">{{ editingExample ? 'Edit Example' : 'New Example' }}</h6>
+              <div class="row g-3">
+                <div class="col-12"><label class="form-label fw-semibold">Title *</label>
+                  <input type="text" class="form-control" [(ngModel)]="exampleForm.title" /></div>
+                <div class="col-md-6"><label class="form-label fw-semibold">Category</label>
+                  <select class="form-select" [(ngModel)]="exampleForm.category">
+                    <option value="professional">Professional</option>
+                    <option value="modern">Modern</option>
+                    <option value="minimal">Minimal</option>
+                    <option value="creative">Creative</option>
+                  </select></div>
+                <div class="col-md-6"><label class="form-label fw-semibold">Image URL</label>
+                  <input type="text" class="form-control" [(ngModel)]="exampleForm.imageUrl" /></div>
+                <div class="col-12"><label class="form-label fw-semibold">Download URL</label>
+                  <input type="text" class="form-control" [(ngModel)]="exampleForm.downloadUrl" /></div>
+                <div class="col-12"><label class="form-label fw-semibold">Description</label>
+                  <textarea class="form-control" rows="2" [(ngModel)]="exampleForm.description"></textarea></div>
+                <div class="col-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="exActive" [(ngModel)]="exampleForm.isActive" />
+                    <label class="form-check-label" for="exActive">Active</label>
+                  </div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary btn-sm" (click)="saveExample()">Save</button>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="cancelExampleForm()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          }
+          <div class="row g-3">
+            @for (ex of resumeExamples; track ex.id) {
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-3">
+                  @if (ex.imageUrl) {
+                    <img [src]="ex.imageUrl" class="card-img-top rounded-top-3" style="height:120px;object-fit:cover;" />
+                  } @else {
+                    <div class="bg-light rounded-top-3 d-flex align-items-center justify-content-center" style="height:120px">
+                      <i class="bi bi-file-earmark-person fs-1 text-muted"></i>
+                    </div>
+                  }
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 class="mb-1 fw-semibold">{{ ex.title }}</h6>
+                        <span class="badge bg-secondary-subtle text-secondary small">{{ ex.category }}</span>
+                      </div>
+                      <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-outline-primary" (click)="openEditExample(ex)"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteExample(ex)"><i class="bi bi-trash"></i></button>
+                      </div>
+                    </div>
+                    <p class="small text-muted mt-1 mb-0">{{ ex.description }}</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Pricing -->
+    @if (activeTab === 'pricing') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-tag text-primary me-2"></i>Pricing Plans</span>
+          <button class="btn btn-primary btn-sm" (click)="savePricing()"><i class="bi bi-save me-1"></i>Save All Plans</button>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            @for (plan of pricingPlans; track plan.id) {
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-3 h-100" [style.border-left]="'4px solid ' + plan.color + ' !important'">
+                  <div class="card-body p-3">
+                    <div class="mb-2">
+                      <label class="form-label fw-semibold small">Plan Name</label>
+                      <input type="text" class="form-control form-control-sm" [(ngModel)]="plan.name" />
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label fw-semibold small">Price (₹/mo)</label>
+                      <input type="number" class="form-control form-control-sm" [(ngModel)]="plan.price" min="0" />
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label fw-semibold small">Accent Color</label>
+                      <div class="d-flex gap-2 align-items-center">
+                        <input type="color" class="form-control form-control-sm form-control-color" [(ngModel)]="plan.color" style="width:48px;" />
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="plan.color" />
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label fw-semibold small mb-0">Features</label>
+                        <button class="btn btn-sm btn-outline-secondary py-0" (click)="addPricingFeature(plan)">+ Add</button>
+                      </div>
+                      @for (feature of plan.features; track $index; let fi = $index) {
+                        <div class="input-group input-group-sm mb-1">
+                          <input type="text" class="form-control" [(ngModel)]="plan.features[fi]" />
+                          <button class="btn btn-outline-danger" (click)="removePricingFeature(plan, fi)"><i class="bi bi-x"></i></button>
+                        </div>
+                      }
+                    </div>
+                    <div class="form-check form-switch mb-1">
+                      <input class="form-check-input" type="checkbox" [id]="'popular_' + plan.id" [(ngModel)]="plan.isPopular" />
+                      <label class="form-check-label small" [for]="'popular_' + plan.id">Most Popular</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" [id]="'active_' + plan.id" [(ngModel)]="plan.isActive" />
+                      <label class="form-check-label small" [for]="'active_' + plan.id">Active</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Finance -->
+    @if (activeTab === 'finance') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-graph-up text-primary me-2"></i>Finance Overview
+        </div>
+        <div class="card-body">
+          @if (loadingFinance) {
+            <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+          } @else {
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="card border-0 bg-success-subtle rounded-3 p-3">
+                  <div class="small text-success fw-semibold">Total Revenue</div>
+                  <div class="fs-3 fw-bold text-success">₹{{ financeStats.totalRevenue | number:'1.0-0' }}</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border-0 bg-primary-subtle rounded-3 p-3">
+                  <div class="small text-primary fw-semibold">This Month</div>
+                  <div class="fs-3 fw-bold text-primary">₹{{ financeStats.monthlyRevenue | number:'1.0-0' }}</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border-0 bg-warning-subtle rounded-3 p-3">
+                  <div class="small text-warning fw-semibold">Total Transactions</div>
+                  <div class="fs-3 fw-bold text-warning">{{ financeStats.totalTransactions }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              Detailed transaction history will be available once users start purchasing templates.
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Admin -->
+    @if (activeTab === 'admin') {
+      <div class="card shadow-sm border">
+        <div class="card-header bg-white fw-semibold border-bottom">
+          <i class="bi bi-shield-lock text-primary me-2"></i>Admin Account Settings
+        </div>
+        <div class="card-body">
+          <div class="card border-0 bg-light rounded-3 p-4 mb-4" style="max-width:480px">
+            <h6 class="fw-semibold mb-3"><i class="bi bi-key me-2"></i>Change Password</h6>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Current Password</label>
+              <input type="password" class="form-control" [(ngModel)]="adminPasswordForm.currentPassword" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">New Password</label>
+              <input type="password" class="form-control" [(ngModel)]="adminPasswordForm.newPassword" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Confirm New Password</label>
+              <input type="password" class="form-control" [(ngModel)]="adminPasswordForm.confirmPassword" />
+            </div>
+            <button class="btn btn-primary fw-semibold" (click)="changePassword()" [disabled]="isSavingPassword">
+              @if (isSavingPassword) {
+                <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+              } @else {
+                <i class="bi bi-check2 me-1"></i>Update Password
+              }
+            </button>
+          </div>
         </div>
       </div>
     }

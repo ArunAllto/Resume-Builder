@@ -10,12 +10,11 @@ namespace ResumeBuilder.Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-               name: "IsPublished",
-               table: "Templates",
-               type: "bit",
-               nullable: false,
-               defaultValue: true);
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID(N'Templates') AND name = 'IsPublished')
+                BEGIN
+                    ALTER TABLE [Templates] ADD [IsPublished] bit NOT NULL DEFAULT CAST(1 AS bit);
+                END");
         }
 
         /// <inheritdoc />

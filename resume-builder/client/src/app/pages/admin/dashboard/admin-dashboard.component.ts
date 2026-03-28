@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../shared/services/toast.service';
-import { forkJoin } from 'rxjs';
+import { catchError, of } from 'rxjs';
 
 interface AdminStats {
   totalTemplates: number;
@@ -19,7 +19,9 @@ interface ResumeTrendItem {
 }
 
 interface PopularTemplate {
+  templateId: string;
   name: string;
+  category: string;
   count: number;
 }
 
@@ -58,6 +60,8 @@ export class AdminDashboardComponent implements OnInit {
 
   isLoading = true;
   errorMessage = '';
+  loadingParts = 0;
+  totalParts = 6;
 
   constructor(private api: ApiService, private toast: ToastService) {}
 
@@ -68,29 +72,43 @@ export class AdminDashboardComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
     this.errorMessage = '';
+    this.loadingParts = 0;
 
-    forkJoin({
-      stats: this.api.get<AdminStats>('/admin/stats'),
-      resumeTrends: this.api.get<ResumeTrendItem[]>('/admin/analytics/resume-trends?days=30'),
-      popularTemplates: this.api.get<PopularTemplate[]>('/admin/analytics/popular-templates?limit=5'),
-      userTrends: this.api.get<UserTrendItem[]>('/admin/analytics/user-trends?days=30'),
-      revenue: this.api.get<RevenueSummary>('/admin/analytics/revenue'),
-      recentActivity: this.api.get<ActivityItem[]>('/admin/analytics/recent-activity?limit=15'),
-    }).subscribe({
-      next: (data) => {
-        this.stats = data.stats;
-        this.resumeTrends = data.resumeTrends;
-        this.popularTemplates = data.popularTemplates;
-        this.userTrends = data.userTrends;
-        this.revenue = data.revenue;
-        this.recentActivity = data.recentActivity;
+    const done = () => {
+      this.loadingParts++;
+      if (this.loadingParts >= this.totalParts) {
         this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.error || 'Failed to load dashboard data.';
-        this.isLoading = false;
-        this.toast.error('Failed to load dashboard data');
-      },
+      }
+    };
+
+    this.api.get<AdminStats>('/admin/stats').pipe(catchError(() => of(null))).subscribe(data => {
+      this.stats = data;
+      done();
+    });
+
+    this.api.get<ResumeTrendItem[]>('/admin/analytics/resume-trends?days=30').pipe(catchError(() => of([]))).subscribe(data => {
+      this.resumeTrends = data ?? [];
+      done();
+    });
+
+    this.api.get<PopularTemplate[]>('/admin/analytics/popular-templates?limit=5').pipe(catchError(() => of([]))).subscribe(data => {
+      this.popularTemplates = data ?? [];
+      done();
+    });
+
+    this.api.get<UserTrendItem[]>('/admin/analytics/user-trends?days=30').pipe(catchError(() => of([]))).subscribe(data => {
+      this.userTrends = data ?? [];
+      done();
+    });
+
+    this.api.get<RevenueSummary>('/admin/analytics/revenue').pipe(catchError(() => of(null))).subscribe(data => {
+      this.revenue = data;
+      done();
+    });
+
+    this.api.get<ActivityItem[]>('/admin/analytics/recent-activity?limit=15').pipe(catchError(() => of([]))).subscribe(data => {
+      this.recentActivity = data ?? [];
+      done();
     });
   }
 

@@ -24,7 +24,7 @@ public class AdminController : ControllerBase
         var activeTemplates = await _context.Templates.CountAsync(t => t.IsActive);
         var totalResumes = await _context.Resumes.CountAsync();
         var totalUsers = await _context.Users.CountAsync();
-        var totalRevenue = await _context.UserPurchases.SumAsync(p => p.Amount);
+        var totalRevenue = await _context.UserPurchases.SumAsync(p => (decimal?)p.Amount) ?? 0m;
 
         return Ok(new
         {
@@ -76,33 +76,32 @@ public class AdminController : ControllerBase
     [HttpGet("analytics/popular-templates")]
     public async Task<IActionResult> GetPopularTemplates([FromQuery] int limit = 10)
     {
-        var templates = await _context.Resumes
+        var grouped = await _context.Resumes
             .GroupBy(r => r.TemplateId)
-            .Select(g => new
-            {
-                templateId = g.Key,
-                usageCount = g.Count()
-            })
+            .Select(g => new { templateId = g.Key, usageCount = g.Count() })
             .OrderByDescending(x => x.usageCount)
             .Take(limit)
-            .Join(
-                _context.Templates,
-                r => r.templateId,
-                t => t.Id,
-                (r, t) => new
-                {
-                    r.templateId,
-                    templateName = t.Name,
-                    category = t.Category,
-                    r.usageCount
-                })
             .ToListAsync();
 
-        return Ok(new
+        var templateIds = grouped.Select(g => g.templateId).ToList();
+        var templates = await _context.Templates
+            .Where(t => templateIds.Contains(t.Id))
+            .Select(t => new { t.Id, t.Name, t.Category })
+            .ToListAsync();
+
+        var result = grouped.Select(g =>
         {
-            success = true,
-            data = templates
-        });
+            var t = templates.FirstOrDefault(x => x.Id == g.templateId);
+            return new
+            {
+                templateId = g.templateId,
+                name = t?.Name ?? "Unknown",
+                category = t?.Category ?? "",
+                count = g.usageCount
+            };
+        }).ToList();
+
+        return Ok(new { success = true, data = result });
     }
 
     [HttpGet("analytics/user-trends")]
@@ -143,10 +142,10 @@ public class AdminController : ControllerBase
         var now = DateTime.UtcNow;
         var monthStart = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var totalRevenue = await _context.UserPurchases.SumAsync(p => p.Amount);
+        var totalRevenue = await _context.UserPurchases.SumAsync(p => (decimal?)p.Amount) ?? 0m;
         var monthlyRevenue = await _context.UserPurchases
             .Where(p => p.PurchaseDate >= monthStart)
-            .SumAsync(p => p.Amount);
+            .SumAsync(p => (decimal?)p.Amount) ?? 0m;
         var totalPurchases = await _context.UserPurchases.CountAsync();
         var monthlyPurchases = await _context.UserPurchases
             .Where(p => p.PurchaseDate >= monthStart)
@@ -158,9 +157,9 @@ public class AdminController : ControllerBase
             data = new
             {
                 totalRevenue,
-                monthlyRevenue,
+                thisMonthRevenue = monthlyRevenue,
                 totalPurchases,
-                monthlyPurchases
+                thisMonthPurchases = monthlyPurchases
             }
         });
     }
@@ -168,59 +167,36 @@ public class AdminController : ControllerBase
     [HttpGet("analytics/recent-activity")]
     public async Task<IActionResult> GetRecentActivity([FromQuery] int limit = 20)
     {
-        var recentUsers = await _context.Users
+        var recentUsers = (await _context.Users
             .OrderByDescending(u => u.CreatedAt)
             .Take(limit)
-            .Select(u => new
-            {
-                type = "user_registered",
-                date = u.CreatedAt,
-                userName = u.FullName,
-                userEmail = u.Email,
-                details = "New user registered"
-            })
-            .ToListAsync();
+            .Select(u => new { u.FullName, u.CreatedAt })
+            .ToListAsync())
+            .Select(u => (Type: "signup", Time: u.CreatedAt, Description: $"New user registered: {u.FullName}"));
 
-        var recentResumes = await _context.Resumes
-            .Include(r => r.User)
+        var recentResumes = (await _context.Resumes
             .OrderByDescending(r => r.CreatedAt)
             .Take(limit)
-            .Select(r => new
-            {
-                type = "resume_created",
-                date = r.CreatedAt,
-                userName = r.User != null ? r.User.FullName : "Anonymous",
-                userEmail = r.User != null ? r.User.Email : "",
-                details = "Created resume: " + r.Title
-            })
-            .ToListAsync();
+            .Select(r => new { r.Title, r.CreatedAt })
+            .ToListAsync())
+            .Select(r => (Type: "resume", Time: r.CreatedAt, Description: $"Resume created: {r.Title}"));
 
-        var recentPurchases = await _context.UserPurchases
-            .Include(p => p.User)
+        var recentPurchases = (await _context.UserPurchases
             .Include(p => p.Template)
             .OrderByDescending(p => p.PurchaseDate)
             .Take(limit)
-            .Select(p => new
-            {
-                type = "template_purchased",
-                date = p.PurchaseDate,
-                userName = p.User != null ? p.User.FullName : "Unknown",
-                userEmail = p.User != null ? p.User.Email : "",
-                details = "Purchased template: " + (p.Template != null ? p.Template.Name : p.TemplateId)
-            })
-            .ToListAsync();
+            .Select(p => new { templateName = p.Template != null ? p.Template.Name : p.TemplateId, p.PurchaseDate })
+            .ToListAsync())
+            .Select(p => (Type: "purchase", Time: p.PurchaseDate, Description: $"Template purchased: {p.templateName}"));
 
         var activity = recentUsers
             .Concat(recentResumes)
             .Concat(recentPurchases)
-            .OrderByDescending(a => a.date)
+            .OrderByDescending(a => a.Time)
             .Take(limit)
+            .Select(a => new { type = a.Type, time = a.Time.ToString("o"), description = a.Description })
             .ToList();
 
-        return Ok(new
-        {
-            success = true,
-            data = activity
-        });
+        return Ok(new { success = true, data = activity });
     }
 }

@@ -2,7 +2,7 @@ namespace ResumeBuilder.Api.Models;
 
 public class SiteSettings
 {
-    public int Id { get; set; } = 1; // singleton
+    public int Id { get; set; } // singleton, auto-generated identity
     public string SiteName { get; set; } = "ResumeAI";
     public string Tagline { get; set; } = "Build Professional Resumes with AI";
     public string HeroTitle { get; set; } = "Build Your Perfect Resume with AI";
